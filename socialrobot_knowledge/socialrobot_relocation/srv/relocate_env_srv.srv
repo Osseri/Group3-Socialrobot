@@ -1,0 +1,16 @@
+float64 robot_height
+float64[] robot_pose
+int64 target_id
+int64 N
+float64[] R
+float64[] H
+float64[] X
+float64[] Y
+float64 x_min
+float64 x_max
+float64 y_min
+float64 y_max 
+---
+int64 accessibility
+int64 relocate_id
+float64[] relocate_coordinates

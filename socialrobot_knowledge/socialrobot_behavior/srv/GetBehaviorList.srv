@@ -1,0 +1,3 @@
+std_msgs/Empty query
+---
+string[] behavior_list

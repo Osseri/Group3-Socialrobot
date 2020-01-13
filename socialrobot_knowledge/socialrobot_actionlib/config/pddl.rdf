@@ -1,0 +1,328 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/pddl#"
+     xml:base="http://www.semanticweb.org/pddl"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:pddl="http://www.semanticweb.org/pddl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/pddl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#action -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#action"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#argument -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#argument"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#constant -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#constant"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#domain -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#domain"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#effect -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#effect"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#goal -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#goal"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#init -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#init"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#param1 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#param1">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#parameter"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#param2 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#param2">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#parameter"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#param3 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#param3">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#parameter"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#param4 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#param4">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#parameter"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#param5 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#param5">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#parameter"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#parameter -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#parameter"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#parameters -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#parameters"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#precondition -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#precondition"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#predicate -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#predicate"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#problem -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#problem"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#requirements -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#requirements"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#variable -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/pddl#variable"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#action -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#action"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#adl -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#adl">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#requirements"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#and -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#and">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#conditions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#conditions"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#constants -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#constants"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#disjunctive-preconditions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#disjunctive-preconditions">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#requirements"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#equal -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#equal">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#equality -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#equality">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#requirements"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#exists -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#exists">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#forall -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#forall">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#functions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#functions"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#imply -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#imply">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#negative-preconditions -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#negative-preconditions">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#requirements"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#not -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#not">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#or -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#or">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#parameters -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#parameters"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#precondition -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#precondition"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#predicates -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#predicates"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#requirements -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#requirements"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#strips -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#strips">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#requirements"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#types -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#types"/>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#typing -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#typing">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#requirements"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#when -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#when">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#conditions"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

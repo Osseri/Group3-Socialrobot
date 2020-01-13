@@ -1,0 +1,8 @@
+#query: “properPhysicalParts(Parts, “tomatoSoupCan01”), typePrimaryFunction-objectActedOn(“Holding”, Parts)”
+#manager: “TaskManager”
+string[] query
+string manager
+---
+std_msgs/Header header
+bool result
+socialrobot_task_msgs/Problem problem

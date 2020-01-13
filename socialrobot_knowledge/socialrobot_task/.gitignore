@@ -1,0 +1,6 @@
+
+*.pyc
+
+socialrobot_task_planner/data/plan\.json
+
+socialrobot_task_planner/pddl/domain\.pddl

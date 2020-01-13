@@ -1,0 +1,11 @@
+<!-- -->
+<launch>
+    <!-- By default, we are in simulation mode -->
+    <arg name="sim" default="true"/>
+
+
+    <node name="behavior" pkg="socialrobot_behavior" type="behavior_node.py" output="screen">
+        <param if="$(arg sim)" name="~hw_if" value="vrep"/>
+        <param unless="$(arg sim)" name="~hw_if" value="hw"/>
+    </node>
+</launch>

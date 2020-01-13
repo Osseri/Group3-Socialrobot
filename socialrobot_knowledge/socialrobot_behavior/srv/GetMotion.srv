@@ -1,0 +1,6 @@
+string planner_name
+socialrobot_behavior/PlannerInputs inputs
+
+---
+bool result
+socialrobot_behavior/PlannerOutputs motion

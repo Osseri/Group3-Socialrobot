@@ -1,0 +1,6 @@
+std_msgs/Header header
+trajectory_msgs/JointTrajectory trajectory
+---
+int32 result
+int32 OK = 0
+int32 ERROR = 1

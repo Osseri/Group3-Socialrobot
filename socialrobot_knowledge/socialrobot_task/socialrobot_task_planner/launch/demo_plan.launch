@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- action library -->
+	<node name="action_library" pkg="socialrobot_actionlib" type="actionlib_node.py" respawn="false" output="screen"/>
+
+	<!-- Task planner -->
+	<include file="$(find socialrobot_task_planner)/launch/task_plan.launch">
+	</include>
+	
+	<!-- Interface -->
+	<include file="$(find socialrobot_interface)/launch/interface_manager.launch">
+	</include>
+	
+	<!-- demo gui -->
+	<node name="demo_gui" pkg="socialrobot_task_planner" type="ActionViewer.py" respawn="false" output="screen"/>
+</launch>

@@ -1,0 +1,2 @@
+string predicate
+string[] args

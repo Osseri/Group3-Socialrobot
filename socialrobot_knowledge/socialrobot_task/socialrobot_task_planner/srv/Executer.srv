@@ -1,0 +1,7 @@
+string problemPath
+string domainPath
+---
+bool problemResolved
+string planStatus
+string jsonPath
+string jsonObject

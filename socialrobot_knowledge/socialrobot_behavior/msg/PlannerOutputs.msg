@@ -1,0 +1,2 @@
+trajectory_msgs/JointTrajectory jointTrajectory
+std_msgs/String controller

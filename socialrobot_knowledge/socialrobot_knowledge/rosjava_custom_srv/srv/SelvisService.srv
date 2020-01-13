@@ -1,0 +1,6 @@
+string filepath
+---
+uint8 SUCCESS = 1
+uint8 FAIL = 0
+
+bool success

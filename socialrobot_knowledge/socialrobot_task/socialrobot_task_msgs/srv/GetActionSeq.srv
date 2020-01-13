@@ -1,0 +1,8 @@
+# 
+string query
+---
+std_msgs/Header header
+int32 plan_result
+int32 SUCCESS=1
+int32 FAIL=0
+socialrobot_task_msgs/ActionSequence action_sequence

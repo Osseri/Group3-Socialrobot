@@ -1,0 +1,428 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY owl2 "http://www.w3.org/2006/12/owl2#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY knowrob "http://knowrob.org/kb/knowrob.owl#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY arbi "http://www.arbi.com/ontologies/arbi.owl#" >
+    <!ENTITY protege "http://protege.stanford.edu/plugins/owl/protege#" >
+	<!ENTITY srdl2-comp "http://knowrob.org/kb/srdl2-comp.owl#" >
+]>
+
+<rdf:RDF xmlns="http://knowrob.org/kb/ias_semantic_map.owl#"
+     xml:base="http://knowrob.org/kb/ias_semantic_map.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:arbi="http://www.arbi.com/ontologies/arbi_knowrob.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:srdl2-comp="http://knowrob.org/kb/srdl2-comp.owl#"
+     xmlns:knowrob="http://knowrob.org/kb/knowrob.owl#">
+    <owl:Ontology rdf:about="http://knowrob.org/kb/ias_semantic_map.owl#">
+        <owl:imports rdf:resource="package://knowrob_common/owl/knowrob.owl"/>
+    </owl:Ontology>
+>
+
+	<!-- 환경 정의 -->
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_display_env">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.8114887078337394</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.75</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_storage_env">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-0.14</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">1.3</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.75</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_table_env">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">0.9</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">-0.1</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.45</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	
+	<!-- 가구 정의 -->
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_display">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.8</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.75</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_storage">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-0.14</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">1.3</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.75</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_table">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">0.9</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">-0.1</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.45</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<!-- middle shelf -->
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_displayMiddleShelf">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double"></knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.8</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.45</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_storageMiddleShelf">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-0.14</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">1.3</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.45</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_tablePlane">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">0.9</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">-0.1</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.45</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<!-- point 정의 -->
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_point1">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.67</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">-0.23</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.98</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_point2">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.67</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0.0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">1.0</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_point3">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.67</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0.23</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.98</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_displayPoint">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.3</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">-0.3</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0.0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_storagePoint">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-0.6</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0.35</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0.0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_tablePoint">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0.0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">0</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0.0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0.0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	
+	<!-- semantic object -->
+	<owl:NamedIndividual rdf:about="&arbi;rotMat3D_red_gotica">
+		<rdf:type rdf:resource="&arbi;RotationMatrix3D"/>
+		<knowrob:m00 rdf:datatype="&xsd;double">0</knowrob:m00>
+		<knowrob:m01 rdf:datatype="&xsd;double">0.0</knowrob:m01>
+		<knowrob:m02 rdf:datatype="&xsd;double">0.0</knowrob:m02>
+		<knowrob:m03 rdf:datatype="&xsd;double">-1.67</knowrob:m03>
+
+		<knowrob:m10 rdf:datatype="&xsd;double">0.0</knowrob:m10>
+		<knowrob:m11 rdf:datatype="&xsd;double">0.0</knowrob:m11>
+		<knowrob:m12 rdf:datatype="&xsd;double">0.0</knowrob:m12>
+		<knowrob:m13 rdf:datatype="&xsd;double">0.23</knowrob:m13>
+
+		<knowrob:m20 rdf:datatype="&xsd;double">0.0</knowrob:m20>
+		<knowrob:m21 rdf:datatype="&xsd;double">0.0</knowrob:m21>
+		<knowrob:m22 rdf:datatype="&xsd;double">0.0</knowrob:m22>
+		<knowrob:m23 rdf:datatype="&xsd;double">0.98</knowrob:m23>
+
+		<knowrob:m30 rdf:datatype="&xsd;double">0.0</knowrob:m30>
+		<knowrob:m31 rdf:datatype="&xsd;double">0.0</knowrob:m31>
+		<knowrob:m32 rdf:datatype="&xsd;double">0.0</knowrob:m32>
+		<knowrob:m33 rdf:datatype="&xsd;double">0.0</knowrob:m33>
+	</owl:NamedIndividual>
+	
+	<!-- SemanticMapPerception한 부분-->
+	<owl:NamedIndividual rdf:about="&arbi;semanticMapPerception1">
+		<rdf:type rdf:resource="&knowrob;SemanticMapPerception"/>
+		<knowrob:startTime rdf:resource="&arbi;timepoint_0000"/>
+		<knowrob:objectActedOn rdf:resource="&arbi;display_env"/>
+		<knowrob:eventOccursAt rdf:resource="&arbi;rotMat3D_display_env"/>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;semanticMapPerception2">
+		<rdf:type rdf:resource="&knowrob;SemanticMapPerception"/>
+		<knowrob:startTime rdf:resource="&arbi;timepoint_0000"/>
+		<knowrob:objectActedOn rdf:resource="&arbi;storage_env"/>
+		<knowrob:eventOccursAt rdf:resource="&arbi;rotMat3D_storage_env"/>
+	</owl:NamedIndividual>
+	
+	<owl:NamedIndividual rdf:about="&arbi;semanticMapPerception3">
+		<rdf:type rdf:resource="&knowrob;SemanticMapPerception"/>
+		<knowrob:startTime rdf:resource="&arbi;timepoint_0000"/>
+		<knowrob:objectActedOn rdf:resource="&arbi;table_env"/>
+		<knowrob:eventOccursAt rdf:resource="&arbi;rotMat3D_table_env"/>
+	</owl:NamedIndividual>
+
+</rdf:RDF>

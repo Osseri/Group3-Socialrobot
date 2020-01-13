@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+	<name>socialrobot_task</name>
+	<version>0.0.0</version>
+	<description>The socialrobot_task metapackage</description>
+	<maintainer email="nicky707@hanmail.net">JJM</maintainer>
+	<license>BSD</license>
+
+	<buildtool_depend>catkin</buildtool_depend>
+
+	<run_depend>socialrobot_task_dispatcher</run_depend>
+	<run_depend>socialrobot_task_planner</run_depend>
+
+	<export>
+		<metapackage/>
+	</export>
+
+</package>
+

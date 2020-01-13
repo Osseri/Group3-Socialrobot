@@ -1,0 +1,5 @@
+int32 action_type
+int32 ALL=1
+int32 AVAILABLE_ACTIONS=2
+---
+std_msgs/String[] actions

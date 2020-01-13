@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find franka_description)/robots/panda_arm_RRT.urdf.xacro'" />
+
+  <node name="mobile_manipulator_motion_planner" pkg="mobile_manipulator_motion_planner" type="mobile_manipulator_motion_planner" output="screen" >
+    <param name="urdf_param" value="/robot_description"/> 
+  </node>
+
+</launch>

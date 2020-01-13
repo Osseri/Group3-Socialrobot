@@ -1,0 +1,8 @@
+string[] group_list     # current robot's group list
+---
+string actions          # compressed key value of PDDL actions
+string types            # compressed key value of PDDL types
+string predicates       # compressed key value of PDDL predicates
+string[] requirements   # string array of PDDL requirements
+bool result
+

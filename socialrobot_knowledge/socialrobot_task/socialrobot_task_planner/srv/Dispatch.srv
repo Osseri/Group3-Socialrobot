@@ -1,0 +1,5 @@
+# starts dispatch
+string jsonPath
+string jsonObject
+---
+string result
