@@ -1,0 +1,8 @@
+prefix=/home/ubuntu/pyweb/install
+
+Name: pywebtest
+Description: Description of pywebtest
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ubuntu/pyweb/install/lib 
+Requires: 

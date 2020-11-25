@@ -1,0 +1,13 @@
+# Set the inputs
+string[] inputs
+
+# Input Actions
+socialrobot_actionlib/Action[] action
+
+---
+
+# Action info/list
+socialrobot_actionlib/Action[] action
+
+# Primitive Actions
+string[] action_sequence

@@ -1,0 +1,19 @@
+string command
+string var1
+string var2
+
+socialrobot_actionlib/Action action
+
+---
+
+std_msgs/Header header
+bool result
+
+# Planning Problem
+socialrobot_actionlib/Problem problem
+
+# Object info
+socialrobot_perception_msgs/Object object_info
+
+# Action values
+socialrobot_behavior/PlannerInputs action_values

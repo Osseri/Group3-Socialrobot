@@ -1,0 +1,9 @@
+socialrobot_actionlib/Action action
+socialrobot_behavior/PlannerInputs requirements
+trajectory_msgs/JointTrajectory jointTrajectory
+
+---
+
+bool result
+string error
+trajectory_msgs/JointTrajectory jointTrajectory

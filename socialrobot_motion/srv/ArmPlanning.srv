@@ -1,0 +1,14 @@
+int32 arm_type
+int32 LEFT_ARM=1
+int32 RIGHT_ARM=2
+int32 BOTH_ARM=3
+
+int32 plan_mode
+int32 IK_MODE = 1
+int32 JOINT_MODE = 2
+
+sensor_msgs/JointState start_state
+geometry_msgs/PoseStamped pose
+
+---
+trajectory_msgs/JointTrajectory trajectory

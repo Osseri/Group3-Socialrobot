@@ -1,0 +1,18 @@
+# command
+int32 comm
+int32 GET = 1
+int32 SET = 2
+
+# specifications 
+int32 spec
+int32 OBJECT = 1
+int32 VOICE = 2
+
+# arguments
+string arg1
+string arg2
+
+---
+
+# object information
+socialrobot_perception_msgs/Object object_info

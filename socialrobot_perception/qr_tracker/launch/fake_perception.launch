@@ -1,0 +1,15 @@
+<launch>
+    <!-- Detect QR code -->
+    <node name="qr_tracker" pkg="qr_tracker" type="qr_tracker" output="screen">
+        <param name="~marker_size" value="0.0267"/>
+        <param name="~camera_frame" value="camera_rgb_optical_frame"/>
+        <param name="~color_topic" value="/camera/rgb/image_raw"/>
+        <param name="~color_info" value="/camera/rgb/camera_info"/>
+    </node>
+    
+    <!-- visualization of objects-->
+    <node name="object_creator" pkg="qr_tracker" type="qr_to_object.py" output="screen">
+        <param name="~marker_size" value="0.0267"/>
+    </node>
+
+</launch>

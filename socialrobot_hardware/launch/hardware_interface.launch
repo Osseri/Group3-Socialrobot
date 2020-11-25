@@ -1,0 +1,22 @@
+<!-- -->
+<launch>
+  <arg name="robot_name" default="skkurobot"/>
+  <arg name="sim_env" default="default"/>
+  <arg name="sim" default="true"/>
+
+  <group if="$(eval arg('sim') == true)">
+    <node name="sim_interface" pkg="socialrobot_hardware" type="coppelia_interface_async.py" output="screen">
+      <param name="vrep_environment" value="$(arg sim_env)"/>
+    </node>
+
+    <!-- moveit_vrep_interface  -->
+    <node name="moveit_vrep_interface" pkg="socialrobot_hardware" type="vrep_interface" />  
+  </group>
+
+  <group if="$(eval arg('sim') == false)">
+    <node name="hw_interface" pkg="socialrobot_hardware" type="hw_interface.py" output="screen">
+      <param name="robot_name" value="$(arg robot_name)"/>
+    </node>
+  </group>
+
+</launch>

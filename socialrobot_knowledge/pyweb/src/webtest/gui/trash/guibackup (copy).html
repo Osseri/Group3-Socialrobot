@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="author" content="Vincent Link, Steffen Lohmann, Eduard Marbach, Stefan Negru, Vitalis Wiens" />
+  <meta name="keywords"
+    content="webvowl, vowl, visual notation, web ontology language, owl, rdf, ontology visualization, ontologies, semantic web" />
+  <meta name="description" content="WebVOWL - Web-based Visualization of Ontologies" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+
+  <script type="text/javascript" src="js/roslib.min.js"></script>
+
+  <script type="text/javascript" type="text/javascript">
+
+    var prefix = {};
+    prefix['http://www.arbi.com/ontologies/arbi.owl'] = 'arbi';
+    prefix['http://knowrob.org/kb/comp_spatial.owl'] = 'comp_spatial';
+    prefix['http://knowrob.org/kb/comp_temporal.owl'] = 'comp_temporal';
+    prefix['http://knowrob.org/kb/computable.owl'] = 'computable';
+    prefix['http://purl.org/dc/elements/1.1/'] = 'dc';
+    prefix['http://knowrob.org/kb/knowrob.owl'] = 'knowrob';
+    prefix['http://www.w3.org/2002/07/owl'] = 'owl';
+    prefix['http://www.w3.org/1999/02/22-rdf-syntax-ns'] = 'rdf';
+    prefix['http://www.w3.org/2000/01/rdf-schema'] = 'rdfs';
+    prefix['http://knowrob.org/kb/srdl2-comp.owl'] = 'srdl2comp';
+    prefix['http://www.w3.org/2001/XMLSchema'] = 'xsd';
+
+    function locations(sub, str) {
+      var a = [], i = -1;
+      while ((i = str.indexOf(sub, i + 1)) >= 0) a.push(i);
+      return a;
+    }
+
+    function forTooltip(data) {
+      data = pr(data);
+
+      var indices;
+      if (data.indexOf(").") != -1)
+        indices = locations(").", data);
+
+
+      var oi = 0;
+      var result = "";
+      var j = 0;
+      for (var i = 0; i < indices.length; i++) {
+        j = indices[i];
+        result += data.substring(oi, j + 2) + "\n";
+        oi = j + 2;
+      }
+
+      if (result == "") result = data;
+      return result;
+    }
+
+    function replaceAll(str, searchStr, replaceStr) {
+      return str.split(searchStr).join(replaceStr);
+    }
+
+    function pr(data) {
+      for (var key in prefix) {
+        data = replaceAll(data, key, prefix[key]);
+      }
+      data = replaceAll(data, "#", ":");
+
+
+      return data
+    }
+
+    function count() {
+      if (typeof count.c == 'undefined') {
+        count.c = 0;
+      }
+      count.c++;
+      return count.c;
+    }
+    var ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', function () {
+      document.getElementById("status").innerHTML = "Connected";
+    });
+
+    ros.on('error', function (error) {
+      document.getElementById("status").innerHTML = "Error";
+    });
+
+    ros.on('close', function () {
+      document.getElementById("status").innerHTML = "Closed";
+    });
+
+    var low_listener = new ROSLIB.Topic({
+      ros: ros,
+      name: '/context_manager/web/provision_for_l',
+      messageType: 'rosjava_triple_msgs/LowLevelContextMonitor'
+    });
+
+    low_listener.subscribe(function (m) {
+      //document.getElementById("low_vowl").src = "http://localhost:8081/webvowl_1.1.5"+"#iri=file://"+m.path;
+      document.getElementById("low_triples").innerHTML = m.triples;
+      document.getElementById("low_objects").innerHTML = m.objects;
+      document.getElementById("low_robots").innerHTML = m.robots;
+      document.getElementById("low_humans").innerHTML = m.humans;
+
+    });
+
+
+    var current_listener = new ROSLIB.Topic({
+      ros: ros,
+      name: '/context_manager/context/provision_for_c',
+      messageType: 'rosjava_triple_msgs/ContextOntologyMonitor'
+    });
+
+    current_listener.subscribe(function (m) {
+      //document.getElementById("current_vowl").src = "http://localhost:8081/webvowl_1.1.5"+"#iri=file://"+m.path;
+      document.getElementById("current_triples").innerHTML = m.triples;
+      document.getElementById("current_classes").innerHTML = m.classes;
+      document.getElementById("current_individuals").innerHTML = m.individuals;
+      document.getElementById("current_objectProperties").innerHTML = m.objectProperties;
+      document.getElementById("current_datatypeProperties").innerHTML = m.datatypeProperties;
+
+
+    });
+
+
+    var high_listener = new ROSLIB.Topic({
+      ros: ros,
+      name: '/context_manager/context/provision_for_r',
+      messageType: 'rosjava_triple_msgs/ContextReasoningMonitor'
+    });
+
+    high_listener.subscribe(function (m) {
+      var c = count();
+
+      var number_tbody = document.getElementById('numberTbody');
+      var sender_tbody = document.getElementById('senderTbody');
+      var query_tbody = document.getElementById('queryTbody');
+      var reply_tbody = document.getElementById('replyTbody');
+      var replytime_tbody = document.getElementById('replyTimeTbody');
+
+      // var row = my_tbody.insertRow(0); // 상단에 추가
+      var number_row = number_tbody.insertRow(number_tbody.rows.length); // 하단에 추가
+      var sender_row = sender_tbody.insertRow(sender_tbody.rows.length); // 하단에 추가
+      var query_row = query_tbody.insertRow(query_tbody.rows.length); // 하단에 추가
+      var reply_row = reply_tbody.insertRow(reply_tbody.rows.length); // 하단에 추가
+      var replytime_row = replytime_tbody.insertRow(replytime_tbody.rows.length); // 하단에 추가
+
+      var cell1 = number_row.insertCell(0);
+      var cell2 = sender_row.insertCell(0);
+      var cell3 = query_row.insertCell(0);
+      var cell4 = reply_row.insertCell(0);
+      var cell5 = replytime_row.insertCell(0);
+      cell1.innerHTML = c;
+      cell2.innerHTML = pr(m.sender);
+      var query = pr(m.query);
+      var lim = query_tbody.offsetWidth;
+
+      if (query.length > lim / 10) { cell3.title = m.query; }
+      cell3.innerHTML = pr(query);
+
+      var response = pr(m.response);
+      var ruler = document.createElement('span');
+
+      document.body.appendChild(ruler);
+      ruler.innerText = response;
+      ruler.setAttribute('style', ' white-space:nowrap; position:absolute; left:-9999px; top: -9999px;');
+      document.body.appendChild(ruler);
+
+      lim = reply_tbody.offsetWidth;
+      if (ruler.offsetWidth > lim) { cell4.title = forTooltip(m.response); }
+      cell4.innerHTML = pr(response);
+      cell4.addEventListener("mouseover", over, false);
+      cell4.id = "" + c;
+      ruler.id = "" + c + "span";
+
+      cell5.innerHTML = pr(m.responseTime);
+
+
+
+
+    });
+
+    function over() {
+
+      var reply_table = document.getElementById('replyTable');
+
+      var reply_tbody = document.getElementById('replyTbody');
+
+      var td = document.getElementById(lastID);
+
+      var ruler = document.getElementById(lastID + "span");
+
+      if (!ruler) return;
+
+      var lim = reply_tbody.offsetWidth;
+      if (ruler.offsetWidth > lim) { td.title = forTooltip(ruler.innerText); }
+      else td.title = "";
+    }
+    var lastID = null;
+
+    var handleMouseover = function (e) {
+      var target = e.target || e.srcElement;
+      lastID = target.id;
+    };
+
+    if (document.addEventListener) {
+      document.addEventListener('mouseover', handleMouseover, false);
+    }
+    else {
+      document.attachEvent('onmouseover', handleMouseover);
+    }
+/*
+      var txt_talker = new ROSLIB.Topic({
+        ros : ros,
+        name : '/temp2',
+        messageType : 'std_msgs/String'
+      });*/
+
+
+  </script>
+
+  <script type="text/javascript" type="text/javascript">
+    var video = document.querySelector("#videoElement");
+
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          video.srcObject = stream;
+        })
+        .catch(function (err0r) {
+          console.log("Something went wrong!");
+        });
+    }
+
+    function stop(e) {
+      var stream = video.srcObject;
+      var tracks = stream.getTracks();
+
+      for (var i = 0; i < tracks.length; i++) {
+        var track = tracks[i];
+        track.stop();
+      }
+
+      video.srcObject = null;
+    }
+  </script>
+
+
+</head>
+
+<body>
+
+
+  <p>Connection status: <span id="status"></span></p>
+
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'current')" id="defaultOpen1">Ontology</button>
+    <button class="tablinks" onclick="openTab(event, 'low')">Low-level context</button>
+    <button class="tablinks" onclick="openTab(event, 'high')" id="defaultOpen">High-level context</button>
+  </div>
+
+  <div id="low" class="tabcontent">
+
+    <h1>Perception Instances</h1>
+    <table>
+      <tr>
+
+
+        <td>
+          <div id="contexttable" class="clearfix">
+
+            <div class="contexttable">
+
+              <div class="name">Triples</div>
+
+              <div class="value"><label id="low_triples">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Objects</div>
+
+              <div class="value"><label id="low_objects">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Robots</div>
+
+              <div class="value"><label id="low_robots">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Humans</div>
+
+              <div class="value"><label id="low_humans">0</label></div>
+
+            </div>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+      <tr>
+
+        <td>
+          <h1>Visualization</h1>
+          <div class="vowl">
+
+            <iframe id="low_vowl" src="http://localhost:8081/webvowl_1.1.5" width=1000 height=700></iframe>
+          </div>
+        </td>
+
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="current" class="tabcontent">
+
+    <h1>Ontology Statistics</h1>
+    <table>
+      <tr>
+
+        <td>
+          <div id="contexttable" class="clearfix">
+
+            <div class="contexttable">
+
+              <div class="name">Triples</div>
+
+              <div class="value"><label id="current_triples">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Classes</div>
+
+              <div class="value"><label id="current_classes">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Individuals</div>
+
+              <div class="value"><label id="current_individuals">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Object properties</div>
+
+              <div class="value"><label id="current_objectProperties">0</label></div>
+
+            </div>
+
+            <div class="contexttable">
+
+              <div class="name">Datatype properties</div>
+
+              <div class="value"><label id="current_datatypeProperties">0</label></div>
+
+            </div>
+
+          </div>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <h1>Visualization</h1>
+          <div class="vowl">
+            <iframe id="current_vowl"
+              src="http://localhost:8081/webvowl_1.1.5#iri=file:///home/ubuntu/Desktop/test/social_ws/src/socialrobot/src/socialrobot_knowledge/cmProlog/knowrob_library/knowrob.owl"
+              width=1000 height=700>
+            </iframe>
+          </div>
+
+        </td>
+      </tr>
+
+    </table>
+  </div>
+
+
+  <div id="high" class="tabcontent">
+
+    <h1>Query & Answer</h1>
+
+    <table class="scrolldown">
+
+      <thead>
+        <tr>
+          <th class="th-sm">#</th>
+
+          <th class="th-sm">Sender</th>
+
+          <th class="th-sm">Query</th>
+
+          <th class="th-sm">Reply</th>
+
+          <th class="th-sm">Reply time</th>
+        </tr>
+      </thead>
+    </table>
+
+
+    <div class="contentstable">
+
+      <table id="context_contents" class="scrolldown2" cellspacing="0">
+
+        <tbody>
+
+
+          <td width=10%>
+            <table class=contentstable id="numberTable" width=100%>
+
+              <tbody class=contents id="numberTbody">
+              </tbody>
+            </table>
+          </td>
+
+          <td width=10%>
+            <table class=contentstable id="senderTable" width=100%>
+
+              <tbody class=contents id="senderTbody">
+              </tbody>
+            </table>
+          </td>
+
+          <td width=20%>
+            <table class=contentstable id="queryTable" width=100%>
+
+              <tbody class=contents id="queryTbody">
+              </tbody>
+            </table>
+          </td>
+
+          <td width=50%>
+            <div class=forReplyTable>
+              <table class=contentstable id="replyTable" width=100%>
+
+                <tbody class=contents id="replyTbody">
+                </tbody>
+              </table>
+            </div>
+          </td>
+
+          <td width=10%>
+            <table class=contentstable id="replyTimeTable" width=100%>
+
+              <tbody class=contents id="replyTimeTbody">
+              </tbody>
+            </table>
+          </td>
+
+
+        </tbody>
+
+      </table>
+    </div>
+
+
+    <h1>Camera View</h1>
+
+    <img src="http://localhost:8080/stream?topic=/image" width=500 height=375 />
+
+  </div>
+
+
+  </div>
+
+
+
+</body>
+
+
+<script>
+  function openTab(evt, tabname) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabname).style.display = "block";
+    evt.currentTarget.className += " active";
+    if (tabname == "high") {
+      document.getElementById("low_vowl").style.display = "none";
+      document.getElementById("current_vowl").style.display = "none";
+    }
+    else if (tabname == "low") {
+      document.getElementById("low_vowl").style.display = "block";
+      document.getElementById("current_vowl").style.display = "none";
+    }
+    else {
+      document.getElementById("low_vowl").style.display = "none";
+      document.getElementById("current_vowl").style.display = "block";
+    }
+  }
+
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,8 @@
+###################  Command 
+string command      
+
+---
+
+bool result
+string error
+

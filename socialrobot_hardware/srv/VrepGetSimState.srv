@@ -1,0 +1,5 @@
+int32 dummy
+---
+int32 state
+int32 READY_STATE = 0
+int32 RUNNING_STATE = 1

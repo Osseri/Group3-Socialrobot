@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <rosparam param="moveit_status" subst_value="true">False</rosparam>
+	
+    <!-- launch the mongoDB -->
+	<include file="$(find socialrobot_interface)/launch/db.launch"/>
+	
+	<!-- interface manager node -->
+    <node name="socialrobot_interface" pkg="socialrobot_interface" type="interface_node.py" respawn="false" output="screen">		
+    	<remap from="~behavior/joint_state" to="/joint_state"/>
+	</node>
+
+</launch>

@@ -1,0 +1,6 @@
+env_object_info_msg workspace
+env_object_info_msg target
+env_object_info_msg[] objects 
+---
+string[] object_name
+geometry_msgs/Point[] rearrange_positions

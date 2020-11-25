@@ -1,8 +1,0 @@
-#goal
-socialrobot_task_msgs/ActionSequence action_sequence
----
-#result
-string[] sequence
----
-#feedback
-string[] sequence

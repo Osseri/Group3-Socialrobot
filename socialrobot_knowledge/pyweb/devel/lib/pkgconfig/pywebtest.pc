@@ -1,0 +1,8 @@
+prefix=/home/ubuntu/pyweb/devel
+
+Name: pywebtest
+Description: Description of pywebtest
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ubuntu/pyweb/devel/lib 
+Requires: 

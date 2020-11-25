@@ -1,0 +1,6 @@
+<!-- -->
+<launch>
+    <node name="perception" pkg="vrep_perception" type="fake_perception_node.py" output="screen">
+    </node>
+
+</launch>

@@ -1,0 +1,331 @@
+
+body {font-family: Arial;}
+
+
+
+.tooltip {
+  position: absolute;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+
+
+
+
+/* Style the tab */
+.tab {
+  width : 100%;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+
+/* Style the close button */
+.topright {
+  float: right;
+  cursor: pointer;
+  font-size: 28px;
+}
+
+.topright:hover {color: red;}
+
+
+
+.tabcontent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+
+
+#container {
+	margin: 0px auto;
+	width: 500px;
+	height: 375px;
+	border: 10px #333 solid;
+}
+
+#videoElement {
+	width: 500px;
+	height: 375px;
+	background-color: #666;
+}
+
+
+
+/* -----------------------------------------------------------------------
+
+ Design by Graham Bill.
+
+ http://www.freshdesignweb.com
+
+----------------------------------------------------------------------- */
+
+.clearfix,.w-bar .clearfix,.e-bar .clearfix{
+
+	width:auto !important;
+
+	margin-left:auto;
+
+	margin-right:auto;
+
+
+
+	}
+
+#contexttable{
+
+	
+
+	margin:24px auto 0;
+
+	height:80px;
+
+	}
+
+#contexttable .contexttable{
+
+	font-size:16px;float:left;
+
+	height:auto;width:auto;
+
+	line-height:auto;
+
+	border-left:1px dotted #004080;
+
+	border-right:1px dotted #004080;
+
+	border-top:1px dotted #004080;
+
+	border-bottom:1px dotted #004080;
+
+	padding:24px;
+
+	margin-top:12px;
+
+	margin-bottom:12px;
+
+	text-align:center;
+
+	}
+
+
+#contexttable .contexttable div{
+
+	display:table;
+
+	margin-left:auto;
+
+	margin-right:auto;
+
+	*text-align:center;
+
+	width:auto;
+
+	text-align:center;
+
+	}
+
+#contexttable .name{
+
+	font-size:24px;
+
+	font-weight:bold;
+
+	border-bottom:1px solid #ccc
+
+	}
+
+#contexttable .value{
+
+	color:#004080;
+
+	font-size:20px;
+
+	font-weight:bold;
+
+	margin-top:12px;
+
+	}
+
+#contexttable .contexttable:hover .name{
+
+	font-size:36px;
+
+	border-bottom:3px solid #ccc
+
+	}
+
+#contexttable .contexttable:hover .value{
+
+	font-size:30px;
+
+	}
+
+#signUp{
+
+	padding-bottom:24px
+
+    }
+
+
+
+div.forReplyTable{
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
+}
+
+table td{
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+
+body {
+  padding: 80px;
+  font-family: 'NanumSquareRound',sans-serif;
+  color: #555;
+}
+
+
+        table.scrolldown {
+
+            border-spacing: 0; 
+            border: 2px solid black;
+            border-collapse:collapse;
+            table-layout:fixed;
+
+            text-align:center;
+            width:100%;
+
+
+        } 
+
+        table.scrolldown2 {
+
+            border-spacing: 0; 
+            border: 2px solid black;
+            border-collapse:collapse;
+            table-layout:fixed;
+
+            text-align:center;
+            width:100%;
+
+
+        } 
+
+
+div.contentstable{
+            overflow-y:scroll;
+height:100px;
+}
+
+
+        table.scrolldown tbody{     border-right: 1px solid black;
+        height:100px;
+
+
+        } 
+ 
+
+        thead tr{
+
+            height: 30px;
+            line-height: 30px;
+            border-bottom: 1px solid black;
+
+
+
+        }
+
+        td {
+
+            height: 20px;
+            line-height: 20px;
+            border-bottom: 1px solid black;
+        }
+
+          
+        /* To display the block as level element */ 
+        table.scrolldown tbody { 
+            border-spacing: 0; 
+
+        }  
+        .scrolldown th:nth-of-type(1), .scrolldown td:nth-of-type(1) { width:7%;}
+        .scrolldown th:nth-of-type(2), .scrolldown td:nth-of-type(2) { width:6%;}
+        .scrolldown th:nth-of-type(3), .scrolldown td:nth-of-type(3) { width:25%;}
+        .scrolldown th:nth-of-type(4), .scrolldown td:nth-of-type(4) { width:55%;}
+        .scrolldown th:nth-of-type(5), .scrolldown td:nth-of-type(5) { width:7%;}
+
+        .scrolldown2 th:nth-of-type(1), .scrolldown2 td:nth-of-type(1) { width:7%;}
+        .scrolldown2 th:nth-of-type(2), .scrolldown2 td:nth-of-type(2) { width:6%;}
+        .scrolldown2 th:nth-of-type(3), .scrolldown2 td:nth-of-type(3) { width:25%;}
+        .scrolldown2 th:nth-of-type(4), .scrolldown2 td:nth-of-type(4) { width:55%;}
+        .scrolldown2 th:nth-of-type(5), .scrolldown2 td:nth-of-type(5) { width:7%;}
+
+
+
+       
+        table.scrolldown td{ 
+            border-right: 1px solid black;
+        } 
+
+
+
+       
+          
+        
+
+
+

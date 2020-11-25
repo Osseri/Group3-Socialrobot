@@ -1,0 +1,67 @@
+# target body of the robot
+int32 targetBody
+int32 WHOLE_BODY = 0
+int32 LEFT_ARM = 1
+int32 RIGHT_ARM = 2
+int32 BOTH_ARM = 3
+int32 LEFT_GRIPPER = 4
+int32 RIGHT_GRIPPER = 8
+int32 BOTH_GRIPPER = 12
+
+# Obstacles environment
+string[] obstacle_ids
+vision_msgs/BoundingBox3D[] obstacles
+
+# target object
+string[] targetObject
+
+#############
+## Moveit! ##
+#############
+
+# goal type
+int32 goalType
+int32 CARTESIAN_SPACE_GOAL = 0
+int32 JOINT_SPACE_GOAL = 1
+int32 CARTESIAN_WITH_ORIENTATION_CONSTRAINTS = 10
+int32 CARTESIAN_WITH_POSITION_CONSTRAINTS = 11
+
+# target pose (EEF pose or joint state)
+sensor_msgs/JointState targetJointState
+geometry_msgs/Pose targetPose
+
+# robot state
+sensor_msgs/JointState currentJointState
+
+# find manipulability
+bool find_manipulability
+
+##############
+## Graspit! ##
+##############
+
+# gripper pose
+geometry_msgs/Pose gripper_pose
+
+
+# constraints
+# TBD
+
+---
+int32 planResult
+int32 SUCCESS = 0
+int32 ERROR_INPUT = 1
+int32 ERROR_NO_SOLUTION = 2
+int32 ERROR_FAIL = 3
+
+# for Moveit
+trajectory_msgs/JointTrajectory jointTrajectory
+float64 manipulability
+
+# for Graspit!
+geometry_msgs/Pose[] endEffectorPose
+float64[] graspQuality
+std_msgs/Float32MultiArray dofs
+
+# push/pull
+nav_msgs/OccupancyGrid gridMap

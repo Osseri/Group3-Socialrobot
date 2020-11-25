@@ -1,0 +1,3623 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/socialrobot#"
+     xml:base="http://www.semanticweb.org/socialrobot"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:pddl="http://www.semanticweb.org/pddl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:social="http://www.semanticweb.org/socialrobot#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/socialrobot">
+        <owl:imports rdf:resource="http://www.semanticweb.org/pddl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#action -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/pddl#action">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#constant -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/pddl#constant">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#effect -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/pddl#effect">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#parameters -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/pddl#parameters">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#precondition -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/pddl#precondition">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#requirements -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/pddl#requirements">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#arg1 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#arg1">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#argument"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#arg2 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#arg2">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#argument"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#arg3 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#arg3">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#argument"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#arg4 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#arg4">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#argument"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#arg5 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#arg5">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/pddl#argument"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#constraints -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#constraints"/>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#controller -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#controller">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#constraints"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#hardware_group -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#hardware_group">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#constraints"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#planner -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#planner">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#constraints"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#primitives -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#primitives"/>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#sub1 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#sub1">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#primitives"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#sub2 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#sub2">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#primitives"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#sub3 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#sub3">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#primitives"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#sub4 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#sub4">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#primitives"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#sub5 -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/socialrobot#sub5">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/socialrobot#primitives"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#inWorkspace -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#inWorkspace">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>robotBase</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                <pddl:param2>target</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#locatedAt -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#locatedAt">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>object</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                <pddl:param2>location</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/pddl#type -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/pddl#type">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>object</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>type</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#Arm -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#Arm">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#Gripper -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#Gripper">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#constants"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#Mobile -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#Mobile">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#constants"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#Nearby -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#Nearby">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#constants"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#Object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#Object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#types"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>object</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>type</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#Position -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#Position">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#types"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#RelocatePosition -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#RelocatePosition">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#constants"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#TempPosition -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#TempPosition">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#constants"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#aboveOf -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#aboveOf">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>obj1</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>obj2</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#accesibility -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#accesibility">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#reasoner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#accesible -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#accesible">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>hand</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>object</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#approach -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#approach">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#planner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#approach_arm -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#approach_arm">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#hold_object"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#nearby"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>initPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>nearPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>initPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param4>nearPosition</pddl:param4>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param2>targetObject</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#equal"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param1>initPosition</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>nearPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#equal"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param1>nearPosition</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Nearby"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>objects</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                                <pddl:predicate>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param1>robotPart</pddl:param1>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param2>targetObject</pddl:param2>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param3>objects</pddl:param3>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                    </rdf:Description>
+                                </pddl:predicate>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#approach"/>
+            </rdf:Description>
+        </constraints>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#carry_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#carry_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#aboveOf"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>attachedObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>attachedObject</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>targetPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>targetPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>attachedObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param3>targetObject</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param4>targetPosition</pddl:param4>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>attachedObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>attachedObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>targetPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>targetPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#clear -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#clear">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                <pddl:param1>position</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#close_hand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#close_hand">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#grasp_object"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#openclose"/>
+            </rdf:Description>
+        </constraints>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#controller -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#controller"/>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#current -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#current">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#controller"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#delivered -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#delivered">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>obj</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#detected -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#detected">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>object</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#emptyHand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#emptyHand">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>robotGripper</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#force -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#force">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#controller"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#grasp -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#grasp">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#planner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#grasp_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#grasp_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#hold_object"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>nearPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>nearPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param4>goalPosition</pddl:param4>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>nearPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#nearby"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#emptyHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param2>targetObject</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>nearPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>goalPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param2>targetObject</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#equal"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param1>nearPosition</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Nearby"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#grasp"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#close_hand"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#graspable -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#graspable">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>object</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>hand</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#graspedBy -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#graspedBy">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>hand</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>object</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#handover_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#handover_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>toPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>fromPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>toPart</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param3>targetObject</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param4>objectPosition</pddl:param4>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>fromPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>toPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>objectPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#inWorkspace"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>fromPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>objectPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#inWorkspace"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>toPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>objectPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#hold_object"/>
+                <sub2 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+                <sub3 rdf:resource="http://www.semanticweb.org/socialrobot#hold_object"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#heavy -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#heavy">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>obj</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#hold_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#hold_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#emptyHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>initPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>initPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param4>goalPosition</pddl:param4>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>objects</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                                <pddl:predicate>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param1>robotPart</pddl:param1>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param2>targetObject</pddl:param2>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param3>objects</pddl:param3>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                    </rdf:Description>
+                                </pddl:predicate>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#emptyHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param2>targetObject</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#grasp"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#approach_arm"/>
+                <sub2 rdf:resource="http://www.semanticweb.org/socialrobot#grasp_object"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#hold_object_dualarm -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#hold_object_dualarm">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#delivered"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>targetPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#heavy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+                <sub2 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#inContGeneric -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#inContGeneric">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>container</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>content</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#motion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#motion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#planner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#move_arm -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#move_arm">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#carry_object"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#handover_object"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#pour_object"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#relocate_object"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#rotate_object"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>initPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param2>initPosition</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>goalPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#inWorkspace"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>objects</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                                <pddl:predicate>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                <pddl:param1>robotPart</pddl:param1>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                        <pddl:parameter>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                                <pddl:param2>initPosition</pddl:param2>
+                                            </rdf:Description>
+                                        </pddl:parameter>
+                                    </rdf:Description>
+                                </pddl:predicate>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#movearm -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#movearm">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#planner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#nearby -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#nearby">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>obj1</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>obj2</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#obstruct -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#obstruct">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param3>obstacle</pddl:param3>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>hand</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>target</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#onPhysical -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#onPhysical">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>object</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>supportPlane</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#open_hand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#open_hand">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#release_object"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#openclose"/>
+            </rdf:Description>
+        </constraints>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#openclose -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#openclose">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#planner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#openedHand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#openedHand">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#predicates"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>openedHand</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#path -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#path">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#planner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#planner -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#planner"/>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#position -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#position">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#controller"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#pour_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#pour_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#inContGeneric"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>container</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param3>container</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#aboveOf"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>container</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#reasoner -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#reasoner"/>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#release_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#release_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param2>targetObject</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#emptyHand"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>initPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#openedHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#emptyHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#grasp"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#open_hand"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#relocate_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#relocate_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>goalPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>targetObject</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>initPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>objects</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#when"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <pddl:predicate>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                                                <pddl:parameter>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                        <pddl:param1>robotPart</pddl:param1>
+                                                    </rdf:Description>
+                                                </pddl:parameter>
+                                                <pddl:parameter>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                        <pddl:param2>objects</pddl:param2>
+                                                    </rdf:Description>
+                                                </pddl:parameter>
+                                                <pddl:parameter>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                        <pddl:param3>targetObject</pddl:param3>
+                                                    </rdf:Description>
+                                                </pddl:parameter>
+                                            </rdf:Description>
+                                        </pddl:predicate>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:predicate>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                                        <pddl:predicate>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                                                <pddl:parameter>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                        <pddl:param1>robotPart</pddl:param1>
+                                                    </rdf:Description>
+                                                </pddl:parameter>
+                                                <pddl:parameter>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                        <pddl:param2>objects</pddl:param2>
+                                                    </rdf:Description>
+                                                </pddl:parameter>
+                                                <pddl:parameter>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                                        <pddl:param3>targetObject</pddl:param3>
+                                                    </rdf:Description>
+                                                </pddl:parameter>
+                                            </rdf:Description>
+                                        </pddl:predicate>
+                                    </rdf:Description>
+                                </pddl:predicate>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>initPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>initPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param4>goalPosition</pddl:param4>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#equal"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param1>goalPosition</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#RelocatePosition"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>initPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>goalPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>targetObject</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>goalPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#relocation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#relocation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#reasoner"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#rotate_object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#rotate_object">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/pddl#action"/>
+        <pddl:effect>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#delivered"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:effect>
+        <pddl:parameters>
+            <rdf:Description>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>robotPart</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>targetObject</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param3>targetPosition</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:precondition>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#heavy"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>targetObject</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <pddl:param2>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                                    </rdf:Description>
+                                </pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#graspedBy"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>robotPart</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>targetObject</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetObject</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                <pddl:param2>targetPosition</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#emptyHand"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>robotPart</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:precondition>
+        <constraints>
+            <rdf:Description>
+                <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+                <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+                <planner rdf:resource="http://www.semanticweb.org/socialrobot#movearm"/>
+            </rdf:Description>
+        </constraints>
+        <primitives>
+            <rdf:Description>
+                <sub1 rdf:resource="http://www.semanticweb.org/socialrobot#move_arm"/>
+            </rdf:Description>
+        </primitives>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#torque -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#torque">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#controller"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/socialrobot#velocity -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/socialrobot#velocity">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/socialrobot#controller"/>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <pddl:param1>obj</pddl:param1>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <pddl:param1>robotPart</pddl:param1>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#RelocatePosition"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <pddl:param1>robotPart</pddl:param1>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <pddl:param2>objects</pddl:param2>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <pddl:param3>targetObject</pddl:param3>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param2>objects</pddl:param2>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>robotPart</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param3>targetObject</pddl:param3>
+            </rdf:Description>
+        </pddl:parameter>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#or"/>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#equal"/>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                        <pddl:param1>goalPosition</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <pddl:param2>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+                            </rdf:Description>
+                        </pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:predicate>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>objects</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>objects</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                                        <pddl:param2>goalPosition</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#when"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+                        <pddl:predicate>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param1>targetArm</pddl:param1>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param2>objects</pddl:param2>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                                <pddl:parameter>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                        <pddl:param3>obstructObject</pddl:param3>
+                                    </rdf:Description>
+                                </pddl:parameter>
+                            </rdf:Description>
+                        </pddl:predicate>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:parameter>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#not"/>
+                <pddl:predicate>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param1>targetArm</pddl:param1>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param2>objects</pddl:param2>
+                            </rdf:Description>
+                        </pddl:parameter>
+                        <pddl:parameter>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                                <pddl:param3>obstructObject</pddl:param3>
+                            </rdf:Description>
+                        </pddl:parameter>
+                    </rdf:Description>
+                </pddl:predicate>
+            </rdf:Description>
+        </pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+        <pddl:param2>test</pddl:param2>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <pddl:param2 rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>targetArm</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>objects</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param3>obstructObjects</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#clear"/>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                <pddl:param1>robotGripper</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+        <rdfs:comment rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+        <pddl:parameters rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+        <pddl:parameters>targetArm</pddl:parameters>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+        <arg2>eefPosition</arg2>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+        <pddl:parameters rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+        <pddl:parameters>?targetArm</pddl:parameters>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+        <pddl:predicate>(inWorkspace ?targetArm ?goalPosition)</pddl:predicate>
+        <pddl:predicate>(locatedAt ?targetArm ?eefPosition)</pddl:predicate>
+        <pddl:predicate>(type ?targetArm Gripper)</pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#or"/>
+        <pddl:parameters>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:parameters>
+            <rdf:Description/>
+        </pddl:parameters>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+        <pddl:parameters>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#inWorkspace"/>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:parameters>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#or"/>
+                <pddl:parameters>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#forall"/>
+                    </rdf:Description>
+                </pddl:parameters>
+                <pddl:parameters>
+                    <rdf:Description/>
+                </pddl:parameters>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:parameters>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+            </rdf:Description>
+        </pddl:parameters>
+        <pddl:parameters>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+            </rdf:Description>
+        </pddl:parameters>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#locatedAt"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/pddl#type"/>
+            </rdf:Description>
+        </pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/pddl#and"/>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>targetArm</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>objects</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param3>obstructObjects</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#delivered"/>
+    </rdf:Description>
+    <rdf:Description>
+        <controller>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+            </rdf:Description>
+        </controller>
+    </rdf:Description>
+    <rdf:Description>
+        <pddl:predicate>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#obstruct"/>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param1>targetArm</pddl:param1>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param2>objects</pddl:param2>
+                    </rdf:Description>
+                </pddl:parameter>
+                <pddl:parameter>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Object"/>
+                        <pddl:param3>obstructObject</pddl:param3>
+                    </rdf:Description>
+                </pddl:parameter>
+            </rdf:Description>
+        </pddl:predicate>
+    </rdf:Description>
+    <rdf:Description>
+        <controller>
+            <rdf:Description/>
+        </controller>
+        <hardware_group>
+            <rdf:Description/>
+        </hardware_group>
+    </rdf:Description>
+    <rdf:Description>
+        <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+    </rdf:Description>
+    <rdf:Description>
+        <pddl:parameter>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#Position"/>
+                <pddl:param1>goalPosition</pddl:param1>
+            </rdf:Description>
+        </pddl:parameter>
+    </rdf:Description>
+    <rdf:Description>
+        <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+        <planner rdf:resource="http://www.semanticweb.org/socialrobot#grasp"/>
+        <planner rdf:resource="http://www.semanticweb.org/socialrobot#motion"/>
+    </rdf:Description>
+    <rdf:Description>
+        <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+        <planner rdf:resource="http://www.semanticweb.org/socialrobot#motion"/>
+    </rdf:Description>
+    <rdf:Description>
+        <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Arm"/>
+        <planner rdf:resource="http://www.semanticweb.org/socialrobot#motion"/>
+    </rdf:Description>
+    <rdf:Description>
+        <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+    </rdf:Description>
+    <rdf:Description>
+        <controller>
+            <rdf:Description>
+                <rdf:type rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+            </rdf:Description>
+        </controller>
+    </rdf:Description>
+    <rdf:Description>
+        <controller rdf:resource="http://www.semanticweb.org/socialrobot#position"/>
+        <hardware_group rdf:resource="http://www.semanticweb.org/socialrobot#Gripper"/>
+    </rdf:Description>
+    <rdf:Description>
+        <pddl:parameters>?eefPosition</pddl:parameters>
+        <pddl:parameters>?goalPosition</pddl:parameters>
+        <pddl:parameters>?targetArm</pddl:parameters>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

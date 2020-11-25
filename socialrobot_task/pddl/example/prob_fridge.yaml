@@ -1,0 +1,30 @@
+Demo:
+    problem: "fridge"
+    domain: "social_robot"
+    object:
+    -     ["left_hand", "Object"]
+    -     ["right_hand", "Object"]
+    -     ["robot_base", "Object"]
+    -     ["obj_juice", "Object"]
+    -     ["obj_fridge", "Object"]
+    -     ["pos_juice", "Position"]
+    -     ["pos_left_hand", "Position"]
+    -     ["pos_right_hand", "Position"]
+    -     ["pos_robot", "Position"]
+    -     ["pos_fridge", "Position"]
+    fact: 
+        - ["type", ["robot_base", "Mobile"]]
+        - ["type", ["left_hand", "Gripper"]]
+        - ["type", ["right_hand", "Gripper"]]
+        - ["emptyHand", ["left_hand"]]
+        - ["emptyHand", ["right_hand"]]
+        - ["detectedObject", ["obj_fridge"]]
+        - ["locatedAt", ["right_hand", "pos_right_hand"]]
+        - ["locatedAt", ["left_hand", "pos_left_hand"]]
+        - ["locatedAt", ["robot_base", "pos_robot"]]
+        - ["locatedAt", ["obj_juice", "pos_juice"]]
+        - ["locatedAt", ["obj_fridge", "pos_fridge"]]
+        - ["inContGeneric", ["obj_fridge", "obj_juice"]]   
+    goal:
+        - ["graspedBy", ["left_hand", "obj_juice"]]
+        - ["detectedObject", ["obj_juice"]]

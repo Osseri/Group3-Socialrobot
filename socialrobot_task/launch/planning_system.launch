@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- action library -->
+	<node name="action_library" pkg="socialrobot_actionlib" type="actionlib_node.py" respawn="false" output="screen"/>
+
+	<!-- Task planner -->
+	<include file="$(find socialrobot_task)/launch/task_plan.launch">
+	</include>
+
+</launch>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package>
+  <name>socialrobot_interface</name>
+  <version>0.0.0</version>
+  <description>The socialrobot_interface package</description>
+
+  <maintainer email="nicky707@hanmail.net">JJM</maintainer>
+
+
+  <license>TODO</license>
+
+    <build_depend>message_generation</build_depend>    
+    <run_depend>message_runtime</run_depend>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <build_depend>roscpp</build_depend>
+    <build_depend>rospy</build_depend>
+    <build_depend>std_msgs</build_depend>
+    <build_depend>diagnostic_msgs</build_depend>
+    <build_depend>vision_msgs</build_depend>
+    <build_depend>trajectory_msgs</build_depend>
+    <build_depend>socialrobot_perception_msgs</build_depend>
+    <build_depend>socialrobot_behavior</build_depend>
+    <build_depend>socialrobot_actionlib</build_depend>
+    <build_depend>actionlib_msgs</build_depend>
+  
+    <run_depend>roscpp</run_depend>
+    <run_depend>rospy</run_depend>
+    <run_depend>std_msgs</run_depend>
+    <run_depend>diagnostic_msgs</run_depend>
+    <run_depend>vision_msgs</run_depend>
+    <run_depend>trajectory_msgs</run_depend>
+    <run_depend>socialrobot_perception_msgs</run_depend>
+    <run_depend>socialrobot_behavior</run_depend>
+    <run_depend>socialrobot_actionlib</run_depend>
+    <run_depend>actionlib_msgs</run_depend>
+  <export>
+  </export>
+</package>

@@ -1,0 +1,29 @@
+axis:
+  right_bhand_finger_1_prox_joint: -1
+  right_bhand_finger_1_med_joint: -1
+  right_bhand_finger_1_dist_joint: -1
+  right_bhand_finger_2_prox_joint: 1
+  right_bhand_finger_2_med_joint: -1
+  right_bhand_finger_2_dist_joint: -1
+  right_bhand_finger_3_med_joint: -1
+  right_bhand_finger_3_dist_joint: -1
+  left_bhand_finger_1_prox_joint: -1
+  left_bhand_finger_1_med_joint: -1
+  left_bhand_finger_1_dist_joint: -1
+  left_bhand_finger_2_prox_joint: 1
+  left_bhand_finger_2_med_joint: -1
+  left_bhand_finger_2_dist_joint: -1
+  left_bhand_finger_3_med_joint: -1
+  left_bhand_finger_3_dist_joint: -1
+
+# joint angle ratio (ROS:VREP)
+ratio:
+
+# joint offset (degree)
+offset:
+  right_bhand_finger_1_dist_joint: -45
+  right_bhand_finger_2_dist_joint: -45
+  right_bhand_finger_3_dist_joint: -45
+  left_bhand_finger_1_dist_joint: -45
+  left_bhand_finger_2_dist_joint: -45
+  left_bhand_finger_3_dist_joint: -45

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>socialrobot_motion</name>
+  <version>0.0.1</version>
+  <description>The socialrobot_motion_planner package</description>
+
+  <maintainer email="taredm@skku.edu">Dongmin Choi</maintainer>
+
+  <author email="taredm@skku.edu">Dongmin Choi</author>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+
+  <build_export_depend>moveit_ros_planning_interface</build_export_depend>
+  <exec_depend>moveit_ros_planning_interface</exec_depend>
+  <build_export_depend>moveit_msgs</build_export_depend>
+  <exec_depend>moveit_msgs</exec_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <build_depend>vision_msgs</build_depend>
+  <exec_depend>vision_msgs</exec_depend>
+  <build_depend>nav_msgs</build_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <export>
+  </export>
+</package>

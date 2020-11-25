@@ -1,0 +1,34 @@
+Demo:
+    problem: "social_task"
+    domain: "social_robot"
+    object:
+    -     ["left_hand", "Object"]
+    -     ["right_hand", "Object"]
+    -     ["obj_juice", "Object"]
+    -     ["obj_milk", "Object"]
+    -     ["obj_table", "Object"]
+    -     ["pos_juice", "Position"]
+    -     ["pos_milk", "Position"]
+    -     ["pos_left_arm", "Position"]
+    -     ["pos_right_arm", "Position"]
+    -     ["pos_table", "Position"]
+    fact: 
+        - ["onPhysical", ["obj_juice", "obj_table"]]
+        - ["onPhysical", ["obj_milk", "obj_table"]]
+        - ["emptyHand", ["left_hand"]]
+        - ["emptyHand", ["right_hand"]]
+        - ["locatedAt", ["obj_milk", "pos_milk"]]
+        - ["locatedAt", ["obj_juice", "pos_juice"]]
+        - ["locatedAt", ["left_hand", "pos_left_arm"]]
+        - ["locatedAt", ["right_hand", "pos_right_arm"]]
+        - ["locatedAt", ["obj_table", "pos_table"]]
+        - ["detectedobject", ["obj_milk"]]
+        - ["detectedobject", ["obj_juice"]]
+        - ["obstruct", ["left_hand", "obj_milk", "obj_juice"]]
+        - ["obstruct", ["right_hand", "obj_milk", "obj_juice"]]
+        - ["inWorkspace", ["left_hand", "pos_juice"]]
+        - ["inWorkspace", ["left_hand", "pos_milk"]]
+        - ["inWorkspace", ["right_hand", "pos_juice"]]
+        - ["inWorkspace", ["right_hand", "pos_milk"]]
+    goal:
+    -     ["graspedBy", ["left_hand", "obj_milk"]]

@@ -1,0 +1,8 @@
+int32 operation
+int32 SIM_START = 0
+int32 SIM_STOP = 1
+---
+int32 result
+int32 OK = 0
+int32 ERROR = 1
+string err_msg

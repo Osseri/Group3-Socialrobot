@@ -1,0 +1,25 @@
+Demo:
+    problem: "handover"
+    domain: "social_robot"
+    object:
+    -     ["left_hand", "Object"]
+    -     ["right_hand", "Object"]
+    -     ["obj_mug", "Object"]
+    -     ["obj_table", "Object"]
+    -     ["pos_mug", "Position"]
+    -     ["pos_left_hand", "Position"]
+    -     ["pos_right_hand", "Position"]
+    fact: 
+        - ["type", ["left_hand", "Gripper"]]
+        - ["type", ["right_hand", "Gripper"]]
+        - ["inWorkspace", ["left_hand", "pos_mug"]]
+        - ["onPhysical", ["obj_mug", "obj_table"]]
+        - ["emptyHand", ["left_hand"]]
+        - ["emptyHand", ["right_hand"]]
+        - ["detectedObject", ["obj_mug"]]
+        - ["locatedAt", ["obj_mug", "pos_mug"]]
+        - ["locatedAt", ["left_hand", "pos_left_hand"]]
+        - ["locatedAt", ["right_hand", "pos_right_hand"]]
+    goal:
+    -     ["graspedBy", ["right_hand", "obj_mug"]]
+    -     ["graspedBy", ["left_hand", "obj_mug"], "not"]

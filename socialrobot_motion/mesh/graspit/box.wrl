@@ -1,0 +1,347 @@
+#VRML V2.0 utf8
+
+Transform {
+	scale         82.402 79.344 238.14 
+	children [
+Group {
+	children [
+Group {
+	children [
+DEF _20321118 Group {
+	children [
+	]
+}
+	]
+}
+Group {
+	children [
+DEF _20323EC8 Group {
+	children [
+	]
+}
+	]
+}
+Group {
+	children [
+DEF _20322EA8 Group {
+	children [
+	]
+}
+	]
+}
+Group {
+	children [
+Group {
+	children [
+DEF _006A9E88 Group {
+	children [
+Shape {
+appearance Appearance {
+	material DEF _material0 Material {
+		diffuseColor  0.823529 0.823529 1
+	}
+}
+geometry IndexedFaceSet {
+solid FALSE
+coord Coordinate {
+	point	[
+		 0.5 -0.5 0.5,
+		 -0.5 -0.5 0.5,
+		 -0.5 0.5 0.5,
+		 0.5 0.5 0.5,
+		]
+	}
+coordIndex [
+ 1,0,2,-1,
+ 0,3,2,-1,
+]
+
+}
+}
+Shape {
+appearance Appearance {
+material USE _material0
+}
+geometry IndexedFaceSet {
+solid FALSE
+coord Coordinate {
+	point	[
+		 0.5 -0.5 -0.5,
+		 -0.5 -0.5 -0.5,
+		 -0.5 0.5 -0.5,
+		 0.5 0.5 -0.5,
+		]
+	}
+coordIndex [
+ 1,2,0,-1,
+ 2,3,0,-1,
+]
+
+}
+}
+Shape {
+appearance Appearance {
+material USE _material0
+}
+geometry IndexedFaceSet {
+solid FALSE
+coord Coordinate {
+	point	[
+		 0.5 -0.5 -0.5,
+		 0.5 0.5 -0.5,
+		 0.5 0.5 0.5,
+		 0.5 -0.5 0.5,
+		]
+	}
+coordIndex [
+ 1,2,0,-1,
+ 2,3,0,-1,
+]
+
+}
+}
+Shape {
+appearance Appearance {
+material USE _material0
+}
+geometry IndexedFaceSet {
+solid FALSE
+coord Coordinate {
+	point	[
+		 -0.5 -0.5 -0.5,
+		 0.5 -0.5 -0.5,
+		 0.5 -0.5 0.5,
+		 -0.5 -0.5 0.5,
+		]
+	}
+coordIndex [
+ 1,2,0,-1,
+ 2,3,0,-1,
+]
+
+}
+}
+Shape {
+appearance Appearance {
+material USE _material0
+}
+geometry IndexedFaceSet {
+solid FALSE
+coord Coordinate {
+	point	[
+		 -0.5 0.5 -0.5,
+		 -0.5 -0.5 -0.5,
+		 -0.5 -0.5 0.5,
+		 -0.5 0.5 0.5,
+		]
+	}
+coordIndex [
+ 1,2,0,-1,
+ 2,3,0,-1,
+]
+
+}
+}
+Shape {
+appearance Appearance {
+material USE _material0
+}
+geometry IndexedFaceSet {
+solid FALSE
+coord Coordinate {
+	point	[
+		 0.5 0.5 -0.5,
+		 -0.5 0.5 -0.5,
+		 -0.5 0.5 0.5,
+		 0.5 0.5 0.5,
+		]
+	}
+coordIndex [
+ 1,2,0,-1,
+ 2,3,0,-1,
+]
+
+}
+}
+Shape {
+appearance Appearance {
+	material DEF _material1 Material {
+		emissiveColor 0 0 0
+	}
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 0.5 0.5 -0.5,
+		 0.5 0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 -0.5 0.5 -0.5,
+		 -0.5 0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 0.5 0.5 -0.5,
+		 -0.5 0.5 -0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 0.5 0.5 0.5,
+		 -0.5 0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 -0.5 -0.5 -0.5,
+		 -0.5 -0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 -0.5 0.5 -0.5,
+		 -0.5 -0.5 -0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 -0.5 0.5 0.5,
+		 -0.5 -0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 0.5 -0.5 -0.5,
+		 0.5 -0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 -0.5 -0.5 -0.5,
+		 0.5 -0.5 -0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 -0.5 -0.5 0.5,
+		 0.5 -0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 0.5 -0.5 -0.5,
+		 0.5 0.5 -0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+Shape {
+appearance Appearance {
+material USE _material1
+}
+geometry IndexedLineSet {
+	coord Coordinate {
+point	[
+		 0.5 -0.5 0.5,
+		 0.5 0.5 0.5,
+		]
+}
+	coordIndex	[0 1  -1 ]
+}
+}
+	]
+}
+	]
+}
+	]
+}
+	]
+}
+	]
+}
+
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																		

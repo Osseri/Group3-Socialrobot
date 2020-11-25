@@ -1,0 +1,14 @@
+<launch>
+  <!-- By default we do not overwrite the URDF. Change the following to true to change the default behavior -->
+  <arg name="load_robot_description" default="false"/>
+  <arg name="robot_name" default="skkurobot"/>
+  <arg name="robot_config" default="$(arg robot_name)_config.launch"/>
+
+  <group if="$(arg load_robot_description)">
+    <include file="$(find socialrobot_commons)/launch/$(arg robot_config)"/>
+  </group>
+
+  <node name="planner_node" pkg="socialrobot_motion" type="planner_node" output="screen">
+  </node>
+  
+</launch>

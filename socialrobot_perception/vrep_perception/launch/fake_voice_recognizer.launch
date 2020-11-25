@@ -1,0 +1,7 @@
+<!-- -->
+<launch>
+    <node name="voice_recognizer" pkg="vrep_perception" type="fake_voice_recognition.py" output="screen">
+        <param name="~voice_source" value="마실것을 줘"/>
+    </node>
+
+</launch>

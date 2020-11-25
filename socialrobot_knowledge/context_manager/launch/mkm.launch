@@ -1,0 +1,10 @@
+<!-- -->
+<launch>
+
+	<node pkg="context_manager" type="context_manager" name="context_manager" args="org.ros.rosjava_context_manager.ContextManager"/>
+
+	<node pkg="context_manager" type="context_manager" name="context_listener" args="org.ros.rosjava_context_manager.ContextListener"/>
+
+	<node name="perception_listener" pkg="perception_listener" type="perception_listener.py" output="screen">
+    </node>
+</launch>

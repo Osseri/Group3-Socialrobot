@@ -1,0 +1,501 @@
+1574392763699	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileGCoLYb"
+1574392765141	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1574392765142	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1574392765142	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1574392765143	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1574392771058	Marionette	INFO	Listening on port 45083
+1574392771141	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 24951, Gecko_IOThread] WARNING: pipe error (55): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1574397884467	Marionette	INFO	Stopped listening on port 45083
+1574398307673	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilezFtpe9"
+1574398309233	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1574398309233	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1574398309234	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1574398309234	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1574398314564	Marionette	INFO	Listening on port 36032
+1574398314616	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+[Parent 29249, Gecko_IOThread] WARNING: pipe error (81): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1574405281451	Marionette	INFO	Stopped listening on port 36032
+1574405341592	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilegfE78W"
+1574405343051	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1574405343052	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1574405343052	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1574405343053	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1574405348466	Marionette	INFO	Listening on port 38046
+1574405348540	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+1574410365971	Marionette	INFO	Stopped listening on port 38046
+1574410369740	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileOG1SvZ"
+1574410370891	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1574410370891	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1574410370892	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1574410370892	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1574410374579	Marionette	INFO	Listening on port 45599
+1574410374655	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 26020, Gecko_IOThread] WARNING: pipe error (78): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 26020, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1574412205424	Marionette	INFO	Stopped listening on port 45599
+1574412209230	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilem5Z3vh"
+1574412210405	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1574412210406	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1574412210407	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1574412210407	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1574412215754	Marionette	INFO	Listening on port 34421
+1574412215780	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+1575014150204	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileeAZdFI"
+1575014150922	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575014150922	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575014150922	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575014150922	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575014152729	Marionette	INFO	Listening on port 36285
+1575014152812	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: file:///home/ubuntu/pyweb/src/webtest/gui/gui.html, line 84: ReferenceError: ROSLIB is not defined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.app.js, line 1911: TypeError: jsonExportFileName is undefined
+[Parent 9580, Gecko_IOThread] WARNING: pipe error (81): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 9580, Gecko_IOThread] WARNING: pipe error (80): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575026154853	Marionette	INFO	Stopped listening on port 36285
+1575026161498	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilevAp3bT"
+1575026161958	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575026161958	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575026161958	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575026161958	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575026163454	Marionette	INFO	Listening on port 41320
+1575026163504	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/UrlClassifierListManager.jsm, line 680: TypeError: this.tablesData[table] is undefined
+1575026165111	Marionette	INFO	Stopped listening on port 41320
+1575095773688	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileyGEfGg"
+1575095774135	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575095774135	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575095774135	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575095774135	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575095775755	Marionette	INFO	Listening on port 42525
+1575095775793	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 24154, Gecko_IOThread] WARNING: pipe error (71): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 24154, Gecko_IOThread] WARNING: pipe error (101): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575095930514	Marionette	INFO	Stopped listening on port 42525
+1575096870305	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilec4NW7E"
+1575096870925	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575096870925	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575096870925	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575096870926	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575096874230	Marionette	INFO	Listening on port 38013
+1575096874384	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 327, Gecko_IOThread] WARNING: pipe error (84): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575096939622	Marionette	INFO	Stopped listening on port 38013
+1575096942920	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileHPDeqg"
+1575096943589	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575096943589	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575096943589	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575096943590	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575096946020	Marionette	INFO	Listening on port 35991
+1575096946082	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+1575097339116	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilecoTRCo"
+1575097339881	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575097339881	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575097339881	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575097339881	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+[Parent 4134, Gecko_IOThread] WARNING: pipe error (100): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575097341206	Marionette	INFO	Stopped listening on port 35991
+1575097342540	Marionette	INFO	Listening on port 39064
+1575097342632	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+1575100328043	Marionette	INFO	Stopped listening on port 39064
+1575100330951	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilexPGlLM"
+1575100332173	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575100332174	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575100332174	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575100332174	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575100338625	Marionette	INFO	Listening on port 42674
+1575100338696	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1575100833131	Marionette	INFO	Stopped listening on port 42674
+1575100836689	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilezSfl0y"
+1575100838171	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575100838172	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575100838172	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575100838173	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575100844773	Marionette	INFO	Listening on port 38992
+1575100844840	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 12268, Gecko_IOThread] WARNING: pipe error (78): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 12268, Gecko_IOThread] WARNING: pipe error (93): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575101305782	Marionette	INFO	Stopped listening on port 38992
+1575101307891	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile8stajp"
+1575101308563	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575101308564	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575101308564	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575101308564	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575101310937	Marionette	INFO	Listening on port 40035
+1575101311044	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+Exiting due to channel error.
+[GFX1-]: Receive IPC close with reason=AbnormalShutdown
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1575101961329	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileaXJ25B"
+1575101962029	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575101962029	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575101962030	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575101962030	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575101964323	Marionette	INFO	Listening on port 44256
+1575101964349	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 19426, Gecko_IOThread] WARNING: pipe error (103): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1575351771698	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile4Bg1cd"
+1575351772608	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575351772608	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575351772609	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575351772609	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575351775660	Marionette	INFO	Listening on port 42148
+1575351775726	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+[Parent 17121, Gecko_IOThread] WARNING: pipe error (71): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1575352421550	Marionette	INFO	Stopped listening on port 42148
+1575352427673	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileX4j2pR"
+1575352428394	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575352428395	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575352428395	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575352428395	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575352431129	Marionette	INFO	Listening on port 39310
+1575352431184	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+
+(firefox:31411): Gtk-WARNING **: Attempting to read the recently used resources file at '/home/ubuntu/.local/share/recently-used.xbel', but the parser failed: Failed to open file '/home/ubuntu/.local/share/recently-used.xbel': Permission denied.
+
+(firefox:31411): Gtk-WARNING **: Attempting to read the recently used resources file at '/home/ubuntu/.local/share/recently-used.xbel', but the parser failed: Failed to open file '/home/ubuntu/.local/share/recently-used.xbel': Permission denied.
+1575359196230	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileWb55nW"
+1575359196956	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575359196957	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575359196957	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575359196957	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575359199349	Marionette	INFO	Listening on port 42701
+1575359199470	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 13926, Gecko_IOThread] WARNING: pipe error (80): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 13926, Gecko_IOThread] WARNING: pipe error (66): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 13926, Gecko_IOThread] WARNING: pipe error (99): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575360922761	Marionette	INFO	Stopped listening on port 42701
+1575360929623	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile4BXuow"
+1575360930263	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575360930263	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575360930263	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575360930263	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575360933022	Marionette	INFO	Listening on port 33889
+1575360933068	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+[Parent 18479, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PLayerTransaction::Msg_ReleaseLayer Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+1575361022345	Marionette	INFO	Stopped listening on port 33889
+1575361027963	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileEe6VqH"
+1575361028567	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575361028567	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575361028567	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575361028567	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575361031059	Marionette	INFO	Listening on port 33126
+1575361031113	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+[Parent 20769, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 20769, Gecko_IOThread] WARNING: pipe error (69): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575361075375	Marionette	INFO	Stopped listening on port 33126
+1575361078699	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile2Mmknn"
+1575361079389	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575361079389	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575361079390	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575361079390	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575361081837	Marionette	INFO	Listening on port 36710
+1575361081936	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 22111, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 22111, Gecko_IOThread] WARNING: pipe error (56): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575361411803	Marionette	INFO	Stopped listening on port 36710
+1575361417042	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilezR3g5C"
+1575361417854	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575361417854	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575361417854	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575361417854	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575361420509	Marionette	INFO	Listening on port 40137
+1575361420634	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 29636, Gecko_IOThread] WARNING: pipe error (97): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 29636, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575361461678	Marionette	INFO	Stopped listening on port 40137
+1575361470729	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileje32nu"
+1575361471394	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575361471394	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575361471394	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575361471394	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575361474064	Marionette	INFO	Listening on port 33500
+1575361474141	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 31411, Gecko_IOThread] WARNING: pipe error (80): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575365063487	Marionette	INFO	Stopped listening on port 39310
+1575365083107	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileyL38Yu"
+1575365083970	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575365083970	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575365083970	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575365083970	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575365086737	Marionette	INFO	Listening on port 40514
+1575365086826	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 10687, Gecko_IOThread] WARNING: pipe error (71): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 10687, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575365176022	Marionette	INFO	Stopped listening on port 40514
+[Parent 31006, Gecko_IOThread] WARNING: pipe error (71): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 31006, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575365180408	Marionette	INFO	Stopped listening on port 33500
+1575365185580	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilePtb4H1"
+1575365186225	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575365186225	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575365186226	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575365186226	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575365188611	Marionette	INFO	Listening on port 42158
+1575365188700	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 13089, Gecko_IOThread] WARNING: pipe error (90): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 13089, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575365805330	Marionette	INFO	Stopped listening on port 42158
+1575365816319	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileY9tbuW"
+1575365817000	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575365817001	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575365817001	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575365817001	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575365819578	Marionette	INFO	Listening on port 35939
+1575365819681	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 26659, Gecko_IOThread] WARNING: pipe error (90): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 26659, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575365962465	Marionette	INFO	Stopped listening on port 35939
+1575365966408	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileG0TvDb"
+1575365967107	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575365967107	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575365967108	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575365967108	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575365969716	Marionette	INFO	Listening on port 33379
+1575365969735	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 30075, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+[Parent 30075, Gecko_IOThread] WARNING: pipe error (90): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575366832759	Marionette	INFO	Stopped listening on port 33379
+1575366840569	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilebaY7dU"
+1575366841197	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575366841197	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575366841198	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575366841198	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575366843569	Marionette	INFO	Listening on port 33416
+1575366843590	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8081/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+1575367017551	Marionette	INFO	Stopped listening on port 33416
+1575367028083	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile40y5Gp"
+1575367028773	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575367028773	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575367028773	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575367028773	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575367031460	Marionette	INFO	Listening on port 36882
+1575367031497	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+[Parent 20631, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-hE9N0Y/firefox-70.0.1+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 358
+1575367209926	Marionette	INFO	Stopped listening on port 36882
+1575367217481	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileOiGnoj"
+1575367218192	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1575367218192	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1575367218192	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1575367218192	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1575367220583	Marionette	INFO	Listening on port 36643
+1575367220608	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 1310: NS_ERROR_FAILURE: 
+JavaScript error: http://localhost:8082/webvowl_1.1.5/js/webvowl.js, line 5093: TypeError: labelGroupElements is undefined

@@ -1,0 +1,16 @@
+###################  Action command 
+# SET
+# GET
+string command      
+
+###################  Goal
+# Goal predicates
+socialrobot_actionlib/Problem problem
+
+---
+
+bool result
+string error
+
+# Result of Task Plan
+string[] action_sequence

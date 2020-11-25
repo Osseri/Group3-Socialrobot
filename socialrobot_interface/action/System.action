@@ -1,0 +1,17 @@
+#goal definition
+int32 order
+string command
+
+---
+
+#result definition
+int32 action_idx
+socialrobot_actionlib/Action[] action_sequence
+socialrobot_actionlib/Problem problem
+
+---
+
+#feedback
+int32 action_idx
+socialrobot_actionlib/Action[] action_sequence
+socialrobot_actionlib/Problem problem

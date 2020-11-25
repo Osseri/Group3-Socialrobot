@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- scene database (MongoDB) -->
+	<node name="scene_database" pkg="mongodb_store" type="mongodb_server.py" respawn="false" output="log">
+	    <param name="database_path" value="$(find socialrobot_interface)/common/mongoDB/" />
+	</node>
+	<node name="rosplan_scene_message_store" pkg="mongodb_store" type="message_store_node.py" respawn="false" output="log">
+	</node>
+	
+
+</launch>

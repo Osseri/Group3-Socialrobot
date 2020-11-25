@@ -1,0 +1,10 @@
+###################  Command 
+string command      
+
+
+---
+
+bool result
+
+# Result of Relocation
+string[] action_sequence

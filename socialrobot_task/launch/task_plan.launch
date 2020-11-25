@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- Task planner -->
+    <node name="task_manager" pkg="socialrobot_task" type="task_planner_node.py" respawn="false" output="screen">
+		<!-- path for plan result JSON -->
+		<param name="json_path" value="$(find socialrobot_task)/data/plan.json" />
+		<!-- path for PDDL4J jar file -->
+		<param name="planner_path" value="$(find socialrobot_task)/data/pddl4j-3.8.2.jar" />
+		<!-- folder directory for PDDL parser library -->
+		<param name="lib_path" value="$(find socialrobot_task)/libs" />
+		<!-- PDDL planning method  -->
+		<param name="plan_method" value="1" />
+	</node>
+
+	
+</launch>
