@@ -26,9 +26,9 @@ def influence(ob, target, obstacle, Body_position, d_max, ob_radius, target_radi
 
 
     if direct:
-        eta = 30
+        eta = 20
     else:
-        eta = 30
+        eta = 20
 
     front = 0.10
 

@@ -19,9 +19,14 @@ class ActionLibInterface(InterfaceBase):
         rospy.loginfo("Initializing ActionLibInterface...")
 
         # set the data label name for DB
+        self.use_mongodb = False
+        self.msg_store = None
         self.db_action_list = "/actionlib/action_list"
-        self.msg_store = MessageStoreProxy()
-        self.msg_store.insert_named(self.db_action_list, socialrobot_interface.msg.ActionLibrary())
+        if rospy.has_param("/use_mongodb"):
+            self.use_mongodb = rospy.get_param("/use_mongodb")
+        if self.use_mongodb:
+            self.msg_store = MessageStoreProxy()
+            self.msg_store.insert_named(self.db_action_list, socialrobot_interface.msg.ActionLibrary())
 
         # actionlib service list
         self.srv_check_action = rospy.ServiceProxy('/actionlib/check_action', CheckAction)

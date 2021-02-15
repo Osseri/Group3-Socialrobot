@@ -1,7 +1,6 @@
 import rospy
 from rosjava_custom_srv.msg import *
 from rosjava_custom_srv.srv import *
-from mongodb_store.message_store import MessageStoreProxy
 from socialrobot_actionlib.msg import Problem, Predicate
 
 class ContextKnowledge():
@@ -20,18 +19,11 @@ class ContextKnowledge():
     ['near', 'Object1', 'Object2', '0', '0'],
     ['empty_container', 'Object', '0', '0', '0']]
     
-    def __init__(self, msg_store):
+    def __init__(self):
         context_topic = "/context_manager/monitor/provision_for_tm"
         #rospy.Subscriber(context_topic, MonitorServiceResponse, self._callback_state, queue_size=10)
         self.context_srv = rospy.ServiceProxy("/context_manager/monitor/service", MonitorSimilarService)
 
-        # set the data label name for DB
-        self.current_state = "/knowledge/current_state"
-        self.goal_state = "/knowledge/goal_state"
-
-        # init data format
-        self.msg_store = msg_store
-        self.msg_store.insert_named(self.current_state, Problem()) 
 
     def update(self):
         current_states = Problem()
@@ -41,6 +33,7 @@ class ContextKnowledge():
         req.status = 100
         req.manager = "TaskManager"
         for pred in self.predicates:   
+            print("Reasoning for %s predicate." %pred[0])
             req.predicate = pred[0]
             req.param1 = pred[1]
             req.param2 = pred[2]
@@ -51,13 +44,11 @@ class ContextKnowledge():
             # check response is not empty
             for response in res.response:
                 state = self._convert_format(response)
-                current_states.facts.append(state)
+                if 'obj_bakey' not in state.args and 'pos_bakey' not in state.args:
+                    current_states.facts.append(state) 
 
-        # update data into DB
-        self.msg_store.update_named(self.current_state, current_states)        
+        print(current_states)
         
-        msg_state = self.msg_store.query_named(self.current_state, Problem._type)
-        print msg_state[0].facts
 
     def _callback_state(self, data):
         pred = data.predicate
@@ -92,11 +83,6 @@ class ContextKnowledge():
 
 if __name__ == "__main__":
     rospy.init_node("state_subscrber")
-    msg_store = MessageStoreProxy()
-    ck = ContextKnowledge(msg_store)
-
-    while not rospy.is_shutdown():
-        r = rospy.Rate(10)
-        ck.update()
-        r.sleep()
+    ck = ContextKnowledge()
+    ck.update()
 

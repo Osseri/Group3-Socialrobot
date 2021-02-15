@@ -4,14 +4,9 @@
 import itertools
 
 class Action:
-
-    def __init__(self, name, parameters, positive_preconditions, negative_preconditions, add_effects, del_effects, planner, controller, hardware_group, primitives):
+    def __init__(self, name, parameters, positive_preconditions, negative_preconditions, add_effects, del_effects):
         self.name = name
-        self.planner = planner
-        self.hardware_group = hardware_group
-        self.controller = controller
         self.parameters = parameters
-        self.primitives = primitives
         self.positive_preconditions = positive_preconditions
         self.negative_preconditions = negative_preconditions
         self.add_effects = add_effects
@@ -23,11 +18,7 @@ class Action:
         '\n  positive_preconditions: ' + str(self.positive_preconditions) + \
         '\n  negative_preconditions: ' + str(self.negative_preconditions) + \
         '\n  add_effects: ' + str(self.add_effects) + \
-        '\n  del_effects: ' + str(self.del_effects) + \
-        '\n  planner: ' + str(self.planner) + \
-        '\n  hardware_group: ' + str(self.hardware_group) + \
-        '\n  controller: ' + str(self.controller) + \
-        '\n  primitives: ' + str(self.primitives) + '\n'
+        '\n  del_effects: ' + str(self.del_effects) + '\n'
 
     def __eq__(self, other): 
         return self.__dict__ == other.__dict__
@@ -59,3 +50,19 @@ class Action:
                 iv += 1
             g.append(pred)
         return g
+
+if __name__ == '__main__':
+    a = Action('move', [['?ag', 'agent'], ['?from', 'pos'], ['?to', 'pos']],
+        [['at', '?ag', '?from'], ['adjacent', '?from', '?to']],
+        [['at', '?ag', '?to']],
+        [['at', '?ag', '?to']],
+        [['at', '?ag', '?from']]
+    )
+    print(a)
+
+    objects = {
+        'agent': ['ana','bob'],
+        'pos': ['p1','p2']
+    }
+    for act in a.groundify(objects):
+        print(act)

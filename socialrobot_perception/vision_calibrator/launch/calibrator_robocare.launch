@@ -1,0 +1,6 @@
+<launch>
+    
+    <node pkg="vision_calibrator" type="external_calibrator.py" name="extrinsic_calibrator_robocare" output="screen">
+        <param name="~cam" type="int" value="0" />
+    </node>
+</launch>

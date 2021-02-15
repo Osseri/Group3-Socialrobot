@@ -93,7 +93,7 @@ if __name__ == '__main__':
     rospy.init_node('hw_interface')
 
     # To get a robot description
-    robot_name = "skkurobot"
+    robot_name = "social_robot"
     if rospy.has_param('/robot_name'):
         robot_name = rospy.get_param('/robot_name')
     else:

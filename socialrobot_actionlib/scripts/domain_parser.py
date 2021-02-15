@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import re
-from action import Action
 
 class PDDL_Parser:
 

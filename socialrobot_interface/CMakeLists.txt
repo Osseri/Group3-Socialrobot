@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   vision_msgs
   actionlib_msgs
   trajectory_msgs
+  nav_msgs
   socialrobot_perception_msgs
   socialrobot_task
 )
@@ -42,6 +43,7 @@ generate_messages(
     diagnostic_msgs 
     vision_msgs
     trajectory_msgs
+    nav_msgs
     actionlib_msgs
     socialrobot_perception_msgs
     socialrobot_behavior

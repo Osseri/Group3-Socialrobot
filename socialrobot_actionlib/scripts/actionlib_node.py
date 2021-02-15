@@ -5,6 +5,8 @@ import sys
 import signal
 import json
 import cPickle as pickle
+import itertools
+import copy
 import rospy
 import rospkg
 import rosparam
@@ -160,47 +162,153 @@ class ActionLib():
             for param in self.actions[compound_action.name]['parameters']:
                 compound_param.append(param['name'])
             primitive_param = self.actions[compound_action.name]['primitives'][idx]['parameters']
-
             for param in primitive_param:
                 if param in compound_param:
                     idx = compound_param.index(param)
                     param_list.append(compound_action.parameters[idx])
                 else:
-                    rospy.logwarn("Cannot find %s action parameter in compound action %s" %(param, compound_action.name))
+                    param_list.append(param)
+                    #rospy.logwarn("Cannot find %s action parameter in compound action %s" %(param, compound_action.name))
 
         return param_list
 
     def _callback_get_action_info(self, req):
         res = GetActionInfoResponse()
         action_name = req.action_name
-        predicates = req. predicates
-        options = req.options
+        params = req.params
 
         if not action_name in self.available_actions.keys():
             rospy.logwarn("Cannot find '%s' action in the action list." %action_name)
             res.result = False
             return res
-        if 'parameters' in self.actions[action_name].keys():
-            for param in self.actions[action_name]['parameters']:
-                res.parameters.append(param['name'])          
-        if 'primitives' in self.actions[action_name].keys():  
-            for prim in self.actions[action_name]['primitives']:
-                res.primitives.append(prim['name'])                       
-        if 'controller' in self.actions[action_name].keys():     
-            res.controller = self.actions[action_name]['controller']           
-        if 'group' in self.actions[action_name].keys():             
-            res.group = self.actions[action_name]['group']           
-        if 'planner' in self.actions[action_name].keys(): 
-            res.planner = self.actions[action_name]['planner']     
-        if 'precondition' in self.actions[action_name].keys(): 
-            res.precondition.append(pickle.dumps(self.actions[action_name]['precondition'], pickle.HIGHEST_PROTOCOL))     
-        if 'effect' in self.actions[action_name].keys(): 
-            res.effect.append(pickle.dumps(self.actions[action_name]['effect'], pickle.HIGHEST_PROTOCOL))
-        res.result = True
+        else:
+        # if 'parameters' in self.actions[action_name].keys():
+        #     for param in self.actions[action_name]['parameters']:
+        #         res.parameters.append(param['name'])          
+        # if 'primitives' in self.actions[action_name].keys():  
+        #     for prim in self.actions[action_name]['primitives']:
+        #         res.primitives.append(prim['name'])                       
+        # if 'controller' in self.actions[action_name].keys():     
+        #     res.controller = self.actions[action_name]['controller']           
+        # if 'group' in self.actions[action_name].keys():             
+        #     res.group = self.actions[action_name]['group']           
+        # if 'planner' in self.actions[action_name].keys(): 
+        #     res.planner = self.actions[action_name]['planner']     
+        # if 'precondition' in self.actions[action_name].keys(): 
+        #     res.precondition.append(pickle.dumps(self.actions[action_name]['precondition'], pickle.HIGHEST_PROTOCOL))     
+        # if 'effect' in self.actions[action_name].keys(): 
+        #     res.effect.append(pickle.dumps(self.actions[action_name]['effect'], pickle.HIGHEST_PROTOCOL))
+            res.result = True
+            res.action = self.groundify_action(action_name,params)
 
         return res
 
+    def groundify_action(self, action_name, action_variables):
+        pddl_action = self.actions[action_name]
+        act = Action()
+        act.name = action_name
+        act.controller = pddl_action['controller']
+        act.group = pddl_action['group']
+        act.planner = pddl_action['planner']
 
+        # create parameter map
+        params = pddl_action['parameters']
+        precond = pddl_action['precondition']
+        effect = pddl_action['effect']
+        type_map = {}
+        for i, param in enumerate(params):
+            type_map.setdefault(param['name'], []).append(action_variables[i])
+        action_param = []
+        for param in pddl_action['parameters']:
+            action_param.append(param['name'])
+        act.parameters = action_variables
+
+        # groundify primitives
+        primitives = [] 
+        if 'primitives' in pddl_action.keys():
+            for p in pddl_action['primitives']:
+                primitives.append(p['name'])
+                #for i,param in enumerate(p['parameters']):
+                #    primitive.append(action_variables[action_param.index(param)])
+            act.primitives = primitives
+
+        # groundify predicates          
+        pos_precond = []
+        neg_precond = []
+        pos_effect = []
+        neg_effect = []              
+        for p in precond:     
+            self.groundify_predicate(p, type_map, pos_precond, neg_precond)        
+        for e in effect:     
+            self.groundify_predicate(e, type_map, pos_effect, neg_effect)
+
+        # convert to msg format
+        
+        if pos_precond:
+            for precond in pos_precond:
+                fluent = Fluent(predicate=precond[0], args=precond[1])  
+                act.precondition.positives.append(fluent)            
+
+        if neg_precond:
+            for precond in neg_precond:
+                fluent = Fluent(predicate=precond[0], args=precond[1])  
+                act.precondition.negatives.append(fluent)  
+            
+        if pos_effect:
+            for precond in pos_effect:
+                fluent = Fluent(predicate=precond[0], args=precond[1])  
+                act.effect.positives.append(fluent)  
+            
+        if neg_effect:
+            for precond in neg_effect:
+                fluent = Fluent(predicate=precond[0], args=precond[1])  
+                act.effect.negatives.append(fluent)              
+
+        return act
+
+    def groundify_predicate(self, predicate, type_map, pos_predicate, neg_predicate):
+        '''
+        mapping the objects into action parameters
+        '''
+        # TODO: consider current predicate states
+        pred_type = predicate[0]
+        pred_var = predicate[1:]
+        neg_ground_pred = []
+        pos_ground_pred = []
+        
+        # 
+        if pred_type == 'forall': 
+            pass
+        elif pred_type == 'when':
+            pass                
+        elif pred_type == 'exists':
+            pass
+        elif pred_type == 'and':
+            pass
+        elif pred_type == 'or':   
+            pass
+        elif pred_type == 'equal':   
+            pass
+        elif pred_type == 'not': 
+            neg_ground_pred = [pred_var[0][0], pred_var[0][1:]]
+        elif pred_type == 'type':
+            pass
+            
+        else:           
+            pos_ground_pred = [pred_type, pred_var]
+            
+        # groundify
+        if pos_ground_pred:        
+            pred, params = pos_ground_pred
+            for i,param in enumerate(params):
+                params[i] = type_map[param['name']][0]
+            pos_predicate.append(pos_ground_pred)
+
+        if neg_ground_pred:
+            pred, params = neg_ground_pred
+            for i,param in enumerate(params):
+                params[i] = type_map[param['name']][0]        
+            neg_predicate.append(neg_ground_pred)
 
 if __name__ =='__main__':
     al = ActionLib()

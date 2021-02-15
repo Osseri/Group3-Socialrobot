@@ -1,6 +1,6 @@
 <!-- -->
 <launch>
-  <arg name="robot_name" default="skkurobot"/>
+  <arg name="robot_name" default="social_robot"/>
   <arg name="sim_env" default="default"/>
   <arg name="sim" default="true"/>
 
@@ -19,4 +19,6 @@
     </node>
   </group>
 
+  <!-- mobile path controller-->
+   <node name="path_follower" pkg="socialrobot_hardware" type="path_follower.py" output="screen"/>
 </launch>

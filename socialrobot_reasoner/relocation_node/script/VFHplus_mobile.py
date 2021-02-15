@@ -29,9 +29,9 @@ def influence(ob, target, obstacle, Body_position, d_max, ob_radius, target_radi
 
 
     if direct:
-        eta = 60
+        eta = 15
     else:
-        eta = 45
+        eta = 15
 
     front = 0.1
 
@@ -59,9 +59,9 @@ def influence(ob, target, obstacle, Body_position, d_max, ob_radius, target_radi
 
     # The size of the robot implemented by enlarging all the active voxels
 
-    r_r = 0.035
+    r_r = 0.1
 
-    r_s = 0.005
+    r_s = 0.01
 
     #r_t = 0.035
 
@@ -308,8 +308,7 @@ def influence(ob, target, obstacle, Body_position, d_max, ob_radius, target_radi
     plt.axis([-90, 90, 0, 6])
 
     '''
-
-
+    print('magnitude {} / {}'.format(len(H_p[i]), H_p[i]))
 
     for i in range(ob):
 

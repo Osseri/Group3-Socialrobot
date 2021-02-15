@@ -73,12 +73,15 @@ class GraspPlanner(with_metaclass(Singleton)):
         self.object_list = {}
         # clear world
         try:
-            GraspitCommander.clearWorld()
+            graspableBodyList = GraspitCommander.getGraspableBodies()
+            if len(graspableBodyList.ids)>0:
+                GraspitCommander.clearWorld()
         except:
             return -1
 
         # load gripper model
         try:
+            rospy.loginfo('[Grasp planner] gripper model is loaded.')
             GraspitCommander.importRobot(self.robot_name)
         except:
             rospy.logerr('[Grasp planner] can not import robot model..')
@@ -116,27 +119,28 @@ class GraspPlanner(with_metaclass(Singleton)):
         return 0
 
     def add_box(self, name, size, graspable):
-        box_xml_dir_path = self.dir_path + "box.xml"
-        box_wrl_dir_path = self.dir_path + "box.wrl"
+        box_xml_path = self.dir_path + "box.xml"
+        box_wrl_path = self.dir_path + "box.wrl"
+        box_wrl_backup_path = self.dir_path + "box_backup.wrl"
 
         # read box.wrl file
-        list_file = open(box_wrl_dir_path, 'r').read().split('\t')
+        list_file = open(box_wrl_backup_path, 'r').read().split('\t')
 
         # change scale (size unit : m)
         list_file[1] = 'scale         ' + str(size.x*10**3) + ' ' + \
             str(size.y*10**3) + ' ' + str(size.z*10**3) + ' ' + '\r\n'
 
         # overwrite file
-        file = open(box_wrl_dir_path, 'w')
+        file = open(box_wrl_path, 'w')
         for i in range(len(list_file)):
             file.write(list_file[i] + '\t')
         file.close()
 
         # load box model
         if graspable:
-            GraspitCommander.importGraspableBody(box_xml_dir_path)
+            GraspitCommander.importGraspableBody(box_xml_path)
         else:
-            GraspitCommander.importObstacle(box_xml_dir_path)
+            GraspitCommander.importObstacle(box_xml_path)
 
     def setRobotPose(self, pose):
         if pose == Pose():
@@ -179,6 +183,7 @@ class GraspPlanner(with_metaclass(Singleton)):
 
     def callback_plan_grasp(self, req):
         rospy.loginfo("[Grasp planner] planning..")
+
         res = MotionPlanResponse()
 
         ### set params ###
@@ -198,7 +203,7 @@ class GraspPlanner(with_metaclass(Singleton)):
         ### set environment ###
         for i, name in enumerate(obstacle_list):
             graspable = False
-            if name == target_object:
+            if name in target_object:
                 graspable = True
 
             # load object

@@ -1,7 +1,7 @@
-# Rearrange Task Planner
+# socialrobot_rearrangement
 
 <!-- Variables -->
-[SRP_main]: https://gitlab.com/social-robot/socialrobot
+[SRP_main]: https://gitlab.com/Jinhwi/socialrobot_rearrangement
 
 - Version 1.0.0
 - [[Go to the Social Robot Project Main]][SRP_main]
@@ -14,33 +14,28 @@
 **Package summary**
 
 This package determines the object to be relocated in order to clear all obstacles that prevent grasping a target object in clutter.
-
-- Maintainer status: maintained
-- Maintainers
+- Maintainer status : maintained
+- Maintainer :
   - Sang Hun Cheong (welovehun@kist.re.kr)
   - Jinhwi Lee (jinhooi@kist.re.kr)
   - Changjoo Nam (cjnam@kist.re.kr)
-- Author
+- Author :
   - Sang Hun Cheong (welovehun@kist.re.kr)
 - License: {License Name}
-- Source: git https://gitlab.com/social-robot/socialrobot_reasoner.git
+- Source: git https://{Git URL}.git
 
 </div>
 <div style="flex:40%; padding-left:10px;">
 
 **Table of Contents**
 1. [Overview](#overview)
-2. [Installation methods](#installation-methods)
-3. [Dependencies](#dependencies)
+2. [Dependencies](#dependencies)
    1. [Frameworks](#frameworks)
-   2. [Third-party libraries](#third-party-libraries)
-   3. [Social Robot Project Modules](#social-robot-project-modules)
-   4. [Hardware requirements](#hardware-requirements)
-4. [Quick start](#quick-start)
-5. [Features](#features)
-   1. [Example Input test](#example-input-test)
-6. [Nodes](#nodes)
-   1. [rearrange_node](#rearrange_node)
+   2. [Social Robot Project Modules](#social-robot-project-modules)
+   3. [Hardware requirements](#hardware-requirements)
+3. [Quick start](#quick-start)
+   1. [Example Input test(src/src/test_module.py)](#example-input-testsrcsrctest_modulepy)
+   2. [Return](#return)
 
 </div>
 </div>
@@ -49,50 +44,31 @@ This package determines the object to be relocated in order to clear all obstacl
 
 ## Overview
 
-This package determines the object to be relocated in order to clear all obstacles that prevent grasping a target object in clutter.
-
-<!-- 
-```mermaid
-```
- -->
-
-## Installation methods
-
-.
+This package determines the rearrange position of the object to be relocated.
 
 ## Dependencies
 
 ### Frameworks
 
 - ROS Kinetic/Melodic
-
-### Third-party libraries
-
-- .
+  - ROS Moveit!
 
 ### Social Robot Project Modules
 
-- .
+- socialrobot_perception
 
 ### Hardware requirements
 
-This package does not require any hardware device.
+The package does not require any hardware device.
 
-## Quick start
-
+## Quick start 
 1. Install the package through catkin build system.
-2. ```rosrun rearrange_node rearrange_task_planner.py```
-3. run test_module file(`./src/test_module.py`)
+2. `rosrun rearrange_node rearrange_task_planner.py`
+3. run test_module file(src/src/test_module.py)
 
-## Features
+### Example Input test(src/src/test_module.py)
 
-### Example Input test
-
-**./src/test_module.py**
-
-> /usr/bin/python2.7 ~/catkin_ws/src/rearrange_node/src/test_module.py
-
-```
+```py
 #!/usr/bin/env python
 
 import rospy
@@ -144,11 +120,14 @@ def example():
 if __name__ == '__main__':
     print "Example"
     example()
-```
-
-Example return:
 
 ```
+
+### Return
+
+```sh
+/usr/bin/python2.7 ~/catkin_ws/src/rearrange_node/src/test_module.py
+Example
 object_name: [obj1]
 rearrange_positions: 
   - 
@@ -183,77 +162,40 @@ rearrange_positions:
 Process finished with exit code 0
 ```
 
-## Nodes
+#### Service
 
-### rearrange_node
+- {rearrange_srv}(rearrange_node/rearrange_env_srv.srv)
 
-rearrange_task_planner.py
+##### Input/Service Request
 
-<div style="padding-left:40px;">
+- env_object_info_msg.msg<br>
+  - header ('header')
+    - Standard metadata for higher-level stamped data types.<br>
+  - object_name ('string[]')  
+    - the name of the object.<br>
+  - object_position ('geometry_msgs/Point')
+    - the position of the object.<br>
+  - object_orientation ('geometry_msgs/Quaternion')  
+    - the orientation of the object in quaternions(x, y, z, w).<br>
+  - object_scale ('geometry_msgs/Vector3') 
+    - the scale of the object in each x, y, z-axis.<br>
 
-#### Subscribed Topics
+- rearrange_env_srv.srv (request)<br>
+  - workspace ('env_object_info_msg')
+    - the workspace object (ex.table).<br>
+  - target ('env_object_info_msg')
+    - the target object on the workspace object.<br>
+  - objects ('env_object_info_msg[]') 
+    - the obstacles on the workspace object.<br>
 
-- None
+# 7. Output/Service Response
 
-#### Published Topics
+- rearrange_env_srv.srv (response)<br>
+  - object_name ('string[]')
+    - the object to be relocated.<br>
+  - rearrange_positions ('geometry_msgs/Point[]')
+    - the list of positions that the object to be rearranged.<br>
 
-- None
+# 8. Parameters
 
-#### Messages
-
-- env_object_info_msg.msg
-  - header (`Header`)
-    - Standard metadata for higher-level stamped data types.
-  - object_name (`string[]`)
-    - The name of the object.
-  - object_position (`geometry_msgs/Point`)
-    - The position of the object.
-  - object_orientation (`geometry_msgs/Quaternion`)
-    - The orientation of the object in quaternions(x, y, z, w)
-  - object_scale (`geometry_msgs/Vector3`)
-    - The scale of the object in each x, y, z-axis.
-
-#### Services
-
-- ~/rearrange_srv (rearrange_node/rearrange_env_srv.srv)
-
-<div style="display:flex; padding-left:50px">
-<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
-
-Request
-
-- workspace (`env_object_info_msg`)
-  - The workspace object (ex.table).
-- target (`env_object_info_msg`)
-  - The target object on the workspace object.
-- objects (`env_object_info_msg[]`)
-  - The obstacles on the workspace object.
-
-</div>
-<div style="flex:50%; padding-left:10px;">
-
-Response
-
-- object_name (`string[]`)
-  - The object to be relocated.
-- rearrange_positions (`geometry_msgs/Point[]`)
-  - The list of positions that the object to be rearranged.
-
-</div>
-</div>
-
-
-
-#### Services Called
-
-- None
-
-#### Parameters
-
-- None
-
-</div>
-
----
-
-- [[Go to the Social Robot Project Main]][SRP_main]
+N/A

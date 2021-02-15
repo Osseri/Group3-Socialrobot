@@ -20,23 +20,22 @@ import roslib
 from tf.transformations import quaternion_matrix
 roslib.load_manifest('socialrobot_behavior')
 
-
 ##############################
 # Main function
 ##############################
 
+
 def grasp_pos(target_object, euler, dist):
-    quaternion = quaternion_from_euler(
-        euler[0], euler[1], euler[2], axes="rzxy")
+    quaternion = quaternion_from_euler(euler[0], euler[1], euler[2], axes="rzxy")
     transf_m = quaternion_matrix(quaternion)
 
     z_axis = [-transf_m[0][2], -transf_m[1][2], -transf_m[2][2]]
     center = [target_object.position.x, target_object.position.y, target_object.position.z]
 
     grasp_pos = Pose()
-    grasp_pos.position.x = center[0] + dist/(3**0.5)*z_axis[0]
-    grasp_pos.position.y = center[1] + dist/(3**0.5)*z_axis[1]
-    grasp_pos.position.z = center[2] + dist/(3**0.5)*z_axis[2]
+    grasp_pos.position.x = center[0] + dist * z_axis[0]
+    grasp_pos.position.y = center[1] + dist * z_axis[1]
+    grasp_pos.position.z = center[2] + dist * z_axis[2]
 
     grasp_pos.orientation.x = quaternion[0]
     grasp_pos.orientation.y = quaternion[1]
@@ -55,21 +54,21 @@ def main():
     plan_req.planner_name = "pick"
     plan_req.inputs.targetBody = plan_req.inputs.LEFT_ARM
 
-    # table(c3)
+    # table
     obs3 = BoundingBox3D()
     c = Pose()
-    c.position.x = 0.575006
-    c.position.y = 0.0
+    c.position.x = 0.550006
+    c.position.y = 8.80659e-06
     c.position.z = 0.365011
     c.orientation.x = 0
     c.orientation.y = 0
-    c.orientation.z = 0
-    c.orientation.w = 1
+    c.orientation.z = 0.707
+    c.orientation.w = 0.707
     obs3.center = c
     v = Vector3()
-    v.x = 0.708903
-    v.y = 1.13422
-    v.z = 0.69
+    v.x = 1.1342161893844604
+    v.y = 0.7088739275932312
+    v.z = 0.6899999976158142
     obs3.size = v
 
     # SKKU robot
@@ -81,8 +80,7 @@ def main():
         c1.position.y = -5.7710e-02
         c1.position.z = +8.2867e-01
         euler = [0, 0, 0]
-        quaternion = quaternion_from_euler(
-            euler[0], euler[1], euler[2], axes="rzxy")
+        quaternion = quaternion_from_euler(euler[0], euler[1], euler[2], axes="rzxy")
         c1.orientation.x = quaternion[0]
         c1.orientation.y = quaternion[1]
         c1.orientation.z = quaternion[2]
@@ -101,8 +99,7 @@ def main():
         c2.position.y = -8.2703e-02
         c2.position.z = +8.2735e-01
         euler = [0, 0, 0]
-        quaternion = quaternion_from_euler(
-            euler[0], euler[1], euler[2], axes="rzxy")
+        quaternion = quaternion_from_euler(euler[0], euler[1], euler[2], axes="rzxy")
         c2.orientation.x = quaternion[0]
         c2.orientation.y = quaternion[1]
         c2.orientation.z = quaternion[2]
@@ -116,51 +113,64 @@ def main():
 
     # Social_robot
     elif robot_name == 'social_robot':
-        # juice(c1)
+        # red_gotica
         obs1 = BoundingBox3D()
         c1 = Pose()
-        c1.position.x = 0.40
-        c1.position.y = 0.14
-        c1.position.z = 0.825
-        euler = [30*pi/180, 0, 0]
-        quaternion = quaternion_from_euler(
-            euler[0], euler[1], euler[2], axes="rzxy")
-        c1.orientation.x = quaternion[0]
-        c1.orientation.y = quaternion[1]
-        c1.orientation.z = quaternion[2]
-        c1.orientation.w = quaternion[3]
+        c1.position.x = +3.0000e-01
+        c1.position.y = +9.9997e-02
+        c1.position.z = +8.2886e-01
+        c1.orientation.x = 1.31936e-05
+        c1.orientation.y = 2.20794e-10
+        c1.orientation.z = 6.07222e-07
+        c1.orientation.w = 1
         obs1.center = c1
         v1 = Vector3()
-        v1.x = 0.082402
-        v1.y = 0.079344
+        v1.x = 0.0618015
+        v1.y = 0.059508
         v1.z = 0.23814
         obs1.size = v1
+
+        # gotica
+        obs2 = BoundingBox3D()
+        c2 = Pose()
+        c2.position.x = +4.0000e-01
+        c2.position.y = -1.5003e-02
+        c2.position.z = +8.2886e-01
+        c2.orientation.x = 1.31627e-05
+        c2.orientation.y = 2.26816e-10
+        c2.orientation.z = -1.15535e-18
+        c2.orientation.w = 1.0
+        obs2.center = c2
+        v2 = Vector3()
+        v2.x = 0.065
+        v2.y = 0.065
+        v2.z = 0.23544
+        obs2.size = v2
 
     # grasp point (juice)
     for i in range(12):
         for j in range(2):
-            euler = [pi*(i)/6, pi*j, pi/2]
-            grasp_p = grasp_pos(c1, euler, 0.3)
+            euler = [pi * (i) / 6, pi * j, pi / 2]
+            grasp_p = grasp_pos(c1, euler, 0.173)
             plan_req.inputs.grasp_point.append(grasp_p)
 
     # add obstacles
-    plan_req.inputs.obstacle_ids = ['obj_juice', 'obj_milk' 'obj_table']
+    plan_req.inputs.obstacle_ids = ['obj_red_gotica', 'obj_gotica', 'obj_table']
     plan_req.inputs.obstacles.append(obs1)
     plan_req.inputs.obstacles.append(obs2)
     plan_req.inputs.obstacles.append(obs3)
 
     # add target obstacle
-    plan_req.inputs.targetObject = 'obj_juice'
+    plan_req.inputs.targetObject = ['obj_red_gotica']
 
     # get motion
     motion_srv = rospy.ServiceProxy('/behavior/get_motion', GetMotion)
     res = motion_srv(plan_req)
-    print (res)
+    print(res)
 
     # set behavior
     if res.result:
-        behavior_srv = rospy.ServiceProxy(
-            '/behavior/set_behavior', SetBehavior)
+        behavior_srv = rospy.ServiceProxy('/behavior/set_behavior', SetBehavior)
         behavior_req = SetBehaviorRequest()
         behavior_req.header.frame_id = plan_req.planner_name
         behavior_req.trajectory = res.motion.jointTrajectory

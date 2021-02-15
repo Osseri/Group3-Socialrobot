@@ -1,8 +1,8 @@
 <launch>
-<!--
+
     <include file="$(find graspit_interface)/launch/graspit_interface.launch">
     </include>
--->
+
     <!-- <node name="motion_plan" pkg="socialrobot_motion" type="motionplan_node" output="screen"/> -->
     <node name="motion_plan_python" pkg="socialrobot_motion" type="motionplan_node.py" output="screen"/>
 </launch>

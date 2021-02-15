@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
 <launch>
     <rosparam param="moveit_status" subst_value="true">False</rosparam>
-	
+	<arg name="use_mongodb" default="false"/>
+	<arg name="object_tracking" default="false"/>
+	<param name="use_mongodb" value="$(arg use_mongodb)" />
+	<param name="object_tracking" value="$(arg object_tracking)" />
+
     <!-- launch the mongoDB -->
-	<include file="$(find socialrobot_interface)/launch/db.launch"/>
+	<include if="$(arg use_mongodb)" file="$(find socialrobot_interface)/launch/db.launch"/>
 	
 	<!-- interface manager node -->
     <node name="socialrobot_interface" pkg="socialrobot_interface" type="interface_node.py" respawn="false" output="screen">		

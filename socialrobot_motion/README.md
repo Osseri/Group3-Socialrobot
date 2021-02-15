@@ -32,17 +32,9 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 1. [Overview](#overview)
 2. [Installation methods](#installation-methods)
    1. [Install manually](#install-manually)
-3. [Dependencies](#dependencies)
-   1. [Frameworks](#frameworks)
-   2. [Third-party libraries](#third-party-libraries)
-   3. [Social Robot Project Modules](#social-robot-project-modules)
-   4. [Hardware requirements](#hardware-requirements)
-4. [Quick start](#quick-start)
-5. [Features](#features)
+3. [Features](#features)
    1. [arm_planner](#arm_planner)
    2. [grasp_planner](#grasp_planner)
-6. [Nodes](#nodes)
-   1. [{Node1 Name}](#node1-name)
 
 </div>
 </div>
@@ -134,32 +126,6 @@ classDiagram
    catkin_make
    ```
 
-## Dependencies
-
-### Frameworks
-
-- ROS Kinetic/Melodic
-
-### Third-party libraries
-
-- [vision_msgs](https://github.com/Kukanani/vision_msgs)
-- [moveit](https://github.com/ros-planning/moveit)
-- [graspit](https://github.com/graspit-simulator/graspit_interface)
-
-### Social Robot Project Modules
-
-None
-
-### Hardware requirements
-
-This package does not require any hardware device.
-
-## Quick start 
-
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-
 ## Features
 
 ### arm_planner
@@ -178,7 +144,7 @@ Object mesh file path : ../socialrobot_motion/mesh/moveit/
       - Input : targetBody, obstacle_ids, obstacles, goalType, targetPose or targetJointState, currentJointState(default :current joint state in moveit!)
       - Output : planResult, jointTrajectory
 
-**Example**
+`예제`
 
 ```
 from socialrobot_motion.srv import *
@@ -204,14 +170,16 @@ def main():
 - Gripper model
    - name : robot_name + "_left", "_right"
    - path : ../.graspit/models/robots/
+   - 필요한 gripper model은 [[Robocare 패키지에서 social_robot_description/graspit_model]](https://gitlab.com/social-robot/robocare/-/tree/master/social_robot_arm/social_robot_description/graspit_model)로 들어가면 찾을 수 있다.
 - Object model
    - path : ../socialrobot_motion/mesh/graspit/
+   - 기존 물체 목록: [socialrobot_commons/object_dataset/object_lists.md](https://gitlab.com/social-robot/socialrobot_commons/-/blob/master/object_dataset/object_lists.md)
 - Input value
    - targetBody, obstacle_ids, obstacles, targetObject, gripper_pose(default :current gripper pose in moveit!)
 - Output value
    - planResult, endEffectorPose, graspQuality, dofs
 
-**Example**
+`예제`
 
 ```
 from socialrobot_motion.srv import *
@@ -230,76 +198,6 @@ def main():
 
    Result = srv_grasp_plan(grasp_req)
 ```
-
-## Nodes
-
-### {Node1 Name}
-
-<div style="padding-left:40px;">
-
-#### Subscribed Topics
-
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-#### Published Topics
-
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-#### Messages
-
-- {message_name}.msg
-  - header (`Header`)
-    - Standard metadata for higher-level stamped data types.
-  - paramA (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  - paramB (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-#### Services
-
-- {Service Name} (pkg_name/srv_file.srv)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-<div style="display:flex; padding-left:50px">
-<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
-
-Request
-
-- InputParamX (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- InputParamY (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-</div>
-<div style="flex:50%; padding-left:10px;">
-
-Response
-
-- OutputParam1 (`int64`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- OutputParam2 (`int64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-</div>
-</div>
-
-#### Services Called
-
-- ~<some_name>/<service_name> ([nav_msgs/GetMap](http://docs.ros.org/api/nav_msgs/html/srv/GetMap.html))
-  - This node calls this service to do {something}.
-
-#### Parameters
-
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-</div>
 
 ---
 

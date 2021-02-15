@@ -1,14 +1,6 @@
 string action_name
-string[] options
-string[] predicates
+string[] params
 
 ---
 bool result
-string[] parameters
-string[] precondition   #dumped data, must be loaded
-string[] effect         #dumped data, must be loaded
-string[] primitives
-
-string[] controller
-string[] group
-string[] planner
+socialrobot_actionlib/Action action

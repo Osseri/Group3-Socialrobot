@@ -29,6 +29,7 @@ from envClass import CanInfo as CI
 
 
 def rearrange_task_planner(data):
+    print "node 1"
     # check the service data
     # print data.target.object_name, "\n", data.target.object_position
     # for i in range(len(data.objects)):
@@ -77,13 +78,17 @@ def rearrange_task_planner(data):
 
     # ws_w, ws_d = 100, 100  # get table size in the v-rep
     ws_cen = [ws[0][0], ws[0][1]]
-    rob_pos = [0.0, 0.0]
+    # rob_pos = [0.0, 0.0]
+    rob_pos = data.robot_pose
+    # rob_pos = [0.0, 0.5]
     OBJ_R = 0.035
 
     env = EI(rob_pos, ws_w, ws_d, ws_cen, grid_size=GRID_SIZE, wall_r=OBJ_R)
     env.set_env(obstacle_name, obstacle_info, target_name, target_info)
 
     env.update_env(env.obs_pos, env.obs_grid)
+    print "node 2"
+    print "order", env.ore_order
     # print "\tA : rearrangement order:", env.ore_order
     # if len(env.ore_order) == 0:
     #     print "\tA : end rearrangement"
@@ -113,6 +118,8 @@ def rearrange_task_planner(data):
 
     # print "\n*** Step 2: find valid candidates ***\n"
     while len(env.ore_order):  # this while loop is for the algorithm
+
+        print "node 3"
         obstacle_d = obstacle_info[env.ore_order[0]][2][0]
         # print "\tA : rearrange obstacle diameter:", obstacle_d
         padding = 0.02
@@ -140,7 +147,7 @@ def rearrange_task_planner(data):
         # algorithm will go on until it can access to target
         #
         # env.ore_order = []
-        CUF.draw_grid_info(env.grid_max_can)
+        # CUF.draw_grid_info(env.grid_max_can)
         # plt.show()
         # print "\tA : OR:", env.ore_order
         # Check C.A : just next step
@@ -477,6 +484,7 @@ def rearrange_task_planner(data):
         # print "s_v[0][0].pos", s_v[0][0].pos
         # print "\tA : t_b[0]", t_b[0]
 
+        print "node 4"
         find_b = copy.deepcopy(t_b[0])
         # print "move to c_", find_b.index(min(find_b))
         if method == 'far':

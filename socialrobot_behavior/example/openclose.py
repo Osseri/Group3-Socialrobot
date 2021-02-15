@@ -27,7 +27,8 @@ if __name__ == '__main__':
     plan_req = GetMotionRequest()
     
     # set gripper and action
-    action_name = "open_hand"
+    #action_name = "open_hand"
+    action_name = "close_hand"
     plan_req.inputs.targetBody = plan_req.inputs.LEFT_GRIPPER
     
     # pose template

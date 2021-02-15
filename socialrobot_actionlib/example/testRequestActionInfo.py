@@ -16,15 +16,8 @@ if __name__ == '__main__':
 
     # set action name
     req = GetActionInfoRequest()
-    req.action_name = 'hold_object'
+    req.action_name = 'relocate_obstacle'
+    req.params = ['obj_left_hand', 'obj_gotica', 'obj_red_gotica', 'pos_red_gotica', 'relocateposition']
     res = srv(req)
 
-    print res.parameters
-    print pickle.loads(res.precondition[0])
-    print pickle.loads(res.effect[0])
-
-    print res.primitives
-    print res.controller
-    print res.group
-    print res.planner
-
+    print(res)

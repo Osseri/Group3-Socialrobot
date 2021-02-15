@@ -1,0 +1,46 @@
+<!-- -->
+<launch>
+
+	<arg name="robot_name" default="social_robot"/>
+    <arg name="use_rviz" default="true"/>
+    <arg name="sim" default="true"/>
+    <arg name="sim_env" default="default"/>
+    <arg name="use_mongodb" default="false"/>
+    <arg name="use_state_viewer" default="false"/>
+	<arg name="object_tracking" default="false" />
+
+    <include if="$(eval arg('robot_name') == 'skkurobot')" file="$(find skkurobot_description)/launch/default.launch">
+        <arg name ="sim" value="$(arg sim)"/>
+        <arg name="sim_env" default="$(arg sim_env)"/>
+    </include>
+    <include if="$(eval arg('robot_name') == 'social_robot')" file="$(find social_robot_description)/launch/default.launch">
+        <arg name ="sim" value="$(arg sim)"/>
+        <arg name="sim_env" default="$(arg sim_env)"/>
+    </include>
+
+    <!-- socialrobot_task_planner -->
+    <include file="$(find socialrobot_task)/launch/planning_system.launch"/>
+
+    <!-- socialrobot_interface -->
+    <include file="$(find socialrobot_interface)/launch/interface_manager.launch">
+       <arg name ="use_mongodb" value="$(arg use_mongodb)"/>
+       <arg name ="object_tracking" value="$(arg object_tracking)"/>
+    </include>
+
+    <!-- socialrobot_behavior -->
+    <include file="$(find socialrobot_behavior)/launch/behavior.launch"/>
+
+    <!-- socialrobot_motion -->
+    <include file="$(find socialrobot_motion)/launch/motion_plan.launch"/>
+
+    <!-- socialrobot_knowledge -->
+    <include file="$(find context_manager)/launch/mkm.launch"/>
+
+    <!-- socialrobot_relocation -->
+    <include file="$(find relocation_node)/launch/relocate.launch"/>
+
+	<!-- state machine -->
+	<include file="$(find socialrobot_interface)/launch/state_machine.launch">
+       <arg name ="use_state_viewer" value="$(arg use_state_viewer)"/>
+    </include>
+</launch>

@@ -1,0 +1,15 @@
+<!-- -->
+<launch>
+
+
+	<!--	-->
+	<node name="socialrobot_state_machine" pkg="socialrobot_interface" type="state_machine.py" respawn="false" output="screen">		
+	</node>
+
+    <!-- add to smach_viewer.py 1058 +     sys.argv = rospy.myargv()
+         if error occurred-->
+    <arg name="use_state_viewer" default="true"/>
+    <node if="$(arg use_state_viewer)" name="state_viewer" pkg="smach_viewer" type="smach_viewer.py" respawn="false" output="screen">		
+	</node>
+
+</launch>

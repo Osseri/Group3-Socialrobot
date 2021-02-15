@@ -4,7 +4,8 @@ def relocate_planner(data):
     import numpy as np
     import random as rn
     import networkx as nx
-    import VFHplus_mobile as vfh
+    #import VFHplus_mobile as vfh
+    import VFHplus_change_radius as vfh
 
     robot_height = data.robot_height
     robot_pose = list(data.robot_pose)
@@ -151,7 +152,7 @@ def relocate_planner(data):
         if min_len < 10000:
             path.pop(0)  # remove the robot node from the path
         else:
-            sys.exit('No path found to the target')
+            return relocate_env_srvResponse(accessibility=-1, relocate_id=-1, relocate_coordinates=[0, 0])
 
         if path[0] == target_id:
             accessibility = 1
@@ -164,7 +165,7 @@ def relocate_planner(data):
     # Print
     #print('Target accessibility (0=unaccessible, 1=accessible): %d' % accessibility)
     #print('Relocate Object %d at (%f, %f)' % (relocate_id, relocate_coordinates[0], relocate_coordinates[1]))
-    return [accessibility, relocate_id, relocate_coordinates]
+    return relocate_env_srvResponse(accessibility=accessibility, relocate_id=relocate_id, relocate_coordinates=relocate_coordinates)
 
 def listener():
     rospy.Service('relocation_srv', relocate_env_srv, relocate_planner)

@@ -1,2 +1,3 @@
 trajectory_msgs/JointTrajectory jointTrajectory
+nav_msgs/Path pathTrajectory
 std_msgs/String controller

@@ -1,0 +1,8 @@
+std_msgs/Header header
+string action_name
+string[] action_params
+float64[] params
+---
+int32 result
+int32 FAIL = 0
+int32 SUCCESS = 1

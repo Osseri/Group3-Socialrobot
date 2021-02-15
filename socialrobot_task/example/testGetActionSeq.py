@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	decodeAction = rospy.ServiceProxy('/actionlib/decode_action', GetPrimitiveActionList)
 
 	#Set problem
-	predicate = load_problem("movepick")
+	predicate = load_problem("default")
 	problem = generate_problem(predicate)
 	
 	if set_problem(problem):

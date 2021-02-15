@@ -14,4 +14,6 @@ socialrobot_actionlib/Problem problem
 #feedback
 int32 action_idx
 socialrobot_actionlib/Action[] action_sequence
+socialrobot_actionlib/Action current_action
+socialrobot_actionlib/Predicate[] current_goal_predicates
 socialrobot_actionlib/Problem problem

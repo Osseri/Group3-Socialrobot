@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find vision_calibrator)/launch/calibrator_external.launch" />
+    <include file="$(find vision_calibrator)/launch/calibrator_robocare.launch" />
+</launch>

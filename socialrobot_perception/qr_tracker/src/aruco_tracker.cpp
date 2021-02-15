@@ -27,8 +27,8 @@ class ArucoTracker
     ros::Publisher pose_pub;
     ros::Publisher transform_pub; 
     ros::Publisher position_pub;
-    ros::Publisher marker_pub; //rviz visualization marker
-    
+    ros::Publisher marker_pub; //rviz visualization marker    
+
     std::string marker_frame;
     std::string camera_frame;
     std::string reference_frame;
@@ -53,6 +53,7 @@ class ArucoTracker
     image_transport::Subscriber image_sub;
 
     tf::TransformListener _tfListener;
+    tf::TransformBroadcaster br;
     tf::Transform transform_obj;
 
     public:
@@ -62,12 +63,12 @@ class ArucoTracker
         it(nh)
     {
         ROS_INFO("[ArucoTracker] Node is started.");
-        marker_size = nh.param<double>("marker_size", 0.02675);
+        marker_size = nh.param<double>("marker_size", 0.05);
         marker_id = nh.param<int>("marker_id", 8);
-        camera_frame = nh.param<std::string>("camera_frame", "camera_color_optical_frame");
+        camera_frame = nh.param<std::string>("camera_frame", "cam_e_color_optical_frame");
         marker_frame = nh.param<std::string>("marker_frame", "marker_frame");
-        color_topic = nh.param<std::string>("color_topic", "/camera/color/image_raw");
-        color_info = nh.param<std::string>("color_info", "/camera/color/camera_info");
+        color_topic = nh.param<std::string>("color_topic", "/cam_e/color/image_raw");
+        color_info = nh.param<std::string>("color_info", "/cam_e/color/camera_info");
         useRectifiedImages = nh.param<bool>("image_is_rectified", true);
               
         dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_50);
@@ -75,7 +76,7 @@ class ArucoTracker
         cameraMatrix = Mat::zeros(3, 3, CV_32F);
         distCoeffs = Mat::zeros(1, 5, CV_32F);
 
-        image_pub = it.advertise("result", 1);
+        image_pub = it.advertise("/aruco_tracker/result", 1);
         pose_pub = nh.advertise<geometry_msgs::PoseStamped>("/aruco_tracker/pose", 100);
         transform_pub = nh.advertise<geometry_msgs::TransformStamped>("/aruco_tracker/transform", 100);
         position_pub = nh.advertise<geometry_msgs::Vector3Stamped>("/aruco_tracker/position", 100);
@@ -84,6 +85,17 @@ class ArucoTracker
         image_sub = it.subscribe(color_topic, 1, &ArucoTracker::image_callback, this);
         cam_info_sub = nh.subscribe(color_info, 1, &ArucoTracker::cam_info_callback, this);
 
+    }
+
+    void update()
+    {
+        ros::Duration duration = ros::Duration(1.0);
+        ros::Rate rate(duration);
+        while (ros::ok())
+        {            
+            ROS_INFO("test");
+            rate.sleep();
+        }
     }
 
     void image_callback(const sensor_msgs::ImageConstPtr& msg)
@@ -119,60 +131,23 @@ class ArucoTracker
 
                     std::vector<cv::Vec3d> rvecs, tvecs;
                     cv::aruco::estimatePoseSingleMarkers(markerCorners, marker_size, cameraMatrix, distCoeffs, rvecs, tvecs);
-                    
-                    
-/*
-rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(corners, ...)
-T = tvecs[0,0]
-R = cv2.Rodrigues(rvecs[0])[0]
-# Unrelated -- makes Y the up axis, Z forward
-R = R @ np.array([
-	[1, 0, 0],
-	[0, 0, 1],
-	[0,-1, 0],
-])
-if 0 < R[1,1] < 1:
-	# If it gets here, the pose is flipped.
-
-	# Flip the axes. E.g., Y axis becomes [-y0, -y1, y2].
-	R *= np.array([
-		[ 1, -1,  1],
-		[ 1, -1,  1],
-		[-1,  1, -1],
-	])
-	
-	# Fixup: rotate along the plane spanned by camera's forward (Z) axis and vector to marker's position
-	forward = np.array([0, 0, 1])
-	tnorm = T / np.linalg.norm(T)
-	axis = np.cross(tnorm, forward)
-	angle = -2*math.acos(tnorm @ forward)
-	R = cv2.Rodrigues(angle * axis)[0] @ R
-    */
 
                     // draw axis for each marker
                     for(int i=0; i<markerIds.size(); i++)
                     {
                         marker_frame = "QR:"+std::to_string(markerIds[i]);
-                        // if(markerIds[i] == marker_id)
-                        {
-                            cv::aruco::drawAxis(inImage, cameraMatrix, distCoeffs, rvecs[i], tvecs[i], 0.1);
-                            transform_obj = arucoMarker2Tf(rvecs[i], tvecs[i]);
+                        cv::aruco::drawAxis(inImage, cameraMatrix, distCoeffs, rvecs[i], tvecs[i], 0.1);
+                        transform_obj = arucoMarker2Tf(rvecs[i], tvecs[i]);
 
-                        }
-                        static tf::TransformBroadcaster br;
                         br.sendTransform(tf::StampedTransform(transform_obj,ros::Time::now(), camera_frame, marker_frame));
                     }                  
-                    
-                }             
-                if(image_pub.getNumSubscribers() > 0)
-                {
                     //show input with augmented information
                     cv_bridge::CvImage out_msg;
                     out_msg.header.stamp = curr_stamp;
                     out_msg.encoding = sensor_msgs::image_encodings::RGB8;
                     out_msg.image = inImage;
                     image_pub.publish(out_msg.toImageMsg());
-                }
+                }    
             }
             catch (cv_bridge::Exception& e)
             {
@@ -236,21 +211,21 @@ if 0 < R[1,1] < 1:
         tf::Transform object_transform(object_rotation, object_translation);
         
         ///Publish Current Marker to RViz   
-        const tf::Vector3 marker_origin = object_transform.getOrigin();
-        markerPoseData.position.x = marker_origin.getX();
-        markerPoseData.position.y = marker_origin.getY();
-        markerPoseData.position.z = marker_origin.getZ();
+        // const tf::Vector3 marker_origin = object_transform.getOrigin();
+        // markerPoseData.position.x = marker_origin.getX();
+        // markerPoseData.position.y = marker_origin.getY();
+        // markerPoseData.position.z = marker_origin.getZ();
         
-        tf::Quaternion marker_quaternion = object_transform.getRotation();
-        markerPoseData.orientation.x = marker_quaternion.getX();
-        markerPoseData.orientation.y = marker_quaternion.getY();
-        markerPoseData.orientation.z = marker_quaternion.getZ();
-        markerPoseData.orientation.w = marker_quaternion.getW();
+        // tf::Quaternion marker_quaternion = object_transform.getRotation();
+        // markerPoseData.orientation.x = marker_quaternion.getX();
+        // markerPoseData.orientation.y = marker_quaternion.getY();
+        // markerPoseData.orientation.z = marker_quaternion.getZ();
+        // markerPoseData.orientation.w = marker_quaternion.getW();
 
-        // publish pose
-        markerPose.pose = markerPoseData;
-        markerPose.header.frame_id = marker_frame;
-        pose_pub.publish(markerPose);
+        // // publish pose
+        // markerPose.pose = markerPoseData;
+        // markerPose.header.frame_id = marker_frame;
+        // pose_pub.publish(markerPose);
 
         // publish pose marker
         //publish_marker(markerPoseData, 1);

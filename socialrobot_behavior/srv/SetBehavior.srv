@@ -1,5 +1,6 @@
 std_msgs/Header header
 trajectory_msgs/JointTrajectory trajectory
+nav_msgs/Path path
 ---
 int32 result
 int32 OK = 0

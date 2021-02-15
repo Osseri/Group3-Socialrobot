@@ -1,6 +1,6 @@
 import abc
 from abc import ABCMeta
-from six import with_metaclass 
+from six import with_metaclass
 import math
 import copy
 import rospy
@@ -8,6 +8,7 @@ import rosservice
 import rosparam
 
 from socialrobot_motion.srv import *
+from socialrobot_behavior.msg import *
 from socialrobot_behavior.srv import *
 from socialrobot_hardware.srv import *
 from trajectory_msgs.msg import *
@@ -17,13 +18,15 @@ from geometry_msgs.msg import Pose
 
 import tf
 import tf.transformations as tfm
-import numpy as np 
+import numpy as np
 import random
 from behavior import BehaviorBase
+
 
 def degToRad(deg):
     rad = deg / 180.0 * math.pi
     return rad
+
 
 class ApproachBehavior(BehaviorBase):
     ''' Joint Trajectory Following '''
@@ -41,28 +44,30 @@ class ApproachBehavior(BehaviorBase):
         self.talker = tf.TransformBroadcaster(queue_size=10)
         self.srv_plan = rospy.ServiceProxy(armplan_srv, MotionPlan)
 
-        # initial pose 
-        self.gripper_pose = {} 
+        # initial pose
+        self.gripper_pose = {}
         self.approach_option = None
-        self.rot_x = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (1,0,0))
-        self.rot_y = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (0,1,0))
-        self.rot_z = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (0,0,1))
+        self.rot_x = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (1, 0, 0))
+        self.rot_y = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (0, 1, 0))
+        self.rot_z = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (0, 0, 1))
 
-        # get hardware 
+        # get hardware
         robot_name = rosparam.get_param("/robot_name")
 
         if robot_name == 'skkurobot':
-            self.gripper_pose = {'left': '7dof_RISE_wrist_link',
-                                'right': '6dof_connection_link',
-                                'left_offset': [-0.02, 0.08],
-                                'right_offset': [-0.025, 0.08]
-                                }  
+            self.gripper_pose = {
+                'left': '7dof_RISE_wrist_link',
+                'right': '6dof_connection_link',
+                'left_offset': [-0.02, 0.08],
+                'right_offset': [-0.025, 0.08]
+            }
         elif robot_name == 'social_robot':
-            self.gripper_pose =  {'left': 'LHand_base',
-                                'right': 'RHand_base',
-                                'left_offset': [-0.0055, 0.03],
-                                'right_offset': [-0.0055, 0.03]
-                                }
+            self.gripper_pose = {
+                'left': 'LHand_base',
+                'right': 'RHand_base',
+                'left_offset': [-0.0055, 0.03],
+                'right_offset': [-0.0055, 0.03]
+            }
 
     def check_requirement(self):
         rospy.loginfo('checking...%s' % self._name)
@@ -100,7 +105,7 @@ class ApproachBehavior(BehaviorBase):
 
             if res.result == SetJointTrajectoryResponse.OK:
                 return 1
-            
+
         return -1
 
     def get_motion(self, inputs):
@@ -109,7 +114,7 @@ class ApproachBehavior(BehaviorBase):
         '''
         rospy.loginfo("Calculating approaching motion..")
         res = MotionPlanResponse()
-        ret , srv_response = self._call_ros_service(inputs)
+        ret, srv_response = self._call_ros_service(inputs)
         if ret == MotionPlanResponse.SUCCESS:
             rospy.loginfo("Approach planning is done.")
             self.motion_trajectory = srv_response.jointTrajectory
@@ -119,7 +124,7 @@ class ApproachBehavior(BehaviorBase):
         else:
             rospy.loginfo("Approach planning is failed.")
             res.planResult = MotionPlanResponse.ERROR_NO_SOLUTION
-            return res        
+            return res
 
     def finish_behavior(self):
         rospy.loginfo('finishing...%s' % self._name)
@@ -136,30 +141,30 @@ class ApproachBehavior(BehaviorBase):
     def _call_ros_service(self, inputs):
         try:
             plan_req = MotionPlanRequest()
-            
+
             # target body
             body_type = inputs.targetBody
-            if body_type != MotionPlanRequest.LEFT_ARM and body_type != MotionPlanRequest.RIGHT_ARM:
-                return (MotionPlanResponse.ERROR_INPUT, None)
+            # if body_type != MotionPlanRequest.LEFT_ARM and body_type != MotionPlanRequest.RIGHT_ARM:
+            #     return (MotionPlanResponse.ERROR_INPUT, None)
             plan_req.targetBody = body_type
-            
+
             # get obstacles
             plan_req.obstacle_ids = inputs.obstacle_ids
             plan_req.obstacles = inputs.obstacles
 
-            # get bounding box of target object 
-            if len(inputs.targetObject)==0:
+            # get bounding box of target object
+            if len(inputs.targetObject) == 0:
                 rospy.logerr("Approaching target is not decided.")
                 return (MotionPlanResponse.ERROR_FAIL, None)
-            target_object = inputs.targetObject 
-            
+            target_object = inputs.targetObject
+
             try:
                 idx = inputs.obstacle_ids.index(target_object[0])
             except:
                 rospy.logerr("Cannot find target object in the obstacle list for approaching.")
                 return (MotionPlanResponse.ERROR_FAIL, None)
-            boundingbox = inputs.obstacles[idx]           
-            
+            boundingbox = inputs.obstacles[idx]
+
             # # start state
             # start_state = inputs.currentJointState
             # if start_state is None:
@@ -168,7 +173,7 @@ class ApproachBehavior(BehaviorBase):
 
             # approach direction
             approach_direction = inputs.approachDirection
-            self.approach_option = inputs.toolName
+            self.approach_option = inputs.approachPoint
 
             # target object
             obj_center = boundingbox.center
@@ -176,53 +181,66 @@ class ApproachBehavior(BehaviorBase):
 
             # build sample poses
             sample_top = sample_side = sample_front = sample_back = []
-
+            """sample_angle
+            180    135
+                ^     /
+                |  /
+                |------> 90
+            (left hand)
+            """
             sample_angle = []
-            if approach_direction == 0 or approach_direction == 2: # both or side
-                sample_angle = [90, 105, 120, 135, 150, 165, 180]# [180, 165, 150, 135, 120, 105, 90] 
-            if body_type == MotionPlanRequest.RIGHT_ARM:
-                sample_angle = [270, 255, 240, 225, 210, 195, 180] #[180, 195, 210, 225, 240, 255, 270] 
+            if inputs.approachSamples:
+                sample_angle = [sample for sample in inputs.approachSamples]
+            else:
+                if approach_direction == PlannerInputs.APPROACH_ANY or approach_direction == PlannerInputs.APPROACH_SIDE:  # both or side
+                    sample_angle = [90, 105, 120, 135, 150, 165, 180]  # [180, 165, 150, 135, 120, 105, 90]
+                if body_type == MotionPlanRequest.RIGHT_ARM:
+                    sample_angle = [270, 255, 240, 225, 210, 195, 180]  #[180, 195, 210, 225, 240, 255, 270]
 
             for idx, i in enumerate(sample_angle):
                 # first motion
-                first_wrist_pose, second_wrist_pose, eef_pose = self.getApproachPose(body_type, i, boundingbox)
+                first_wrist_pose, second_wrist_pose, first_eef_pose, second_eef_pose = self.getApproachPose(
+                    body_type, i, boundingbox)
 
                 # publish sample pose
-                self.talker.sendTransform((eef_pose.position.x, eef_pose.position.y, eef_pose.position.z), (eef_pose.orientation.x, eef_pose.orientation.y, eef_pose.orientation.z, eef_pose.orientation.w), rospy.Time.now(), "approach_sample_pose", "base_footprint")
+                self.talker.sendTransform(
+                    (second_eef_pose.position.x, second_eef_pose.position.y, second_eef_pose.position.z),
+                    (second_eef_pose.orientation.x, second_eef_pose.orientation.y, second_eef_pose.orientation.z,
+                     second_eef_pose.orientation.w), rospy.Time.now(), "approach_sample_pose", "base_footprint")
 
                 if first_wrist_pose:
                     # target pose
                     plan_req.targetPose = first_wrist_pose
                     plan_req.goalType = MotionPlanRequest.CARTESIAN_SPACE_GOAL
 
-                    first_plan = self.srv_plan(plan_req)  
-            
+                    first_plan = self.srv_plan(plan_req)
+
                     if first_plan.planResult == MotionPlanResponse.SUCCESS:
-                        rospy.loginfo('%d approach pose to target nearby is found!', idx)
-                                                
+                        rospy.loginfo('(%d) %d deg approach pose to target nearby is found!', idx, i)
+
                         # get last joint state for waypoint
                         waypoint_pos = copy.copy(first_plan.jointTrajectory.points[-1].positions)
                         time_from_start = copy.copy(first_plan.jointTrajectory.points[-1].time_from_start)
-                        
+
                         joint_state = sensor_msgs.msg.JointState()
                         joint_state.header = first_plan.jointTrajectory.header
                         joint_state.name = first_plan.jointTrajectory.joint_names
                         joint_state.position = first_plan.jointTrajectory.points[-1].positions
-                        
+
                         # second motion
-                        second_req = MotionPlanRequest()                        
+                        second_req = MotionPlanRequest()
                         second_req.obstacle_ids = inputs.obstacle_ids
                         second_req.obstacles = inputs.obstacles
                         second_req.currentJointState = joint_state
-                        second_req.targetPose = second_wrist_pose                     
+                        second_req.targetPose = second_wrist_pose
+                        #second_req.goalType = MotionPlanRequest.CARTESIAN_WITH_ORIENTATION_CONSTRAINTS
                         second_plan = self.srv_plan(second_req)
 
                         if second_plan.planResult == MotionPlanResponse.SUCCESS:
                             rospy.loginfo('final approach pose to target is found!')
-
                             final_plan = MotionPlanResponse()
                             for i in first_plan.jointTrajectory.points:
-                                    final_plan.jointTrajectory.points.append(i)
+                                final_plan.jointTrajectory.points.append(i)
                             final_plan.jointTrajectory.joint_names = second_plan.jointTrajectory.joint_names
                             final_plan.jointTrajectory.header = second_plan.jointTrajectory.header
                             for i in second_plan.jointTrajectory.points:
@@ -232,7 +250,7 @@ class ApproachBehavior(BehaviorBase):
                             return (MotionPlanResponse.SUCCESS, final_plan)
                         else:
                             rospy.loginfo('no solution of final approach pose to target')
-                        
+
             return (MotionPlanResponse.ERROR_NO_SOLUTION, None)
 
         except rospy.ServiceException as e:
@@ -252,19 +270,23 @@ class ApproachBehavior(BehaviorBase):
 
         # get transforms between wrist and end-effector
         base_to_eef_trans = base_to_eef_rot = []
-        eef_to_wrist_trans = eef_to_wrist_rot = []        
+        eef_to_wrist_trans = eef_to_wrist_rot = []
         is_trans = False
 
-        while is_trans == False: 
+        while is_trans == False:
             try:
-                if body_type is MotionPlanRequest.LEFT_ARM:                    
-                    base_to_eef_trans, base_to_eef_rot = self.listener.lookupTransform('/base_footprint', '/left_end_effect_point', rospy.Time(0))
-                    eef_to_wrist_trans, eef_to_wrist_rot = self.listener.lookupTransform('/left_end_effect_point', self.gripper_pose['left'], rospy.Time(0))
+                if body_type is PlannerInputs.LEFT_ARM or body_type is PlannerInputs.LEFT_ARM_WITHOUT_WAIST:
+                    base_to_eef_trans, base_to_eef_rot = self.listener.lookupTransform(
+                        '/base_footprint', '/left_end_effect_point', rospy.Time(0))
+                    eef_to_wrist_trans, eef_to_wrist_rot = self.listener.lookupTransform(
+                        '/left_end_effect_point', self.gripper_pose['left'], rospy.Time(0))
                     offset = self.gripper_pose['left_offset']
 
-                elif body_type is MotionPlanRequest.RIGHT_ARM:
-                    base_to_eef_trans, base_to_eef_rot = self.listener.lookupTransform('/base_footprint', '/right_end_effect_point', rospy.Time(0))
-                    eef_to_wrist_trans, eef_to_wrist_rot = self.listener.lookupTransform('/right_end_effect_point', self.gripper_pose['right'], rospy.Time(0))
+                elif body_type is PlannerInputs.RIGHT_ARM or body_type is PlannerInputs.RIGHT_ARM_WITHOUT_WAIST:
+                    base_to_eef_trans, base_to_eef_rot = self.listener.lookupTransform(
+                        '/base_footprint', '/right_end_effect_point', rospy.Time(0))
+                    eef_to_wrist_trans, eef_to_wrist_rot = self.listener.lookupTransform(
+                        '/right_end_effect_point', self.gripper_pose['right'], rospy.Time(0))
                     offset = self.gripper_pose['right_offset']
                 is_trans = True
             except:
@@ -279,24 +301,24 @@ class ApproachBehavior(BehaviorBase):
 
         i = azimuth_angle
         # gripper end-effector position from target object
-        if self.approach_option == 'top':
-            z_offset = target_size.z/4        
-        elif self.approach_option == 'lower': 
-            z_offset = -(target_size.z/4)   
+        if self.approach_option == PlannerInputs.APPROACH_TOP:
+            z_offset = target_size.z / 4
+        elif self.approach_option == PlannerInputs.APPROACH_BOTTOM:
+            z_offset = -(target_size.z / 4)
         else:
             z_offset = 0
-        
-        second_eef_pose.position.x = target_pos.x + (target_size.x/2 + offset[0])*math.cos(degToRad(i))
-        second_eef_pose.position.y = target_pos.y + (target_size.x/2 + offset[0])*math.sin(degToRad(i))
+
+        second_eef_pose.position.x = target_pos.x + (target_size.x / 2 + offset[0]) * math.cos(degToRad(i))
+        second_eef_pose.position.y = target_pos.y + (target_size.x / 2 + offset[0]) * math.sin(degToRad(i))
         second_eef_pose.position.z = target_pos.z + z_offset
-        
-        first_eef_pose.position.x = target_pos.x + (target_size.x/2 + offset[1])*math.cos(degToRad(i))
-        first_eef_pose.position.y = target_pos.y + (target_size.x/2 + offset[1])*math.sin(degToRad(i))
+
+        first_eef_pose.position.x = target_pos.x + (target_size.x / 2 + offset[1]) * math.cos(degToRad(i))
+        first_eef_pose.position.y = target_pos.y + (target_size.x / 2 + offset[1]) * math.sin(degToRad(i))
         first_eef_pose.position.z = target_pos.z + z_offset
 
-        # 
+        #
         init_quat = [0, -0.707, 0, 0.707]
-        quat = tfm.quaternion_multiply(init_quat, tfm.quaternion_about_axis(degToRad(i), (1,0,0)))
+        quat = tfm.quaternion_multiply(init_quat, tfm.quaternion_about_axis(degToRad(i), (1, 0, 0)))
 
         first_eef_pose.orientation.x = second_eef_pose.orientation.x = quat[0]
         first_eef_pose.orientation.y = second_eef_pose.orientation.y = quat[1]
@@ -309,11 +331,15 @@ class ApproachBehavior(BehaviorBase):
             first_eef_pose.orientation.x = second_eef_pose.orientation.x = quat[0]
             first_eef_pose.orientation.y = second_eef_pose.orientation.y = quat[1]
             first_eef_pose.orientation.z = second_eef_pose.orientation.z = quat[2]
-            first_eef_pose.orientation.w = second_eef_pose.orientation.w = quat[3]           
+            first_eef_pose.orientation.w = second_eef_pose.orientation.w = quat[3]
 
         # transform to wrist from eef
-        trans1_mat = tf.transformations.translation_matrix([first_eef_pose.position.x, first_eef_pose.position.y, first_eef_pose.position.z])
-        rot1_mat   = tf.transformations.quaternion_matrix([first_eef_pose.orientation.x, first_eef_pose.orientation.y, first_eef_pose.orientation.z, first_eef_pose.orientation.w])
+        trans1_mat = tf.transformations.translation_matrix(
+            [first_eef_pose.position.x, first_eef_pose.position.y, first_eef_pose.position.z])
+        rot1_mat = tf.transformations.quaternion_matrix([
+            first_eef_pose.orientation.x, first_eef_pose.orientation.y, first_eef_pose.orientation.z,
+            first_eef_pose.orientation.w
+        ])
         mat1 = np.dot(trans1_mat, rot1_mat)
 
         trans2_mat = tf.transformations.translation_matrix(eef_to_wrist_trans)
@@ -321,7 +347,7 @@ class ApproachBehavior(BehaviorBase):
         mat2 = np.dot(trans2_mat, rot2_mat)
 
         mat3 = np.dot(mat1, mat2)
-        trans3 = tf.transformations.translation_from_matrix(mat3) 
+        trans3 = tf.transformations.translation_from_matrix(mat3)
         rot3 = tf.transformations.quaternion_from_matrix(mat3)
 
         first_wrist_pose.position.x = trans3[0]
@@ -334,8 +360,12 @@ class ApproachBehavior(BehaviorBase):
         first_wrist_pose.orientation.w = rot3[3]
 
         #
-        trans1_mat = tf.transformations.translation_matrix([second_eef_pose.position.x, second_eef_pose.position.y, second_eef_pose.position.z])
-        rot1_mat   = tf.transformations.quaternion_matrix([second_eef_pose.orientation.x, second_eef_pose.orientation.y, second_eef_pose.orientation.z, second_eef_pose.orientation.w])
+        trans1_mat = tf.transformations.translation_matrix(
+            [second_eef_pose.position.x, second_eef_pose.position.y, second_eef_pose.position.z])
+        rot1_mat = tf.transformations.quaternion_matrix([
+            second_eef_pose.orientation.x, second_eef_pose.orientation.y, second_eef_pose.orientation.z,
+            second_eef_pose.orientation.w
+        ])
         mat1 = np.dot(trans1_mat, rot1_mat)
 
         trans2_mat = tf.transformations.translation_matrix(eef_to_wrist_trans)
@@ -343,7 +373,7 @@ class ApproachBehavior(BehaviorBase):
         mat2 = np.dot(trans2_mat, rot2_mat)
 
         mat3 = np.dot(mat1, mat2)
-        trans3 = tf.transformations.translation_from_matrix(mat3) 
+        trans3 = tf.transformations.translation_from_matrix(mat3)
         rot3 = tf.transformations.quaternion_from_matrix(mat3)
 
         second_wrist_pose.position.x = trans3[0]
@@ -355,4 +385,4 @@ class ApproachBehavior(BehaviorBase):
         second_wrist_pose.orientation.z = rot3[2]
         second_wrist_pose.orientation.w = rot3[3]
 
-        return first_wrist_pose, second_wrist_pose, second_eef_pose
+        return first_wrist_pose, second_wrist_pose, first_eef_pose, second_eef_pose

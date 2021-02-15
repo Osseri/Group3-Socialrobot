@@ -1,0 +1,23 @@
+<!-- -->
+<launch>
+
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="perception_tf"
+        args="0.136358 0.0325221 0.0923757
+                -0.00668052 0.246952 0.0271398 0.968625
+                Head_Pitch camera_link 100" />
+
+    <!-- Detect QR code -->
+    <node name="qr_tracker" pkg="qr_tracker" type="qr_tracker" output="screen">
+        <param name="marker_size" value="0.05"/>
+        <param name="camera_frame" value="camera_color_optical_frame"/>
+        <param name="color_topic" value="/camera/color/image_raw"/>
+        <param name="color_info" value="/camera/color/camera_info"/>
+    </node>
+
+    <!-- visualization of objects-->
+    <node name="object_creator" pkg="qr_tracker" type="qr_to_object.py" output="screen">
+        <param name="~marker_size" value="0.05"/>
+    </node>
+</launch>

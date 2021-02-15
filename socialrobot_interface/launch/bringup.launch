@@ -1,0 +1,24 @@
+<!-- -->
+<launch>
+
+    <arg name="use_robot_name"         default="social_robot"/>
+    <arg name="use_moveit"             default="true"/>
+    <arg name="use_moveit_rviz"         default="true"/>
+    <arg name="dynamixel_usb_port"     default="/dev/ttyUSB0"/>
+
+
+    <include file="$(find social_robot_bringup)/launch/base.launch"/>
+
+    <include file="$(find social_robot_bringup)/launch/arm.launch">
+       <arg name ="use_robot_name" value="$(arg use_robot_name)"/>
+       <arg name ="use_moveit" value="$(arg use_moveit)"/>
+       <arg name ="use_moveit_rviz" value="$(arg use_moveit_rviz)"/>
+       <arg name ="dynamixel_usb_port" value="$(arg dynamixel_usb_port)"/>
+    </include>
+
+    
+    <include file="$(find rplidar_ros)/launch/double_lidar.launch">
+    </include>
+
+
+</launch>

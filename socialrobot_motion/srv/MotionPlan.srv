@@ -3,14 +3,17 @@ int32 targetBody
 int32 WHOLE_BODY = 0
 int32 LEFT_ARM = 1
 int32 RIGHT_ARM = 2
+int32 LEFT_ARM_WITHOUT_WAIST = 12
+int32 RIGHT_ARM_WITHOUT_WAIST = 22
 int32 BOTH_ARM = 3
 int32 LEFT_GRIPPER = 4
 int32 RIGHT_GRIPPER = 8
-int32 BOTH_GRIPPER = 12
+int32 BOTH_GRIPPER = 16
 
 # Obstacles environment
 string[] obstacle_ids
 vision_msgs/BoundingBox3D[] obstacles
+bool is_tracking
 
 # target object
 string[] targetObject
@@ -65,3 +68,6 @@ std_msgs/Float32MultiArray dofs
 
 # push/pull
 nav_msgs/OccupancyGrid gridMap
+
+# path planner
+nav_msgs/Path pathTrajectory

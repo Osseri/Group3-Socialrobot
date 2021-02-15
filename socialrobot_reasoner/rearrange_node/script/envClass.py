@@ -271,8 +271,8 @@ class EnvInfo:
     def get_max_can(self, input_grid, bt_num, trial_num, obstacle_diameter, padding):
         bt_circle = []
         can_grid = []
-        # circle_r = max(self.ore_r)+0.02
-        circle_r = obstacle_diameter*0.5 + padding
+        circle_r = 0.07
+        # circle_r = obstacle_diameter*0.5 + padding
         # circle_r = max(self.ore_r)+0.055
         # circle_r = max(self.ore_r)+0.045
         for bt in range(bt_num):

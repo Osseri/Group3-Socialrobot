@@ -1,0 +1,6 @@
+---
+int32 result
+int32 OK = 0
+int32 ERROR = 1
+
+Object[] objects

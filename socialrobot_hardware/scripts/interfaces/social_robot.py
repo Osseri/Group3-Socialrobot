@@ -78,7 +78,8 @@ class social_robotInterface(InterfaceBase):
         self.pub_state.publish(self.action_state)
         return self.action_state
 
-    def set_motion(self, req):     
+    def set_motion(self, req): 
+
         res = SetJointTrajectoryResponse()
         robot_part = 0
         trajectory = req.trajectory
@@ -91,10 +92,10 @@ class social_robotInterface(InterfaceBase):
         elif self.joint_names == ['LFinger_1', 'LFinger_2', 'LFinger_3']:
             robot_part = LEFT_HAND
             self.planning_group = 'left_arm'
-        elif self.joint_names == ['RShoulder_Pitch', 'RShoulder_Roll', 'RElbow_Pitch', 'RElbow_Yaw', 'RWrist_Pitch', 'RWrist_Roll']:
+        elif self.joint_names == ['Waist_Roll', 'Waist_Pitch', 'RShoulder_Pitch', 'RShoulder_Roll', 'RElbow_Pitch', 'RElbow_Yaw', 'RWrist_Pitch', 'RWrist_Roll']:
             robot_part = RIGHT_ARM
             self.planning_group = 'right_arm'
-        elif self.joint_names == ['LShoulder_Pitch', 'LShoulder_Roll', 'LElbow_Pitch', 'LElbow_Yaw', 'LWrist_Pitch', 'LWrist_Roll']:
+        elif self.joint_names == ['Waist_Roll', 'Waist_Pitch','LShoulder_Pitch', 'LShoulder_Roll', 'LElbow_Pitch', 'LElbow_Yaw', 'LWrist_Pitch', 'LWrist_Roll']:
             robot_part = LEFT_ARM
             self.planning_group = 'left_arm'
         else:
@@ -142,9 +143,11 @@ class social_robotInterface(InterfaceBase):
             goal = ExecuteTrajectoryGoal()
             goal.trajectory.joint_trajectory = req.trajectory
 
+            print('RIGHT_ARM')
+            print('LEFT_ARM')
             # send joint trajectory
-            self.action_client.wait_for_server()
-            self.action_client.send_goal(goal)
+            #self.action_client.wait_for_server()
+            #self.action_client.send_goal(goal)
 
         else:
             res.result = SetJointTrajectoryResponse.ERROR    

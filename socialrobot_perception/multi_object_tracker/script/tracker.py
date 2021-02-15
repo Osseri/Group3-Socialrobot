@@ -31,7 +31,7 @@ class Tracker(object):
         return
 
 
-    def update(self, centers, bboxes, img):
+    def update(self, ids, centers, bboxes, img):
         '''
         Args: 
             centers: centroid array ((x1,y1), (x2,y2)...)
@@ -49,14 +49,14 @@ class Tracker(object):
         #     centers = [centers[0]]
 
         # Create tracker if no tracks vector found
-        print "frame=", self.frame
-        print "tracker number = ", len(self.tracks)
-        print "detections number = ", len(bboxes)
+        # print "frame=", self.frame
+        # print "tracker number = ", len(self.tracks)
+        # print "detections number = ", len(bboxes)
 
         # if no tracks, start new tracks
         if(len(self.tracks) == 0):
             for i, bbox in enumerate(bboxes):
-                track = Track(bboxes[i], centers[i], img, self.trackIdCount)
+                track = Track(bboxes[i], centers[i], img, ids[i])
                 self.trackIdCount += 1
                 self.tracks.append(track)
 
@@ -117,7 +117,7 @@ class Tracker(object):
         # Start new tracks
         if(len(un_assigned_detects) != 0):
             for i in range(len(un_assigned_detects)):
-                track = Track(bboxes[un_assigned_detects[i]], centers[un_assigned_detects[i]], img, self.trackIdCount)
+                track = Track(bboxes[un_assigned_detects[i]], centers[un_assigned_detects[i]], img, ids[un_assigned_detects[i]])
                 self.trackIdCount += 1
                 self.tracks.append(track)
 
@@ -136,7 +136,7 @@ class Tracker(object):
 
             track.trace.append(track.center)
 
-        print assignment,un_assigned_detects,un_assigned_tracks,del_tracks
+        # print assignment,un_assigned_detects,un_assigned_tracks,del_tracks
 
         #If tracks are not detected for long time, remove them
         if len(del_tracks) > 0:  # only when skipped frame exceeds max

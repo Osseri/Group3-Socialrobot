@@ -68,6 +68,16 @@ class MoveBaseBehavior(BehaviorBase):
             goal_pose.orientation.z = 0.940
             goal_pose.orientation.w = 0.342      
             waypoints.append(goal_pose)
+        elif goal_pos == 'pos_fridge':
+            goal_pose = Pose()   
+            goal_pose.position.x = 0.4
+            goal_pose.position.y = 0.2
+            goal_pose.orientation.x = 0.0
+            goal_pose.orientation.y = 0.0
+            goal_pose.orientation.z = 0.0
+            goal_pose.orientation.w = 1.0     
+            waypoints.append(goal_pose)
+
         self.goal_pose = waypoints
 
         return True

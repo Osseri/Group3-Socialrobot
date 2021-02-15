@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="vision_calibrator" type="external_calibrator.py" name="extrinsic_calibrator_external" output="screen">
+        <param name="~cam" type="int" value="1" />  
+    </node>
+</launch>

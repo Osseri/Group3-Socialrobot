@@ -54,20 +54,24 @@ class skkurobotInterface(InterfaceBase):
         robot_part = 0
         trajectory = req.trajectory
         self.joint_names = trajectory.joint_names
-        print req
+        
         # set robot part
-        if self.joint_names ==  ['finger_joint']:
+        if self.joint_names ==  ['right_bh_j12_joint', 'right_bh_j22_joint', 'right_bh_j32_joint', 'right_bh_j11_joint']:
             robot_part = RIGHT_HAND
             self.planning_group = 'right_arm'
-        elif self.joint_names == ['bh_j12_joint', 'bh_j22_joint', 'bh_j32_joint', 'bh_j11_joint']:
+
+        elif self.joint_names == ['left_bh_j12_joint', 'left_bh_j22_joint', 'left_bh_j32_joint', 'left_bh_j11_joint']:
             robot_part = LEFT_HAND
             self.planning_group = 'left_arm'
-        elif self.joint_names == []:
+
+        elif self.joint_names == ['joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6']:
             robot_part = RIGHT_ARM
             self.planning_group = 'right_arm'
+
         elif self.joint_names == ['j1_joint', 'j2_joint', 'j3_joint', 'j4_joint', 'j5_joint', 'j6_joint', 'j7_joint']:
             robot_part = LEFT_ARM
             self.planning_group = 'left_arm'
+
         else:
             rospy.logerr('[hw_interface] undefined robot part')
             res.result = SetJointTrajectoryResponse.ERROR
@@ -76,7 +80,7 @@ class skkurobotInterface(InterfaceBase):
         if robot_part == LEFT_HAND:
             self.topic_name = '/bhand_node/hand_command'
         elif robot_part == RIGHT_HAND:
-           self.topic_name = "/"
+           self.topic_name = '/bhand_node/hand_command'
 
         pub_joint = rospy.Publisher(self.topic_name, JointState, queue_size=10)
         for pt in trajectory.points:
