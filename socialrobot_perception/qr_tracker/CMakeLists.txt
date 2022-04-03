@@ -33,11 +33,16 @@ add_definitions(${PCL_DEFINITIONS})
 
 file(GLOB qr_tracker_SRC
 "src/*.h"
-"src/*.cpp"
+"src/aruco_tracker.cpp"
 )
 add_executable(qr_tracker ${qr_tracker_SRC})
-
 target_link_libraries(qr_tracker
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBS}
+)
+
+add_executable(create_diamond src/create_diamond.cpp)
+target_link_libraries(create_diamond
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS}
 )

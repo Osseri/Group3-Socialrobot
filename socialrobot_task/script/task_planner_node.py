@@ -74,11 +74,13 @@ class TaskManager:
         try:
             if self.plan_method == "pddl4j":
                 planner = TaskPlanner()
-                return planner.resolvProblem(res, DOMAIN_PATH, PROBLEM_PATH)
+                planner.resolvProblem(res, DOMAIN_PATH, PROBLEM_PATH)
+                return res
 
             elif self.plan_method == "fd":
                 planner = FastDownwardPlanner()
-                return planner.resolvProblem(res, DOMAIN_PATH, PROBLEM_PATH)
+                plan = planner.resolvProblem(DOMAIN_PATH, PROBLEM_PATH)
+                return plan
 
         except Exception as e:
             print("Service call failed : %s" % e)

@@ -1,23 +1,21 @@
 #!/usr/bin/env python
+from numpy.core.numeric import require
 import rospy
 import rosparam
+import tf
 import math
 from mongodb_store.message_store import MessageStoreProxy
 from sensor_msgs import msg as sensor_msg
 from diagnostic_msgs.msg import KeyValue
 from geometry_msgs import msg as geo_msg
 from socialrobot_actionlib import msg as sactlib_msg
-from socialrobot_perception_msgs import msg as perception_msg
-from socialrobot_behavior import msg as behavior_msg
-from socialrobot_behavior import srv as behavior_srv
+from socialrobot_msgs import msg as social_robot_msg
 from rosjava_custom_srv import msg as rosjava_msg
 from rosjava_custom_srv import srv as rosjava_srv
-from socialrobot_perception_msgs.srv import *
 from rearrange_node import msg as rearr_msg
 from rearrange_node import srv as rearr_srv
 from relocation_node import srv as reloc_srv
 from interface import InterfaceBase
-
 
 class KnowledgeInterface(InterfaceBase):
     # TODO: remove hard coding
@@ -37,7 +35,7 @@ class KnowledgeInterface(InterfaceBase):
         ["empty_container", "Object", "0", "0", "0"],
     ]
     EFFECT_EXCEPTION = ['locatedat','rearranged','transferred','standby']
-    ARM_LENGTH = 0.55 # meter
+    ARM_LENGTH = 0.599 # meter
 
     def __init__(self):
         super(KnowledgeInterface, self).__init__()
@@ -59,14 +57,12 @@ class KnowledgeInterface(InterfaceBase):
             self.msg_store.update_named("/knowledge/current_state", sactlib_msg.Problem())
 
         # subscriber
-        obj_topic = "/perception/objects"
+        #obj_topic = "/perception/objects"
         state_topic = "/context_manager/monitor/reception"
-        rospy.Subscriber(obj_topic, perception_msg.Objects, self._callback_objects)
         rospy.Subscriber(state_topic, rosjava_msg.MonitorServiceRequest, self._callback_states)
 
         # service
         self.context_srv = rospy.ServiceProxy("/context_manager/monitor/service", rosjava_srv.MonitorSimilarService)
-        self.scene_srv = rospy.ServiceProxy("/motion_plan/get_scene_objects", GetObjects)
 
         self.is_context_manager = False
         self.constraint = 0
@@ -84,69 +80,84 @@ class KnowledgeInterface(InterfaceBase):
         self.accessibility_map = {"obj_left_hand": {}, "obj_right_hand": {}}
         self.current_state = None
         self.is_start =False
-        while(not self.detected_objects):
-            pass
         return True
 
-    def get_current_states(self, target_object=None):
+    def update_current_states(self, current_task):
         problem = sactlib_msg.Problem()
         self.is_start = True
         if self.use_mongodb:            
             # get states from local DB
             msg_state = self.msg_store.query_named(
-                self.current_state, sactlib_msg.Problem._type
+                "/knowledge/current_state", sactlib_msg.Problem._type
             )
             return msg_state[0].facts
         else:                          
             # knowledge reasoner
-            if self.update_states():
-                problem = self.current_state
+            print('Estimating current states.')
+            problem = self.update_states()
 
-                # check workspace
-                self.check_inworkspace(problem)
+            # check workspace predicate
+            print('Calculating inworkspace predicates.')
+            self.check_inworkspace(problem)
 
-                # obstacle reasoner
-                if target_object:
+            # obstacle reasoner
+            if current_task.target_object:
+                if current_task.target_object != "SKIP":
+                    print('Calculating obstruct predicates about %s.' %current_task.target_object)
                     # relocate service for obstruct predicate of target object
-                    if self.check_accessibility(target_object, self.detected_objects):
+                    if self.check_accessibility(current_task.target_object):
                         for robot_group in self.accessibility_map.keys():
                             for obj in self.accessibility_map[robot_group].keys():
                                 if not self.accessibility_map[robot_group][obj][0]: 
                                     # if robot group can't accessible to object
-                                    pred = sactlib_msg.Predicate()
-                                    pred.name = 'obstruct'
-                                    pred.args = [robot_group, target_object, self.accessibility_map[robot_group][obj][1]]
-                                    pred.is_negative = False
-                                    problem.facts.append(pred)                        
-                    else:
-                        return False, None
-                return True, problem
+                                    #TODO: hard-coding for fridge demo
+                                    if 'fridge' not in self.accessibility_map[robot_group][obj][1]:
+                                        pred = sactlib_msg.Predicate()
+                                        pred.name = 'obstruct'
+                                        pred.args = [robot_group, current_task.target_object, self.accessibility_map[robot_group][obj][1]]
+                                        pred.is_negative = False
+                                        problem.facts.append(pred)  
+                else:   # no solution or response
+                    print('No obstruct predicates.')
             else:
-                return False, None
+                rospy.logwarn('No target object for obstruct predicate.')
+
+            current_task.problem = problem
+            return
 
     def check_inworkspace(self, problem):
         for part in self.social_robot['group'].keys():
             part_shoulder = self.social_robot['group'][part]
+            print(part)
             print('arm length =', self.ARM_LENGTH)
             for obj in self.detected_objects:
                 obj_center = [obj.bb3d.center.position.x, obj.bb3d.center.position.y]
                 dist = math.sqrt((part_shoulder[0] - obj_center[0])**2 + (part_shoulder[1] - obj_center[1])**2)
-                print(obj.name.data)
+                print(obj.id)
                 print('object dist =', dist)
+                #TODO: check distance between object's affordance and robot shoulder
+                #for aff in obj.affordance:
+                
                 if dist < self.ARM_LENGTH:
                     # if object in workspace of specific arm part
                     pred = sactlib_msg.Predicate()
                     pred.name = 'inWorkspace'
-                    pred.args = [part, obj.name.data.replace('obj_','obj_')]
+                    pred.args = [part, obj.id.replace('obj_','obj_')]
                     pred.is_negative = False
-                    problem.facts.append(pred)
+                    problem.facts.append(pred)                
+            
+                if self.check_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_tray']) and self.check_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_tray']):
+                    self.add_predicate(problem, 'inWorkspace', ['obj_dual_hand', 'obj_tray'])
+                # if self.check_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_courier_box']) and self.check_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_courier_box']):
+                #     self.add_predicate(problem, 'inWorkspace', ['obj_dual_hand', 'obj_courier_box'])
 
-    def check_accessibility(self, target, obstacles):    
+        return
+
+    def check_accessibility(self, target):    
         """ calculate accessibility for target object with KIST relocation_node
 
         Args:
             target ([string]): ID of target
-            obstacles ([socialrobot_perception_msgs/Objects]): detected object list
         """
             
         # request to relocation_node
@@ -156,13 +167,14 @@ class KnowledgeInterface(InterfaceBase):
         objects = self.detected_objects
         req.N = len(objects)
         target_idx = None
+        
         for i, obj in enumerate(objects):
-            if target == obj.name.data:
+            if target == obj.id:
                 target_idx = i
-            if obj.name.data == 'obj_table':    # except table
+            if obj.id == 'obj_table':    # except table
                 req.N -= 1
                 req.x_min = 0
-                req.x_max = 0.5
+                req.x_max = 0.9
                 req.y_min = -0.5
                 req.y_max = 0.5 
             else:
@@ -174,18 +186,19 @@ class KnowledgeInterface(InterfaceBase):
 
         # workspace (consider table size)
         req.x_min = 0
-        req.x_max = 0.5
+        req.x_max = 0.9
         req.y_min = -0.5
         req.y_max = 0.5           
 
-        rospy.loginfo("[Socialrobot Interface] wait for relocation service...")
-        rospy.wait_for_service("relocation_srv")
-        rospy.loginfo("[Socialrobot Interface] requesting for accesibility of target object...")
+        rospy.loginfo("[Socialrobot Knowledge] requesting for accesibility of %s", target)
         try:
             f_check_srv = rospy.ServiceProxy("relocation_srv", reloc_srv.relocate_env_srv)
             for part in self.social_robot['group'].keys():
                 req.robot_pose = self.social_robot['group'][part]
+                print(req)
                 resp = f_check_srv(req)
+                print(resp)
+
                 # no relocate solution
                 if resp.relocate_id == -1:
                     rospy.logwarn('No relocation solution.')
@@ -193,11 +206,14 @@ class KnowledgeInterface(InterfaceBase):
                     if resp.accessibility == 1:  # accessible
                         self.accessibility_map[part][target] = [True, '']
                     elif resp.accessibility == -1:   # not accessible
-                        self.accessibility_map[part][target] = [False, objects[resp.relocate_id].name.data]
+                        obstacle_id = objects[resp.relocate_id].id
+                        rospy.logwarn('%s is obstructed by %s for %s grasp', target, obstacle_id, part)
+                        self.accessibility_map[part][target] = [False, obstacle_id]  
             return True
 
         except rospy.ServiceException, e:
-            print("Relocation Service call failed: %s" % e)
+            rospy.logerr("Relocation Service call failed: %s" % e)
+            return False
 
     def is_detected(self, object_id):
         """[summary]
@@ -207,10 +223,12 @@ class KnowledgeInterface(InterfaceBase):
 
         Returns:
             [bool]: check object is already detected
-        """
+        """        
         # 
+        print('target:', object_id)
         for obj in self.detected_objects:
-            if obj.name.data == object_id:
+            print(obj.id)
+            if obj.id == object_id:
                 return True
         return False
 
@@ -219,10 +237,12 @@ class KnowledgeInterface(InterfaceBase):
             return "obj_" + request.actionParam1.lower()
         elif request.actionName.lower() == 'handover':
             return "obj_" + request.actionParam1.lower()
+        elif request.actionName.lower() == 'open' or request.actionName.lower() == 'close':
+            return "SKIP"
         else:
             return None
 
-    def estimate_goal(self, request):
+    def estimate_task(self, request):
         ''' 
         string actionName
         string actionParam1
@@ -234,6 +254,18 @@ class KnowledgeInterface(InterfaceBase):
         int32 actionID
         ---
         int32 result 
+
+        # demo 1
+        req.actionName = "HandOver"          
+        req.actionParam1 = "Gotica"           
+        req.actionConstraint = "Left" 
+        # demo 2        
+        req.actionName = "Grab"              
+        req.actionParam1 = "Gotica"             
+        req.actionConstraint = "Left"  
+        # demo 3       
+        req.actionName = Open / Close
+        req.actionConstraint = Left / Right / Dual
         '''
         goal_predicates = []
         predicate = sactlib_msg.Predicate()
@@ -249,12 +281,11 @@ class KnowledgeInterface(InterfaceBase):
             robot_part = 'obj_left_hand'
         elif (request.actionConstraint.lower() == 'right') or (request.actionParam1.lower() == 'right'):
             robot_part = 'obj_right_hand'
+        elif (request.actionConstraint.lower() == 'dual') or (request.actionParam1.lower() == 'dual'):
+            robot_part = 'obj_dual_hand'
 
-        if act_name == "move":
-            predicate.name = 'locatedAt'
-            predicate.args = ['robot_base', act_params[0]]            
-        elif act_name == "handover":
-            predicate.name = 'transferred'
+        if act_name == "handover":
+            predicate.name = 'handedover'
             obj = 'obj_'+ act_params[0] 
             predicate.args = [robot_part, obj]
         elif act_name == "grab":
@@ -262,13 +293,13 @@ class KnowledgeInterface(InterfaceBase):
             obj = 'obj_'+ act_params[0]  
             predicate.args = [robot_part, obj]    
         elif act_name == "open":
-            predicate.name = 'openedHand'
+            predicate.name = 'openhand'
             predicate.args = [robot_part]  
         elif act_name == "close":
-            predicate.name = 'openedHand'
+            predicate.name = 'closehand'
             predicate.args = [robot_part] 
             predicate.is_negative = True
-        elif act_name == "zeropose":
+        elif act_name == "standby":
             predicate.name = 'standby'
             predicate.args = [robot_part]
         goal_predicates.append(predicate)
@@ -278,6 +309,7 @@ class KnowledgeInterface(InterfaceBase):
         goal_predicates = []
         predicate = sactlib_msg.Predicate()
 
+        #TODO:
         if task == "rearrange":
             # set rearrange target from detected objects    
             target = "obj_red_gotica"        
@@ -285,17 +317,6 @@ class KnowledgeInterface(InterfaceBase):
             predicate.args = [target]
         goal_predicates.append(predicate)
         return goal_predicates, target
-    
-    def _callback_objects(self, data):
-        # if tracking mode
-        if rospy.has_param('/object_tracking') and rospy.get_param('/object_tracking')==True:
-            self.detected_objects = list(data.detected_objects)
-        else:
-            # if not tracked, update objects only first time
-            if not self.is_start:
-                self.detected_objects = list(data.detected_objects)
-            else:
-                pass
 
     def _callback_states(self, data):
         # if not self.is_context_manager:
@@ -323,13 +344,45 @@ class KnowledgeInterface(InterfaceBase):
             pred.args[1] = pred.args[0].replace("obj", "pos")
         return pred
 
+    def add_object(self, problem, instance_name, obj_type):
+        key_value = KeyValue()
+        key_value.key = obj_type		    
+        key_value.value = instance_name		
+        problem.objects.append(key_value) 
+
+    def add_predicate(self, problem, name, args):
+        """
+        manually add predicate into fact if don't use knowledge
+        """
+        predicate = sactlib_msg.Predicate()
+        predicate.name = name
+        predicate.args = args
+        problem.facts.append(predicate) 
+
+    def remove_predicate(self, problem, name, args):
+        """
+        manually remove predicate from states
+        """
+        for i, pred in enumerate(problem.facts):
+            if pred.name.lower() == name.lower() and pred.args == args:
+                problem.facts.pop(i)
+
+    def check_predicate(self, problem, name, args):
+        """
+        find problem
+        """
+        for i, pred in enumerate(problem.facts):
+            if pred.name.lower() == name.lower() and pred.args == args:
+                return True
+        return False
+
     def update_states(self):
         """
         update current states from context manager
         """
+        problem = sactlib_msg.Problem()
         try:
-            rospy.wait_for_service("/context_manager/monitor/service", timeout=1)
-            current_states = sactlib_msg.Problem()
+            rospy.wait_for_service("/context_manager/monitor/service", timeout=1)            
             # query for current state predicates
             req = rosjava_srv.MonitorSimilarServiceRequest()
             req.status = 100
@@ -345,53 +398,94 @@ class KnowledgeInterface(InterfaceBase):
                 # check response is not empty
                 for response in res.response:
                     state = self._convert_format(response)
-                    if 'obj_bakey' not in state.args and 'pos_bakey' not in state.args:
-                        current_states.facts.append(state)   
+                    print(state)
+                    problem.facts.append(state)   
+   
+            # object type
+            rospy.loginfo("[Knowledge Interface] manually add facts.")
+            robot_group = ['obj_right_hand', 'obj_left_hand', 'obj_dual_hand', 'obj_socialrobot']
+            static_group = ['obj_table','obj_fridge']                 
+            dynamic_group = []      
 
-            # add additional facts manually            
-            temp_type = sactlib_msg.Predicate()
-            temp_type.name = 'type'
-            temp_type.args = ['obj_right_hand','Gripper']
-            current_states.facts.append(temp_type) 
-            temp_type = sactlib_msg.Predicate()
-            temp_type.name = 'type'
-            temp_type.args = ['obj_left_hand','Gripper']
-            current_states.facts.append(temp_type) 
-            temp_type = sactlib_msg.Predicate()
-            temp_type.name = 'type'
-            temp_type.args = ['obj_socialrobot','Mobile']
-            current_states.facts.append(temp_type) 
-            # temp_type = sactlib_msg.Predicate()
-            # temp_type.name = 'incontgeneric'
-            # temp_type.args = ['obj_fridge','obj_milk']
-            # current_states.facts.append(temp_type) 
-            # temp_type = sactlib_msg.Predicate()
-            # temp_type.name = 'locatedat'
-            # temp_type.args = ['obj_fridge','pos_fridge']
-            # current_states.facts.append(temp_type) 
-            # temp_obj = KeyValue()
-            # temp_obj.key = 'object'
-            # temp_obj.value = 'obj_fridge'
-            # current_states.objects.append(temp_obj) 
-            # temp_obj = KeyValue()
-            # temp_obj.key = 'position'
-            # temp_obj.value = 'pos_fridge'
-            # current_states.objects.append(temp_obj) 
-                    
-            if len(current_states.facts)>0:
-                self.current_state = current_states
+            self.add_predicate(problem, 'type', ['obj_right_hand','Arm'])
+            self.add_predicate(problem, 'type', ['obj_left_hand','Arm'])
+            self.add_predicate(problem, 'type', ['obj_dual_hand','DualArm'])
+            self.add_predicate(problem, 'type', ['obj_socialrobot','Mobile'])
+
+            #hard-coding for dual grasp 
+            self.add_predicate(problem, 'locatedAt', ['obj_dual_hand','pos_dual_hand'])
+            self.add_predicate(problem, 'locatedAt', ['obj_left_hand','pos_left_hand'])
+            self.add_predicate(problem, 'locatedAt', ['obj_right_hand','pos_right_hand'])
+                
+            #hard-coding for on-physical predicate
+            # for obj in self.detected_objects:
+            #     if obj.id not in ['obj_right_hand', 'obj_left_hand', 'obj_dual_hand', 'obj_socialrobot', 'obj_table']:
+            #         self.add_predicate(problem, 'onPhysical', [obj.id, 'obj_table'])
+
+            has_workspace = False
+            for obj in self.detected_objects:
+                # create dynamic group
+                if obj.id in static_group:
+                    has_workspace = True   
+                if obj.id not in static_group + robot_group:
+                    dynamic_group.append(obj.id)
+                
+                # HARD-CODING for fridge demo
+                if obj.id == 'obj_human':                      
+                    self.add_object(problem, 'obj_human', 'Object')    
+                    self.add_object(problem, 'pos_human', 'Position')
+                    self.add_predicate(problem, 'locatedAt', ['obj_human','pos_human'])
+                if obj.id == 'obj_fridge':
+                    self.add_predicate(problem, 'openedhand', ['obj_dual_hand'])
+                    self.add_predicate(problem, 'largeSized', ['obj_fridge'])
+                    self.add_predicate(problem, 'largeSized', ['obj_tray'])   
+                    self.add_predicate(problem, 'emptyhand', ['obj_right_hand'])
+                    self.add_predicate(problem, 'emptyhand', ['obj_left_hand'])
+                    self.add_predicate(problem, 'inContGeneric', ['obj_red_gotica','obj_fridge'])
+                    self.add_predicate(problem, 'inContGeneric', ['obj_white_gotica','obj_fridge'])
+                    self.add_predicate(problem, 'obstruct', ['obj_right_hand','obj_white_gotica','obj_red_gotica'])
+                    self.add_predicate(problem, 'locatedAt', ['obj_fridge','pos_fridge'])
+                    self.add_predicate(problem, 'locatedAt', ['obj_red_gotica','pos_red_gotica'])
+                    self.add_predicate(problem, 'locatedAt', ['obj_white_gotica','pos_white_gotica'])
+                    self.add_predicate(problem, 'detectedobject', ['obj_red_gotica'])
+                    self.add_predicate(problem, 'detectedobject', ['obj_white_gotica'])
+                    self.add_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_white_gotica'])
+                    self.remove_predicate(problem, 'locatedAt', ['obj_left_hand', 'pos_left_hand'])
+                    if rospy.has_param('fridge_isopen'):
+                        if rospy.get_param('fridge_isopen') == True:
+                            self.add_predicate(problem, 'openedContainer', ['obj_fridge'])
+                if obj.id == 'obj_courier_box':
+                    if rospy.has_param('user_age'):
+                        if rospy.get_param('user_age') == 'young':
+                            self.add_predicate(problem, 'largeSized', ['obj_courier_box'])
+                    else:
+                        self.add_predicate(problem, 'largeSized', ['obj_courier_box'])
+                    self.add_predicate(problem, 'locatedAt', ['obj_courier_box','pos_courier_box'])
+            
+            # if workspace is not detected, add virtual table
+            if not has_workspace:
+                self.add_predicate(problem, 'detectedobject', ['obj_table'])
+                self.add_predicate(problem, 'locatedAt', ['obj_table','pos_table'])
+                for dym_obj in dynamic_group:
+                    self.add_predicate(problem, 'onPhysical', [dym_obj, 'obj_table'])
+
+            if len(problem.facts)>0:
                 # update data into DB
-                if self.use_mongodb:
-                    self.msg_store.update_named(self.current_state, current_states)
-                return True
+                if self.use_mongodb:                    
+                    self.msg_store.update_named("/knowledge/current_state", problem)
+                return problem
             else:
-                return False
+                rospy.logerr("[Socialrobot Interface] current facts.")
+                return problem
             
         except Exception:
             rospy.logerr("[Socialrobot Interface] service call to context manager is failed.")
-            return False
+            return problem
 
     def compare_states(self, facts, effects):        
+        '''
+        compare action effect and current states
+        '''
         inefficient_condition = sactlib_msg.Condition()
         fact_condition = sactlib_msg.Condition()
 
@@ -412,239 +506,123 @@ class KnowledgeInterface(InterfaceBase):
 
         return inefficient_condition 
 
-    def get_values(self, action):
+    def _get_object_value(self, requirements=None, symbolic_parameters=None):   
         """
-        Get metric data from knowledge
+        input: symbolic_parameters (list)
+        """  
+        detected_objects = self.detected_objects
+        obj_ids = []
+        metric_values = []
+        for obj in detected_objects: 
+            obj_ids.append(obj.id)
+
+        # find object from symbolic parameters
+        if symbolic_parameters:
+            for param in symbolic_parameters:     
+                # detected from perception manager       
+                if param in obj_ids:
+                    idx = obj_ids.index(param)                
+                    metric_values.append(detected_objects[idx])
+
+                # robot part
+                elif 'left' in param:
+                    metric_values.append(social_robot_msg.Behavior().LEFT_ARM)
+                elif 'right' in param:
+                    metric_values.append(social_robot_msg.Behavior().RIGHT_ARM)
+                elif 'dual' in param:
+                    metric_values.append(social_robot_msg.Behavior().BOTH_ARM)
+                elif 'robot' in param:
+                    metric_values.append(social_robot_msg.Behavior().MOBILE_BASE)
+                else:
+                    rospy.logwarn("cannot find object metric value %s", param)
+                    metric_values.append(social_robot_msg.Object())
+
+        # find object from object type
+        if requirements == 'dynamic_object':
+            #metric_values = detected_objects
+            for obj in detected_objects:
+                # TODO: remove
+                if 'obj_human' not in obj.id:
+                    metric_values.append(obj)
+            
+        elif requirements == 'static_object':
+            pass                   
+        return metric_values
+
+    def _get_position_value(self, requirements=None, symbolic_parameters=None):
+        detected_objects = self.detected_objects
+        obj_ids = []
+        metric_values = []
+        for obj in detected_objects: 
+            obj_ids.append(obj.id)
+
+        # get object position values
+        if symbolic_parameters:
+            for pos_id in symbolic_parameters:
+                if 'pos_' in pos_id:
+                    # get position from object   
+                    obj_id = pos_id.replace('pos_','obj_')  
+                    if obj_id in obj_ids:
+                        idx = obj_ids.index(obj_id)           
+                        obj = detected_objects[idx]
+                        # convert object to position
+                        pos = social_robot_msg.Position()
+                        pos.waypoint = obj_id
+                        pos.pose = obj.bb3d.center
+                        metric_values.append(pos)
+                else: 
+                    # convert string value into float
+                    pose_2d = [float(x) for x in pos_id[1:-1].split(',')] #[x,y,theta]
+                    quat = tf.transformations.quaternion_from_euler(0, 0, pose_2d[2])
+                    pos = social_robot_msg.Position()
+                    pos.pose.position.x = pose_2d[0]
+                    pos.pose.position.y = pose_2d[1]
+                    pos.pose.orientation.x = quat[0]
+                    pos.pose.orientation.y = quat[1]
+                    pos.pose.orientation.z = quat[2]
+                    pos.pose.orientation.w = quat[3]
+                    metric_values.append(pos)
+
+
+        return metric_values
+
+    def assign_metric_value(self, requirements):
         """
-        plan_req = behavior_srv.GetMotionRequest()
+        'requirements':{'parameter':[],
+                        'type':[],
+                        'symbolic':[],
+                        'metric':[]}}
+        """          
 
-        action_name = action.name
-        target_body = action.parameters[0]
-        rospy.loginfo("Getting metric values from knowledge for %s..." % action_name)
-
-        # update object data
-        if rospy.has_param('/object_tracking') and rospy.get_param('/object_tracking')==False:
-            rospy.loginfo("Getting object information from moveit scene.")
-            req = GetObjectsRequest()
-            scene_objects = self.scene_srv(req)
-            if scene_objects.objects:
-                self.detected_objects = list(scene_objects.objects)
-
-        # Define target body
-        if rospy.has_param("robot_name"):
-            robot_name = rosparam.get_param("/robot_name")
-        # Define environment
-        if rospy.has_param("robot_hw"):
-            hw_interface = rosparam.get_param("/robot_hw")
-
-        # Set action parameter
-        # TODO: assign metric values automatically. now hardcoding....
-        if action_name in ("open_hand", "close_hand"):
-            plan_req.planner_name = "openclose"
-            if "left" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_GRIPPER
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_GRIPPER
-
-            # pose template
-            gripper_behavior = [0.0 if action_name == "open_hand" else 1.0, 0.0]
-
-            gripper_box = [0.0, 0.0]
-            # gripper_circle = [0.0, 0.3]
-            # gripper_hook = [0.0, 1.0]
-
-            # set grasp pose: close and box shape
-            plan_req.inputs.graspPose = map(
-                lambda x, y: x + y, gripper_behavior, gripper_box
-            )
-
-        elif action_name == "approach_arm":
-            # set approach direction
-            plan_req.planner_name = "approach"
-
-            if "left" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-
-            plan_req.inputs.approachDirection = plan_req.inputs.APPROACH_SIDE
-            if action.parameters[3] == 'objecttop':
-                plan_req.inputs.approachPoint = plan_req.inputs.APPROACH_TOP
-            elif action.parameters[3] == 'objectbottom':
-                plan_req.inputs.approachPoint = plan_req.inputs.APPROACH_BOTTOM
-
-            elif action.parameters[3] == 'objecthandover':
-                plan_req.inputs.approachPoint = plan_req.inputs.APPROACH_BOTTOM
-                if "left" in target_body:
-                    plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM_WITHOUT_WAIST
-                elif "right" in target_body:
-                    plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM_WITHOUT_WAIST
-            elif action.parameters[3] == 'objecttakeover':
-                plan_req.inputs.approachPoint = plan_req.inputs.APPROACH_TOP
-                if "left" in target_body:
-                    plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM_WITHOUT_WAIST
-                elif "right" in target_body:
-                    plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM_WITHOUT_WAIST
+        # find metric value of symbolic value
+        for i, req in enumerate(requirements['parameter']):
+            param_type = param_sym = None
+            if requirements['type'][i]:
+                param_type = requirements['type'][i][0]
+            if requirements['symbolic'][i]:
+                param_sym = requirements['symbolic'][i]
                 
-            # Set objects information in environment
-            plan_req.inputs.targetObject = [
-                action.parameters[1],
-            ]
+            if param_type == 'object':
+                metric_values = self._get_object_value(symbolic_parameters=param_sym)
+                requirements['metric'][i] = metric_values
 
-            for obj in self.detected_objects:
-                plan_req.inputs.obstacle_ids.append(obj.name.data)
-                plan_req.inputs.obstacles.append(obj.bb3d)
+            elif param_type == 'position':
+                metric_values = self._get_position_value(symbolic_parameters=param_sym)
+                requirements['metric'][i] = metric_values
 
-            # TODO:fridge demo
-            # handle grasp pose
-            # target_pose.position.x = 0.378509
-            # target_pose.position.y = -0.06253
-            # target_pose.position.z = 0.836745
-            # target_pose.orientation.x = 0
-            # target_pose.orientation.y = 0.707107
-            # target_pose.orientation.z = 0
-            # target_pose.orientation.w = 0.707107
+            elif req == 'dynamic_object' or req == 'static_object':
+                metric_values = self._get_object_value(requirements=req)
+                requirements['metric'][i] = metric_values
 
-        elif action_name == "standby":
-            plan_req.planner_name = "standby"
-            target_joint_state = sensor_msg.JointState()
-            if robot_name == "social_robot":
-                if "left" in target_body:
-                    plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM
-                    target_joint_state.name = [
-                        'Waist_Roll', 
-                        'Waist_Pitch',
-                        "LShoulder_Pitch",
-                        "LShoulder_Roll",
-                        "LElbow_Pitch",
-                        "LElbow_Yaw",
-                        "LWrist_Pitch",
-                        "LWrist_Roll",
-                    ]
-                    target_joint_state.position = [0, 0.48, 0, -1.22, 0, 0, 0, 0]
-                elif "right" in target_body:
-                    plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-                    target_joint_state.name = [
-                        'Waist_Roll', 
-                        'Waist_Pitch',
-                        "RShoulder_Pitch",
-                        "RShoulder_Roll",
-                        "RElbow_Pitch",
-                        "RElbow_Yaw",
-                        "RWrist_Pitch",
-                        "RWrist_Roll",
-                    ]
-                    target_joint_state.position = [0, 0.48, 0, 1.22, 0, 0, 0, 0]
-                                         
-            # only consider table object
-            for obj in self.detected_objects:
-                if obj.name.data == 'obj_table':
-                    plan_req.inputs.obstacle_ids.append(obj.name.data)
-                    plan_req.inputs.obstacles.append(obj.bb3d)
-                    
-            plan_req.inputs.jointGoal = target_joint_state
+    def assign_social_constraints(self, task_plan):
+        """ append constraints to each action
 
-        elif action_name in ("approach_base", "move_base", "move_around"):
-            plan_req.planner_name = action.planner[0]
-            plan_req.inputs.targetBody = behavior_msg.PlannerInputs().MOBILE_BASE
-
-            # Set objects information in environment
-            plan_req.inputs.targetObject = [
-                action.parameters[2],
-            ]
-
-            for obj in self.detected_objects:
-                plan_req.inputs.obstacle_ids.append(obj.name.data)
-                plan_req.inputs.obstacles.append(obj.bb3d)
-
-
-        elif action_name == 'relocate_obstacle':
-            plan_req.planner_name = "relocate"
+        Args:
+            task_plan ([socialrobot_actionlib/Action[]]): task plan sequence
+        """
+        # TODO: remove hard-coding
+        #for act in task_plan:
             
-            if "left" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-
-            # Set objects information in environment
-            plan_req.inputs.targetObject = [
-                action.parameters[1],
-                action.parameters[2],
-            ]
-            for obj in self.detected_objects:
-                plan_req.inputs.obstacle_ids.append(obj.name.data)
-                plan_req.inputs.obstacles.append(obj.bb3d)
-
-        elif action_name == 'rearrange_object':
-            plan_req.planner_name = "relocate"
-            
-            if "left" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-
-            # Set objects information in environment
-            plan_req.inputs.targetObject = [
-                '',
-                action.parameters[1]
-            ]
-            for obj in self.detected_objects:
-                plan_req.inputs.obstacle_ids.append(obj.name.data)
-                plan_req.inputs.obstacles.append(obj.bb3d)
-
-        elif action_name == 'transfer_object':
-            plan_req.planner_name = "transfer"
-
-            if "left" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-            
-            # set obstacles
-            for obj in self.detected_objects:
-                if not plan_req.inputs.targetObject == obj.name.data:
-                    plan_req.inputs.obstacle_ids.append(obj.name.data)
-                    plan_req.inputs.obstacles.append(obj.bb3d)
-
-            plan_req.inputs.targetObject =[action.parameters[1]]
-
-        elif action_name == 'handover_object':
-            plan_req.planner_name = "handover"
-
-            if "left" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().LEFT_ARM
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-            
-            # set obstacles
-            for obj in self.detected_objects:
-                if not plan_req.inputs.targetObject == obj.name.data:
-                    plan_req.inputs.obstacle_ids.append(obj.name.data)
-                    plan_req.inputs.obstacles.append(obj.bb3d)
-
-            plan_req.inputs.targetObject =[action.parameters[2]]
-
-        elif action_name == 'move_arm':
-            plan_req.planner_name = "movearm"
-            target_joint_state = sensor_msg.JointState()
-            if "left" in target_body:
-                pass
-            elif "right" in target_body:
-                plan_req.inputs.targetBody = behavior_msg.PlannerInputs().RIGHT_ARM
-                target_pose = geo_msg.Pose()
-                target_pose.position.x = 0.378509
-                target_pose.position.y = -0.06253
-                target_pose.position.z = 0.836745
-                target_pose.orientation.x = 0
-                target_pose.orientation.y = 0.707107
-                target_pose.orientation.z = 0
-                target_pose.orientation.w = 0.707107
-                plan_req.inputs.poseGoal = target_pose
-
-        elif action_name == 'open_door':
-            plan_req.planner_name = "opendoor"
-            plan_req.inputs.targetBody = plan_req.inputs.MOBILE_BASE
 
 
-        rospy.loginfo("Assigning is done.")
-        return plan_req
+        return True

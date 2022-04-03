@@ -31,7 +31,7 @@
 
 @author Moritz Tenorth, Lars Kunze
 @license BSD
-
+ 
 */
 :- module(comp_spatial,
     [
@@ -54,6 +54,7 @@
       comp_inCenterOf/2,
       comp_below_of/2,
       belowOf/2,
+      check_below_of/2,
       comp_above_of/2,
       aboveOf/2,
       comp_center/2,
@@ -196,9 +197,40 @@ holds(comp_above_of(Top, Bottom),T) :-
 %
 
 belowOf(Bottom, Top) :-
-    distinct(comp_below_of(Bottom, Top)),
-    not(rdfs_individual_of(Top,  knowrob:'Robot'));not(rdfs_individual_of(Bottom,  knowrob:'Robot')).
-    
+    check_below_of(Bottom, Top).
+
+check_below_of(Bottom, Top):-
+    get_timepoint(T),
+    holds(check_below_of(Bottom, Top),T).
+
+holds(check_below_of(Bottom, Top), T) :-
+    rdfs_individual_of(Top,  'http://knowrob.org/kb/knowrob.owl#Artifact'),
+    rdfs_individual_of(Bottom,  'http://knowrob.org/kb/ias_semantic_map.owl#BothHandObject'),
+    not(rdfs_individual_of(Top,  knowrob:'DisplayShelf')),
+    not(rdfs_individual_of(Top,  knowrob:'Robot')),
+    not(rdfs_individual_of(Bottom,  knowrob:'Robot')),
+
+    currentArtifactVertex(Top,Tvertex),
+    currentArtifactVertex(Bottom,Bvertex),
+
+    nth0(0, Tvertex, I1), nth0(0, I1, X1E), nth0(1, I1, Y1E), nth0(2, I1, Z1E),
+    nth0(6, Tvertex, I2), nth0(0, I2, X2E), nth0(1, I2, Y2E), nth0(2, I2, Z2E),
+    nth0(0, Bvertex, O3), nth0(0, O3, X3E), nth0(1, O3, Y3E), nth0(2, O3, Z3E),
+    nth0(6, Bvertex, O4), nth0(0, O4, X4E), nth0(1, O4, Y4E), nth0(2, O4, Z4E),
+
+   (X1E > X2E -> X1 = X2E, X2 = X1E;X1 = X1E, X2 = X2E),
+   (Y1E > Y2E -> Y1 = Y2E, Y2 = Y1E;Y1 = Y1E, Y2 = Y2E),
+   (Z1E > Z2E -> Z1 = Z2E, Z2 = Z1E;Z1 = Z1E, Z2 = Z2E),
+   (X3E > X4E -> X3 = X4E, X4 = X3E;X3 = X3E, X4 = X4E),
+   (Y3E > Y4E -> Y3 = Y4E, Y4 = Y3E;Y3 = Y3E, Y4 = Y4E),
+   (Z3E > Z4E -> Z3 = Z4E, Z4 = Z3E;Z3 = Z3E, Z4 = Z4E),
+   TOPZ = (Z1 + Z2) / 2,
+   BOTZ = (Z3 + Z4) / 2,
+   TOPX = (X1 + X2) / 2, TOPY = (Y1 + Y2) / 2,
+   >( TOPZ, BOTZ), >( TOPX, X3 ), <( TOPX, X4),
+   >( TOPY, Y3 ), <( TOPY, Y4).
+
+
 comp_below_of(Bottom, Top) :-
     get_timepoint(T),
     holds(comp_below_of(Bottom, Top),T).
@@ -227,7 +259,7 @@ comp_toTheLeftOf(Left, Right) :-
     Left \= Right,
     near(Right, Left), % near(Robot, Object)
 
-    currentRobotBodyVertex(Right, RVertex),
+    (currentArtifactVertex(Right, RVertex);currentRobotBodyVertex(Right, RVertex)),
     currentArtifactVertex(Left, LVertex),
 
     nth0(0, LVertex, L1), nth0(0, L1, LX1), nth0(1, L1, LY1), nth0(2, L1, LZ1),
@@ -243,8 +275,8 @@ comp_toTheLeftOf(Left, Right) :-
     (RZ1 > RZ2 -> Z3 = RZ2, Z4 = RZ1;Z3 = RZ1, Z4 = RZ2),
 
     Y1 > Y4, % object (right)
-    X1 > X3,
-    X4 > X2,
+    X1 > X3-0.05,
+    X4+0.07 > X2,
     Z4 > (Z1 + Z2) / 2,
     (Z1 + Z2) / 2 > Z3.
 
@@ -315,10 +347,12 @@ comp_toTheLeftOf(Left, Right, P1, P2, P3) :-
 %
 
 toTheRightOf(Right, Left) :-
-	comp_toTheRightOf(Right, Left).
+	% comp_toTheRightOf(Right, Left).
+    comp_toTheLeftOf(Left, Right).
 comp_toTheRightOf(Right, Left) :-
-    get_timepoint(T),
-    holds(comp_toTheRightOf(Right, Left), T).
+    % get_timepoint(T),
+    holds(comp_toTheLeftOf(Left, Right), T).
+    % holds(comp_toTheRightOf(Right, Left), T).
 
 
 %% holds(+ToTheRightOf:compound, +T) is nondet.
@@ -338,7 +372,7 @@ holds(comp_toTheRightOf(Right, Left), T) :-
     Left \= Right,
     near(Left, Right), % near(Robot, Object)
 
-    currentRobotBodyVertex(Left, LVertex),
+    (currentArtifactVertex(Left, LVertex);currentRobotBodyVertex(Left, LVertex)),
     currentArtifactVertex(Right, RVertex),
 
     nth0(0, LVertex, L1), nth0(0, L1, LX1), nth0(1, L1, LY1), nth0(2, L1, LZ1),
@@ -649,7 +683,7 @@ holds(in_ContGeneric(InnerObj, OuterObj), T) :-
 
     rdfs_individual_of(InnerObj,  knowrob:'SpatialThing-Localized'),
     rdfs_individual_of(OuterObj, knowrob:'Container'), % knowrob:'SpatialThing-Localized'),
-    % not(rdfs_individual_of(OuterObj,  knowrob:'DisplayShelf')),
+    not(rdfs_individual_of(OuterObj,  knowrob:'DisplayShelf')),
 
 
     nth0(0, Ivertex, I1), nth0(0, I1, X1E), nth0(1, I1, Y1E), nth0(2, I1, Z1E),
@@ -928,3 +962,4 @@ latest_detection_of_instance(Object, LatestDetection) :-
     nth0(0, Dsorted, Latest),
     nth0(0, Latest, LatestDetection))).
     
+

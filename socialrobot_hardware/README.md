@@ -13,7 +13,7 @@
 
 **Package summary**
 
-socialrobot_hardware package.
+socialrobot hardware interface package.
 
 - Maintainer status: maintained
 - Maintainers
@@ -29,19 +29,24 @@ socialrobot_hardware package.
 <div style="flex:40%; padding-left:10px;">
 
 **Table of Contents**
-1. [Overview](#overview)
-2. [Installation methods](#installation-methods)
-   1. [Install manually](#install-manually)
-3. [Dependencies](#dependencies)
-   1. [Frameworks](#frameworks)
-   2. [Third-party libraries](#third-party-libraries)
-   3. [Social Robot Project Modules](#social-robot-project-modules)
-   4. [Hardware requirements](#hardware-requirements)
-4. [Quick start](#quick-start)
-5. [Features](#features)
-   1. [Example](#example)
-6. [Nodes](#nodes)
-   1. [{Node1 Name}](#node1-name)
+- [Hardware Interface](#hardware-interface)
+  - [Overview](#overview)
+  - [Installation methods](#installation-methods)
+  - [Dependencies](#dependencies)
+    - [Frameworks](#frameworks)
+    - [Hardware requirements](#hardware-requirements)
+      - [Parameters](#parameters)
+  - [Quick start](#quick-start)
+  - [Nodes](#nodes)
+    - [hw_interface](#hw_interface)
+      - [Published Topics](#published-topics)
+      - [Messages](#messages)
+      - [Services](#services)
+    - [path_follower](#path_follower)
+      - [Published Topics](#published-topics-1)
+      - [Subscribed Topics](#subscribed-topics)
+      - [Services](#services-1)
+    - [Example](#example)
 
 </div>
 </div>
@@ -50,146 +55,179 @@ socialrobot_hardware package.
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-```mermaid
-classDiagram
-	Animal <|-- Duck
-	Animal <|-- Fish
-	Animal <|-- Zebra
-	Animal : +int age
-	Animal : +String gender
-	Animal: +isMammal()
-	Animal: +mate()
-	class Duck{
-		+String beakColor
-		+swim()
-		+quack()
-	}
-	class Fish{
-		-int sizeInFeet
-		-canEat()
-	}
-	class Zebra{
-		+bool is_wild
-		+run()
-	}
-					
-```
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+ROS package for interface management to connect robot hardware or vrep simulator with a social robot system.
 
 ## Installation methods
-
-### Install manually
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```
+catkin_make
+```
 
 ## Dependencies
-
+- V-REP simulator
+  
 ### Frameworks
 
 - ROS Kinetic/Melodic
-
-### Third-party libraries
-
-- Lib1
-- Lib2
-- Lib3
-
-### Social Robot Project Modules
-
-- Package1
-- Package2
-- Package3
 
 ### Hardware requirements
 
 This package requires a hardware device.
 
+#### Parameters
+
+- ~robot_name (string, default: social_robot)
+  - set robot name to load robot description package.
+- ~sim_env (bool, default: True)
+  - set robot hardware mode
+  - True : simulation
+  - False : robot hardware
+- ~sim_env (string, default: default)
+  - If `sim_env` is set to True, define the V-rep scene file name
+
 ## Quick start 
+```
+roslaunch socialrobot_hardware hardware_interface.launch
+```
 
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-
-## Features
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-### Example
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ## Nodes
 
-### {Node1 Name}
+### hw_interface
 
 <div style="padding-left:40px;">
 
-#### Subscribed Topics
-
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
 #### Published Topics
 
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
+- ~joint_states ([sensor_msgs/JointState]()
+  - robot joint states
+  
 #### Messages
 
-- {message_name}.msg
-  - header (`Header`)
-    - Standard metadata for higher-level stamped data types.
-  - paramA (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  - paramB (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- VrepState.msg
+  - vrep_state (`int32`)
+    - SIM_STOPPED = 0
+    - SIM_RUNNING = 1
+  - action_state (`int32`)
+    - READY_FOR_ACTION = 0
+    - ACTION_RUNNING = 1
+- ObjectInfo.msg
+  - If `sim_env` is True, publish object info on behalf of the `socialrobot_perception` modules.
+  - names (`string[]`)
+    - object name list
+  - obstacles (`vision_msgs/BoundingBox3D[]`)
+    - object bounding box information
 
 #### Services
 
-- {Service Name} (pkg_name/srv_file.srv)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- ~set_motion ([SetJointTrajectory.srv](srv/SetJointTrajectory.srv))
+  - request to the robot controller to execute motion trajectory 
 
 <div style="display:flex; padding-left:50px">
 <div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
 
 Request
 
-- InputParamX (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- InputParamY (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- trajectory (`trajectory_msgs/JointTrajectory`)
+  - motion trajectory calculated from motion planner
+- duration (`float64`)
+  - executing time
 
 </div>
 <div style="flex:50%; padding-left:10px;">
 
 Response
 
-- OutputParam1 (`int64`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- OutputParam2 (`int64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- result (`int32`)
+  - OK = 0
+  - ERROR = 1
 
 </div>
 </div>
 
-#### Services Called
+- ~get_state ([GetRobotState.srv](srv/GetRobotState.srv))
+  - request to the robot controller to execute motion trajectory 
 
-- ~<some_name>/<service_name> ([nav_msgs/GetMap](http://docs.ros.org/api/nav_msgs/html/srv/GetMap.html))
-  - This node calls this service to do {something}.
+<div style="display:flex; padding-left:50px">
+<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
 
-#### Parameters
+Request
 
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- query (`std_msgs/Empty`)
+  - no request
 
 </div>
+<div style="flex:50%; padding-left:10px;">
+
+Response
+
+- state (`int32`)
+  - robot's moving state
+  - READY_STATE = 0
+  - RUNNING_STATE = 1
+
+</div>
+</div>
+
+
+</div>
+
+### path_follower
+
+<div style="padding-left:40px;">
+
+#### Published Topics
+
+- /cmd_vel ([geometry_msgs/Twist]()
+  - publish robot velocity to follow requested mobile path
+
+#### Subscribed Topics
+
+- /odom ([nav_msgs/Odometry]()
+  - mobile odometry
+
+#### Services
+
+- /set_path ([SetPathTrajectory.srv](srv/SetPathTrajectory.srv))
+  - request to the robot controller to execute motion trajectory 
+
+<div style="display:flex; padding-left:50px">
+<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
+
+Request
+
+- trajectory (`nav_msgs/Path`)
+  - motion trajectory calculated from mobile path planner
+- duration (`float64`)
+  - executing time
+
+</div>
+<div style="flex:50%; padding-left:10px;">
+
+Response
+
+- result (`int32`)
+  - OK = 0
+  - ERROR = 1
+
+</div>
+</div>
+
+</div>
+
+### Example
+
+Trajectory follower
+
+1. run V-REP simulator after roscore
+2. launch the socialrobot packages
+
+   ```
+   roslaunch socialrobot_interface init.launch
+   ```
+3. run the example node
+   ```
+   rosrun socialrobot_hardware path_follwer.py
+   ```
 
 ---
 

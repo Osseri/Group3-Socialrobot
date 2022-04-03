@@ -29,20 +29,20 @@ PDDL based task planner package for social robot
 <div style="flex:40%; padding-left:10px;">
 
 **Table of Contents**
-1. [Overview](#overview)
-2. [Installation methods](#installation-methods)
-   1. [Install using the Docker images](#install-using-the-docker-images)
-   2. [Install manually](#install-manually)
-3. [Dependencies](#dependencies)
-   1. [Frameworks](#frameworks)
-   2. [Third-party libraries](#third-party-libraries)
-   3. [Social Robot Project Modules](#social-robot-project-modules)
-   4. [Hardware requirements](#hardware-requirements)
-4. [Quick start](#quick-start)
-5. [Features](#features)
-   1. [Example](#example)
-6. [Nodes](#nodes)
-   1. [{Node1 Name}](#node1-name)
+- [Social Robot Task manager](#social-robot-task-manager)
+  - [Overview](#overview)
+  - [Installation methods](#installation-methods)
+    - [Install manually](#install-manually)
+  - [Dependencies](#dependencies)
+    - [Frameworks](#frameworks)
+    - [Third-party libraries](#third-party-libraries)
+    - [Social Robot Project Modules](#social-robot-project-modules)
+    - [Hardware requirements](#hardware-requirements)
+  - [Quick start](#quick-start)
+  - [Nodes](#nodes)
+    - [task_manager](#task_manager)
+      - [Services](#services)
+    - [Task planning Example](#task-planning-example)
 
 </div>
 </div>
@@ -87,10 +87,6 @@ end
 
 ## Installation methods
 
-### Install using the Docker images
-
-.
-
 ### Install manually
 
 1. Install the ROS. [Instructions for Ubuntu 16.04](http://wiki.ros.org/indigo/Installation/Ubuntu)
@@ -129,8 +125,7 @@ end
 
 ### Social Robot Project Modules
 
-- socialrobot_actionlib
-- socialrobot_task_msgs
+- [socialrobot_actionlib](./socialrobot_actionlib/)
 
 ### Hardware requirements
 
@@ -142,83 +137,72 @@ This package does not require any hardware device.
 roslaunch socialrobot_task planning_system.launch
 ```
 
-## Features
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-### Example
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
 ## Nodes
 
-### {Node1 Name}
+### task_manager
 
 <div style="padding-left:40px;">
-
-#### Subscribed Topics
-
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-#### Published Topics
-
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-#### Messages
-
-- {message_name}.msg
-  - header (`Header`)
-    - Standard metadata for higher-level stamped data types.
-  - paramA (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  - paramB (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+</div>
 
 #### Services
 
-- {Service Name} (pkg_name/srv_file.srv)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- /task_plan/get_action_sequence ([socialrobot_task/GetActionSeq](./srv/GetActionSeq.srv))
+  - request action sequence as a result of task planning
 
 <div style="display:flex; padding-left:50px">
 <div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
 
 Request
 
-- InputParamX (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- InputParamY (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
+- query (`string`)
+  - empty query
 </div>
 <div style="flex:50%; padding-left:10px;">
 
 Response
 
-- OutputParam1 (`int64`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- OutputParam2 (`int64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- header (`std_msgs/Header`)
+  - header of action sequence
+- plan_result (`int32`)
+  - SUCCESS = 1
+  - FAIL = 0
+- action_sequence (`socialrobot_actionlib/Action[]`)
+  - compound action sequence
 
 </div>
 </div>
 
-#### Services Called
+- /task_plan/set_problem ([socialrobot_task/SetProblem](./srv/SetProblem.srv))
+  - request action sequence as a result of task planning
 
-- ~<some_name>/<service_name> ([nav_msgs/GetMap](http://docs.ros.org/api/nav_msgs/html/srv/GetMap.html))
-  - This node calls this service to do {something}.
+<div style="display:flex; padding-left:50px">
+<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
 
-#### Parameters
+Request
 
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- problem (`socialrobot_actionlib/Problem`)
+  - setup task domain before task planning
+</div>
+<div style="flex:50%; padding-left:10px;">
+
+Response
+
+- result (`bool`)
+  - result of task planning
 
 </div>
+</div>
+
+### Task planning Example
+
+1. launch task planning and action library modules
+   ```sh
+   roslaunch socialrobot_task planning_system.launch
+   ```
+2. request task planning to planner node
+   ```sh
+   rosrun socialrobot_task testGetActionSeq.py
+   ```  
 
 ---
 

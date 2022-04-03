@@ -17,9 +17,9 @@ t_BLUE = ColorRGBA(0.0, 0.0, 1.0, 0.5)
 DEFAULT_QUAT = geo_msg.Quaternion(0.0, 0.0, 0.0, 1.0)
 DEFAULT_SCALE = geo_msg.Vector3(0.06, 0.06, 0.2)
 
-TABLE_SCALE = geo_msg.Vector3(1.1342, 0.70887, 0.69) # W x D x H
-TABLE_POS = geo_msg.Vector3(5.5001e-01, 8.8066e-06, 3.6501e-01) # x y z
-TABLE_QUAT = geo_msg.Quaternion(0.0, 0.0, 0.0, 1.0)
+TABLE_SCALE = geo_msg.Vector3(1.0000e-01, 4.0000e-01, 8.0000e-03) # W x D x H
+TABLE_POS = geo_msg.Vector3(+5.2119e-01, -2.5373e-01, +8.2010e-01) # x y z
+TABLE_QUAT = geo_msg.Quaternion(0.0, 0.0,  0.995, 0.105)
 
 def _create_marker_init():
     marker = Marker()
@@ -68,24 +68,25 @@ class RelocObject(object):
 def make_reqeust(obj_list, target_id=8):
     pub_msg = reloc_srv.relocate_env_srvRequest()
     pub_msg.robot_height = 0.075
-    pub_msg.robot_pose = [0.05, -0.1065] #base (0,0), left(0, 0.1065), right(0,-0.1065)
+    pub_msg.robot_pose = [0.05, -0.3] #base (0,0), left(0.05, 0.3), right(0.05,-0.3)
     pub_msg.target_id = target_id
     pub_msg.N = len(obj_list)
     pub_msg.R = [obj.radius for obj in obj_list]
     pub_msg.H = [obj.height for obj in obj_list]
     pub_msg.X = [obj.x for obj in obj_list]
     pub_msg.Y = [obj.y for obj in obj_list]
-    pub_msg.x_min = 0#-TABLE_SCALE.y/2 + TABLE_POS.x
-    pub_msg.x_max = 0.8#TABLE_SCALE.y/2 + TABLE_POS.x
-    pub_msg.y_min = -0.5#-TABLE_SCALE.x/2
-    pub_msg.y_max = 0.5#TABLE_SCALE.x/2
+    pub_msg.x_min = -TABLE_SCALE.y/2 + TABLE_POS.x
+    pub_msg.x_max = TABLE_SCALE.y/2 + TABLE_POS.x
+    pub_msg.y_min = -TABLE_SCALE.x/2
+    pub_msg.y_max = TABLE_SCALE.x/2
     return pub_msg
 
 
 def feasible_check_client():
     obj_list = [
-        RelocObject(6.5000e-02, 2.3544e-01, +4.0000e-01, -1.5003e-02), #gotica
-        RelocObject(6.5000e-02, 2.3544e-01, +3.0000e-01, +9.9997e-02), #red_gotica
+        RelocObject(6.5000e-02, 2.3544e-01,  0.616211414337, -0.143312320113), #target
+        RelocObject(6.5000e-02, 2.3544e-01, 0.519058585167, -0.200342446566), #obstacle
+        #RelocObject(6.5000e-02, 2.3544e-01, 0.552599668503, 0.0668487995863),  #obstacle
         # RelocObject(0.030, 0.068, 0.475, 0.36975),
         # RelocObject(0.028, 0.070, 0.364, 0.26625),
         # RelocObject(0.026, 0.071, 0.306, 0.40975),

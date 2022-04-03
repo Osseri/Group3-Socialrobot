@@ -33,7 +33,7 @@ class BehaviorBase(with_metaclass(ABCMeta)):
         self.input_args = []
         self.output_args = []
         self.controller = []
-        self.hardware = []
+        self.hardware_group = []
 
         self._state = self.DONE_STATE
         self._state_transition = {}
@@ -89,8 +89,13 @@ class BehaviorBase(with_metaclass(ABCMeta)):
         print('get_motion')
         return True
 
+    def check_requirement(self):
+        ''' check requirement '''      
+        return self.input_args
+
     def reset_motion_ref(self, **params):
-        self.behavior_data['trajectory'] = params.get('trajectory')
+        self.behavior_data['joint'] = params.get('joint')
+        self.behavior_data['path'] = params.get('path')
         self.behavior_data['duration'] = params.get('duration', 2.0)
 
         self._state = self.INIT_STATE

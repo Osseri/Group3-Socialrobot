@@ -1,6 +1,7 @@
 <launch>
+    <arg name="use_graspit" default="false"/>
 
-    <include file="$(find graspit_interface)/launch/graspit_interface.launch">
+    <include if="$(arg use_graspit)" file="$(find graspit_interface)/launch/graspit_interface.launch">
     </include>
 
     <!-- <node name="motion_plan" pkg="socialrobot_motion" type="motionplan_node" output="screen"/> -->

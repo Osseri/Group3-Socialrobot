@@ -65,10 +65,10 @@ class ArucoTracker
         ROS_INFO("[ArucoTracker] Node is started.");
         marker_size = nh.param<double>("marker_size", 0.05);
         marker_id = nh.param<int>("marker_id", 8);
-        camera_frame = nh.param<std::string>("camera_frame", "cam_e_color_optical_frame");
+        camera_frame = nh.param<std::string>("camera_frame", "camera_color_optical_frame");
         marker_frame = nh.param<std::string>("marker_frame", "marker_frame");
-        color_topic = nh.param<std::string>("color_topic", "/cam_e/color/image_raw");
-        color_info = nh.param<std::string>("color_info", "/cam_e/color/camera_info");
+        color_topic = nh.param<std::string>("color_topic", "/camera/color/image_raw");
+        color_info = nh.param<std::string>("color_info", "/camera/color/camera_info");
         useRectifiedImages = nh.param<bool>("image_is_rectified", true);
               
         dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_50);
@@ -85,17 +85,6 @@ class ArucoTracker
         image_sub = it.subscribe(color_topic, 1, &ArucoTracker::image_callback, this);
         cam_info_sub = nh.subscribe(color_info, 1, &ArucoTracker::cam_info_callback, this);
 
-    }
-
-    void update()
-    {
-        ros::Duration duration = ros::Duration(1.0);
-        ros::Rate rate(duration);
-        while (ros::ok())
-        {            
-            ROS_INFO("test");
-            rate.sleep();
-        }
     }
 
     void image_callback(const sensor_msgs::ImageConstPtr& msg)

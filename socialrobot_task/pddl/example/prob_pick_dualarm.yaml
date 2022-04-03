@@ -2,26 +2,35 @@ Demo:
     problem: "social_task"
     domain: "social_robot"
     object:
-    -     ["left_hand", "Object"]
-    -     ["right_hand", "Object"]
+    -     ["obj_left_hand", "Object"]
+    -     ["obj_right_hand", "Object"]
+    -     ["obj_dual_hand", "Object"]
     -     ["obj_box", "Object"]
     -     ["obj_table", "Object"]
+
     -     ["pos_box", "Position"]
     -     ["pos_left_arm", "Position"]
     -     ["pos_right_arm", "Position"]
     -     ["pos_table", "Position"]
     fact: 
-        - ["onPhysical", ["obj_table", "obj_table"]]
-        - ["emptyHand", ["left_hand"]]
-        - ["emptyHand", ["right_hand"]]
+        - ["type", ["obj_left_hand", "Arm"]]
+        - ["type", ["obj_right_hand", "Arm"]]
+        - ["type", ["obj_dual_hand", "DualArm"]]
+
+        - ["onPhysical", ["obj_box", "obj_table"]]
+
+        - ["emptyHand", ["obj_left_hand"]]
+        - ["emptyHand", ["obj_right_hand"]]
+
         - ["locatedAt", ["obj_box", "pos_box"]]
-        - ["locatedAt", ["left_hand", "pos_left_arm"]]
-        - ["locatedAt", ["right_hand", "pos_right_arm"]]
+        - ["locatedAt", ["obj_left_hand", "pos_left_arm"]]
+        - ["locatedAt", ["obj_right_hand", "pos_right_arm"]]
         - ["locatedAt", ["obj_table", "pos_table"]]
-        - ["detectedobject", ["obj_box"]]
-        - ["inWorkspace", ["left_hand", "pos_box"]]
-        - ["inWorkspace", ["right_hand", "pos_box"]]
+
         - ["heavyWeight", ["obj_box"]]
-        
+        - ["detectedobject", ["obj_box"]]
+
+        - ["inWorkspace", ["obj_left_hand", "obj_box"]]
+        - ["inWorkspace", ["obj_right_hand", "obj_box"]]
     goal:
-    -     ["graspedBy", ["left_hand", "obj_box"]]
+    -     ["graspedBy", ["obj_dual_hand", "obj_box"]]

@@ -11,8 +11,6 @@ import rosparam
 import rospkg
 import actionlib
 
-import moveit_commander
-from moveit_msgs.msg import DisplayTrajectory, RobotTrajectory, RobotState, ExecuteTrajectoryAction, ExecuteTrajectoryGoal
 from math import pi
 
 from move_base_msgs.msg import *
@@ -28,6 +26,8 @@ from socialrobot_hardware.srv import *
 from socialrobot_behavior.msg import PlannerInputs
 from socialrobot_behavior.srv import *
 from socialrobot_perception_msgs.msg import Objects, Object
+from socialrobot_actionlib.srv import *
+from socialrobot_actionlib.msg import *
 
 from behaviors.behavior import BehaviorBase
 
@@ -65,31 +65,17 @@ class BehaviorManager(with_metaclass(Singleton)):
         self.robot_state = "READY"
         self.get_behavior_comm = False
         self.robot_name = 'skkurobot'
-        self.detected_objects = []  #TODO: remove
-        self.hw_info = rospy.get_param('robot_hw')
+        self.hw_info = rospy.get_param('robot_hw', default="social_robot")
         if rospy.has_param('robot_name'):
             self.robot_name = rospy.get_param('robot_name')
 
-        if rospy.has_param('robot_hw'):
-            self.hw_info = rospy.get_param('robot_hw')
-            if self.hw_info == 'vrep':
-                topic_robot_state = "/sim_interface/vrep_state"
-            else:
-                topic_robot_state = "/hw_interface/state"
-        else:
-            topic_robot_state = "/sim_interface/vrep_state"
+        # publisher
+        self.status_pub = rospy.Publisher("/socialrobot/behavior/status", String, queue_size=10)
 
-        #
-        rospy.Subscriber(topic_robot_state, Int32, self.callback_robot_state)
-        self.pub_motion = rospy.Publisher('/move_group/display_planned_path', DisplayTrajectory, queue_size=10)
-        rospy.Subscriber('/perception/objects', Objects, self.callback_objects)
-
-        # arm controller action
-        self.ac = actionlib.SimpleActionClient('arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
-        self.robocare_ac = actionlib.SimpleActionClient('/execute_trajectory', ExecuteTrajectoryAction)
-
-        # service server
-        rospy.Service('/social_robot/execute_action', ExecuteAction, self.callback_execute_action)
+        # controller action for vrep simulator
+        self.arm_ac = actionlib.SimpleActionClient('arm_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+        self.gripper_ac = actionlib.SimpleActionClient('gripper_controller/follow_joint_trajectory', FollowJointTrajectoryAction)
+        self.mobile_ac = actionlib.SimpleActionClient('mobile_controller/follow_path_trajectory', FollowPathTrajectoryAction)
 
     def check_hardware(self):
         pass
@@ -97,158 +83,25 @@ class BehaviorManager(with_metaclass(Singleton)):
     def check_controller(self):
         pass
 
+    def set_behavior_requirements(self, action):
+        '''
+        action [socialrobot_actionlib/Action]
+        '''
+        behavior_name = action.name.replace('_','').lower()
+        self.behavior_list[behavior_name]['group'] = action.group
+        self.behavior_list[behavior_name]['planner'] = action.planner
+        #self.behavior_list[behavior_name]['parameters'] = [x.replace('?','') for x in action.parameters]
+
     def add_behavior(self, **params):
         _planner_name = params.get('planner_name')
         _behavior_model = params.get('behavior')
-        #print(_behavior_model)
 
         if _planner_name and _behavior_model:
-            self.behavior_list[_planner_name] = _behavior_model
-
-    def callback_objects(self, data):
-        objects = []
-        for obj in data.detected_objects:
-            # print(obj)
-            objects.append(obj)
-        self.detected_objects = objects
-
-        return
-
-    def callback_execute_action(self, req):
-        rospy.loginfo("Action Command is received.")
-        res = ExecuteActionResponse()
-        plan_req = GetMotionRequest()
-
-        if req.action_name == 'approach':
-            plan_req.planner_name = req.action_name
-            # arm type
-            if req.action_params[0] == 'left':
-                plan_req.inputs.targetBody = plan_req.inputs.LEFT_ARM
-            elif req.action_params[0] == 'right':
-                plan_req.inputs.targetBody = plan_req.inputs.RIGHT_ARM
-            # set approach direction
-            plan_req.inputs.approachDirection = plan_req.inputs.APPROACH_SIDE
-
-            # add dynamic objects
-            plan_req.inputs.targetObject = [req.action_params[1]]
-            for obj in self.detected_objects:
-                if obj.name.data != 'obj_table':
-                    #object name
-                    plan_req.inputs.obstacle_ids.append(obj.name.data)
-                    #object bounding box
-                    plan_req.inputs.obstacles.append(obj.bb3d)
-
-            # add static object(table)
-            obs = BoundingBox3D()
-            c = Pose()
-            c.position.x = 0.550006
-            c.position.y = 8.80659e-06
-            c.position.z = 0.40
-            c.orientation.x = 0
-            c.orientation.y = 0
-            c.orientation.z = 0.707
-            c.orientation.w = 0.707
-            obs.center = c
-            v = Vector3()
-            v.x = 1.1342161893844604
-            v.y = 0.7088739275932312
-            v.z = 0.80
-            obs.size = v
-            plan_req.inputs.obstacles.append(obs)
-            plan_req.inputs.obstacle_ids.append('obj_table')
-
-        elif req.action_name == 'movearm':
-            # arm type
-            if req.action_params[0] == 'left':
-                plan_req.inputs.targetBody = plan_req.inputs.LEFT_ARM
-            if req.action_params[0] == 'right':
-                plan_req.inputs.targetBody = plan_req.inputs.RIGHT_ARM
-            plan_req.planner_name = "movearm"
-            # pose
-            pose = req.params
-
-            # add dynamic objects
-            plan_req.inputs.targetObject = req.action_params
-            for obj in self.detected_objects:
-                if obj.name.data != 'obj_table':
-                    #object name
-                    plan_req.inputs.obstacle_ids.append(obj.name.data)
-                    #object bounding box
-                    plan_req.inputs.obstacles.append(obj.bb3d)
-
-            if req.action_params[1] == 'cartesian':
-                # cartesian space goal
-                target_pose = Pose()
-                target_pose.position.x = pose[0]
-                target_pose.position.y = pose[1]
-                target_pose.position.z = pose[2]
-                target_pose.orientation.x = pose[3]
-                target_pose.orientation.y = pose[4]
-                target_pose.orientation.z = pose[5]
-                target_pose.orientation.w = pose[6]
-                plan_req.inputs.poseGoal = target_pose
-            elif req.action_params[1] == 'joint':
-                target_joint_state = JointState()
-                target_joint_state.name = [
-                    'Waist_Roll', 'Waist_Pitch', 'Shoulder_Pitch', 'Shoulder_Roll', 'Elbow_Pitch', 'Elbow_Yaw',
-                    'Wrist_Pitch', 'Wrist_Roll'
-                ]
-                target_joint_state.position = pose
-                plan_req.inputs.jointGoal = target_joint_state
-
-        elif req.action_name == 'openclose':
-            # pose template
-            gripper_behavior = ''
-            gripper_open = [0.0, 0.0]
-            gripper_close = [1.0, 0.0]
-
-            # arm type
-            if req.action_params[0] == 'left':
-                plan_req.inputs.targetBody = plan_req.inputs.LEFT_GRIPPER
-            if req.action_params[0] == 'right':
-                plan_req.inputs.targetBody = plan_req.inputs.RIGHT_GRIPPER
-
-            plan_req.planner_name = "openclose"
-            if req.action_params[1] == "open":
-                gripper_behavior = gripper_open
-            elif req.action_params[1] == "close":
-                gripper_behavior = gripper_close
-            gripper_box = [0.0, 0.0]
-            gripper_circle = [0.0, 0.3]
-            gripper_hook = [0.0, 1.0]
-
-            # set grasp pose
-            plan_req.inputs.graspPose = map(lambda x, y: x + y, gripper_behavior, gripper_box)
-
-        #TODO-KIST: set grasp body pose
-
-        # get motion
-        motion_srv = rospy.ServiceProxy('/behavior/get_motion', GetMotion)
-        motion_res = motion_srv(plan_req)
-
-        # set behavior
-        if motion_res.result:
-            behavior_srv = rospy.ServiceProxy('/behavior/set_behavior', SetBehavior)
-            behavior_req = SetBehaviorRequest()
-            behavior_req.header.frame_id = plan_req.planner_name
-            behavior_req.trajectory = motion_res.motion.jointTrajectory
-            behavior_res = behavior_srv(behavior_req)
-
-            res.result = 1
-            return res
-        else:
-            res.result = 0
-            return res
-
-    def callback_robot_state(self, state):
-        """
-        check roobot moving state
-        """
-
-        if state.data == RobotState().READY_FOR_ACTION:
-            self.robot_state = "READY"
-        elif state.data == RobotState().ACTION_RUNNING:
-            self.robot_state = "MOVING"
+            self.behavior_list[_planner_name] = {'parameters':None, 
+                                                 'module':None, 
+                                                 'group':None, 
+                                                 'planner':None}
+            self.behavior_list[_planner_name]['module'] = _behavior_model
 
     def callback_get_behavior_list(self, req):
         res = GetBehaviorListResponse()
@@ -256,161 +109,113 @@ class BehaviorManager(with_metaclass(Singleton)):
 
         return res
 
-    def separate_joints(self, trajectory):
-        import copy
-        traj = copy.copy(trajectory)
-        traj.joint_names = traj.joint_names[2:]
-        for i, pt in enumerate(traj.points):
-            traj.points[i].positions = pt.positions[2:]
-            traj.points[i].velocities = pt.velocities[2:]
-            traj.points[i].accelerations = pt.accelerations[2:]
-
-        return traj
-
     def callback_set_behavior(self, req):
         res = SetBehaviorResponse()
         res.result = SetBehaviorResponse.ERROR
-        rospy.loginfo("[Socialrobot behavior] Checking behavior request")
-        planner_name = req.header.frame_id
+        behavior_name = req.behavior_name
+        rospy.loginfo("[Socialrobot behavior] Checking %s behavior request", behavior_name)
         joint_trajectory = req.trajectory
         path_trajectory = req.path
-        behavior_model = self.behavior_list.get(planner_name)
-        print(planner_name, behavior_model.hardware)
 
-        #TODO: integrate manipulator, gripper, mobile control
+        self.current_behavior = behavior_name
+        behavior = self.behavior_list.get(behavior_name)
+        behavior_model = behavior['module']
+        behavior_model.reset_motion_ref(joint=joint_trajectory, path=path_trajectory)
 
-        # gripper control
-        if behavior_model.hardware == PlannerInputs.LEFT_GRIPPER or behavior_model.hardware == PlannerInputs.RIGHT_GRIPPER:
-            rospy.loginfo("[Socialrobot behavior] Setting gripper behavior...")
-            self.current_behavior = planner_name
-            behavior_model.reset_motion_ref(trajectory=joint_trajectory)             
-            res.result = self.wait_for_gripper()   
+        # request behavior motion to the action server
+        if ['gripper'] == behavior['group']:
+            # connect to gripper controller server
+            self.gripper_ac.wait_for_server()
+            goal = FollowJointTrajectoryActionGoal().goal
+            goal.trajectory = behavior_model.behavior_data.get('joint')
+            #print(goal)
+            self.gripper_ac.send_goal(goal)
+            rospy.loginfo("Wait until robot gripper is stopped.")
+            self.robot_state = "MOVING_GRIPPER"
+            self.gripper_ac.wait_for_result()
+            rospy.loginfo("Gripper behavior is done.")
+            res.result = SetBehaviorResponse.OK
 
-        # mobile control
-        elif behavior_model.hardware == PlannerInputs.MOBILE_BASE:
-            rospy.loginfo("[Socialrobot behavior] Setting mobile behavior...")
-            # having mobile path trajectory
-            if len(path_trajectory.poses)>0:
-                path_srv = rospy.ServiceProxy('/set_path', SetPathTrajectory)
-                path = SetPathTrajectoryRequest()
-                path.trajectory = path_trajectory
-                path_res = path_srv(path)
+        elif ['arm'] == behavior['group']:
+            # connect to arm controller server
+            self.arm_ac.wait_for_server()
+            goal = FollowJointTrajectoryActionGoal().goal
+            goal.trajectory = behavior_model.behavior_data.get('joint')
+            #print(goal)
+            self.arm_ac.send_goal(goal)
+            rospy.loginfo("Wait until robot arm is stopped.")
+            self.robot_state = "MOVING_ARM"
+            self.arm_ac.wait_for_result()
+            rospy.loginfo("Arm behavior is done.")
+            res.result = SetBehaviorResponse.OK
 
-                
-                res.result = SetBehaviorResponse.OK
-                return res
-            # having mobile goal pose
-            else:
-                client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
-                client.wait_for_server()
+        elif ['mobile'] == behavior['group']:
+            # connect to mobile controller server
+            self.mobile_ac.wait_for_server()
+            goal = FollowPathTrajectoryActionGoal().goal
+            goal.trajectory = behavior_model.behavior_data.get('path')
+            
+            self.mobile_ac.send_goal(goal)
+            rospy.loginfo("Wait until robot mobile is stopped.")
+            self.robot_state = "MOVING_BASE"
+            self.mobile_ac.wait_for_result()
+            rospy.loginfo("Mobile behavior is done.")
+            res.result = SetBehaviorResponse.OK
+        else:
+            rospy.logerr("Cannot load %s behavior module", behavior_name)
 
-                #send waypoints 
-                for goal_pose in behavior_model.goal_pose:
-                    goal = MoveBaseGoal()
-                    goal.target_pose.header.frame_id = "map"
-                    goal.target_pose.header.stamp = rospy.Time.now()
-                    goal.target_pose.pose = goal_pose
-
-                    # send goal position to action server
-                    client.send_goal(goal)
-                    wait = client.wait_for_result()
-                    if wait:
-                        res.result = SetBehaviorResponse.OK
-
-        # manipulator control
-        elif behavior_model.hardware == PlannerInputs.LEFT_ARM or behavior_model.hardware == PlannerInputs.RIGHT_ARM:
-            rospy.set_param('/social_robot/moveit_plan_state', True)
-            rospy.loginfo("[Socialrobot behavior] Setting arm behavior...")
-            # robocare robot
-            if (self.robot_name == 'social_robot' and self.hw_info == 'hw'):
-                self.robocare_ac.wait_for_server()
-                # set trajectory goal
-                goal = ExecuteTrajectoryGoal()
-                goal.trajectory.joint_trajectory = joint_trajectory
-                self.robocare_ac.send_goal(goal)
-                self.robocare_ac.wait_for_result()
-                self.robocare_ac.get_result()
-                rospy.logwarn("Action finished.")
-                res.result = self.wait_for_social_robot()
-            else:
-                # connect to arm controller server
-                self.ac.wait_for_server()
-                goal = FollowJointTrajectoryActionGoal().goal
-                goal.trajectory = joint_trajectory
-                self.ac.send_goal(goal)
-                rospy.loginfo("Wait until robot is stopped.")
-                self.ac.wait_for_result()
-                # wait more seconds to update moveit scene
-                wait_in_seconds = 3
-                while wait_in_seconds:
-                    rospy.loginfo("Wait %i secs." % wait_in_seconds)
-                    rospy.sleep(1)
-                    if self.robot_state != "READY":
-                        break
-                    wait_in_seconds -= 1
-                self.ac.get_result()
-                res.result = SetBehaviorResponse.OK
         rospy.loginfo("Action is finished.")
+        self.robot_state = "READY"
         return res
 
-    def wait_for_social_robot(self):
-        rospy.loginfo("Wait until robot moving is stopped.")
-        # wait few seconds until robot is moving because of delay
-        is_moving = True
-        elapsed = 0
-        while is_moving:
-            is_moving = rospy.get_param('/social_robot/moveit_plan_state')
-            rospy.loginfo("def wait_for_social_robot(). %i secs elapsed" % elapsed)
-            rospy.sleep(1)
-            elapsed += 1
-        return SetBehaviorResponse.OK
-
-    def wait_for_gripper(self):
-        rospy.loginfo("Wait until robot gripper is stopped.")
-        # wait few seconds until robot is moving because of delay
-        wait_in_seconds = 3
-        while wait_in_seconds:
-            rospy.loginfo("[wait_for_gripper] Wait %i secs." % wait_in_seconds)
-            rospy.sleep(1)
-            if self.robot_state != "READY":
-                break
-            wait_in_seconds -= 1
-        # moving start
-        while (self.robot_state == "MOVING"):
-            rospy.sleep(1)
-            if (self.robot_state == "READY"):
-                break
-        return SetBehaviorResponse.OK
-
     def callback_get_motion(self, req):
-        planner_name = req.planner_name
-        behavior_model = self.behavior_list.get(planner_name)
-        ret = behavior_model.get_motion(req.inputs)
+        # load behavior module
+        behavior_name = req.requirements.name
+        try:
+            behavior_model = self.behavior_list.get(behavior_name)['module']
+        except:
+            rospy.logerr("cannot load %s behavior module.", behavior_name)
+            res.result = False
+            return res
+
+        # calculate motion trajectory
+        ret = behavior_model.get_motion(req.requirements)
+
+        # response
         res = GetMotionResponse()
         if ret.planResult == MotionPlanResponse.SUCCESS:
             res.result = True
             res.motion.jointTrajectory = ret.jointTrajectory
             res.motion.pathTrajectory = ret.pathTrajectory
-            behavior_model.hardware = req.inputs.targetBody
+        else:
+            res.result = False
+        return res
+
+    def callback_get_requirements(self, req):
+        res = GetRequirementsResponse()
+        
+        # load behavior module
+        planner_name = req.behavior_name
+        if planner_name not in self.behavior_list:
+            rospy.logerr("[Socialrobot behavior] %s is not in behavior module list.",planner_name)
+            res.result = False
+            return res
+
+        behavior_model = self.behavior_list.get(planner_name)['module']
+
+        # response
+        requirements = behavior_model.check_requirement()
+        if len(requirements)>0:
+            res.requirements = requirements
+            res.result = True
         else:
             res.result = False
         return res
 
     def update(self):
-        behavior_model = self.behavior_list.get(self.current_behavior)
-
-        if behavior_model:
-            state = behavior_model.loop_until_done()
-
-            if state == BehaviorBase.DONE_STATE:
-                behavior_model.loop_until_done()
-                self.current_behavior = None
-                return 1
-            elif state == BehaviorBase.ERROR_STATE:
-                self.current_behavior = None
-                return -1
-
-        return 0
+        msg = String(data=self.robot_state)
+        self.status_pub.publish(msg)
+        return
 
 
 ##############################
@@ -420,37 +225,62 @@ if __name__ == '__main__':
     # ros initialize
     rospy.init_node('behavior')
 
-    # get joint information
-    robot = moveit_commander.RobotCommander()
-    robot.get_current_state()
-
     # hardware interface(vrep or hw)
     hw_if = 'vrep'  # By default, vrep!
     if rospy.has_param('robot_hw'):
         hw_if = rospy.get_param('robot_hw')
 
-    # get behavior list
+    # get behavior module list
     rospack = rospkg.RosPack()
     behavior_dir = rospack.get_path('socialrobot_behavior') + '/script/behaviors/'
     behavior_list = search_behavior(behavior_dir)
-    if 'behavior' in behavior_list:
-        behavior_list.remove('behavior')
-    if '__init__' in behavior_list:
-        behavior_list.remove('__init__')
-
+    
+    for except_module in ['behavior', 'utils', '__init__']:
+        if except_module in behavior_list:
+            behavior_list.remove(except_module)
+        
     # Behavior Manager
+    rospy.loginfo("Loading behavior modules...")
     bm = BehaviorManager()
-    for behavior in behavior_list:
+    for i, behavior in enumerate(behavior_list):
+        behavior_list[i] = behavior.lower()
         module_name = 'behaviors.' + behavior
+        #try:
         bm.add_behavior(planner_name=behavior.lower(), behavior=load_behavior(module_name, behavior, hw_if))
+        #except:
+        #	rospy.logerr("[Behavior] %s cannot load.", behavior)
+
+    # get primitive action list
+    srv_act_list = rospy.ServiceProxy('/actionlib/get_action_list', GetActionList)
+    rospy.loginfo("[BehaviorManager] wait for action library service...")
+    rospy.wait_for_service('/actionlib/get_action_list')
+    get_action_req = GetActionListRequest()
+    get_action_req.action_type = GetActionListRequest().AVAILABLE_ACTIONS
+    get_action_res = srv_act_list(get_action_req)
+    action_list = get_action_res.actions
+
+    # set behavior requirements
+    srv_act_info = rospy.ServiceProxy('/actionlib/get_action_info', GetActionInfo)
+    rospy.wait_for_service('/actionlib/get_action_info')
+    for act in action_list:
+        act_name = act.data.replace('_','').lower()
+        if act_name in behavior_list:
+            req = GetActionInfoRequest()
+            req.action_name = act.data
+            res = srv_act_info(req)
+            try:
+                bm.set_behavior_requirements(res.action)
+            except:
+                pass
 
     # ros service
     srv_get_behavior_list = rospy.Service('~get_behavior_list', GetBehaviorList, bm.callback_get_behavior_list)
+    srv_get_requirements = rospy.Service('~get_requirements', GetRequirements, bm.callback_get_requirements)
+    srv_get_motion = rospy.Service('~get_motion', GetMotion, bm.callback_get_motion)
     srv_set_behavior = rospy.Service('~set_behavior', SetBehavior, bm.callback_set_behavior)
-    srv_get_requirements = rospy.Service('~get_motion', GetMotion, bm.callback_get_motion)
 
     # Start
-    rospy.loginfo('[BehaviorManager: %s] Service Started!' % hw_if)
+    rospy.loginfo('[BehaviorManager: %s Service Started!' % hw_if)
 
     loop_freq = 10  # 10hz
     r = rospy.Rate(loop_freq)

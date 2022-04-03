@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+    <!-- relocate -->
+    <node name="rearrange_node" pkg="rearrange_node" type="rearrange_task_planner.py" output="screen">
+    </node>
+
+    <node name="relocation_node" pkg="relocation_node" type="relocation_task_planner.py" output="screen">
+    </node>
+
+    <!-- ir repositioning -->
+    <include file="$(find ir_repositioning)/launch/ir_server.launch"/>
+</launch>

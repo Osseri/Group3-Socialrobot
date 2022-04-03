@@ -34,6 +34,8 @@
     import org.ros.node.service.ServiceServer;
     import org.ros.node.service.ServiceClient;
     import org.ros.node.service.ServiceResponseListener;
+    import org.ros.node.parameter.ParameterTree;  
+
     import java.io.Console;
     import org.jpl7.*;
     import org.ros.concurrent.CancellableLoop;
@@ -99,9 +101,11 @@
       // static ServiceClient<MonitorServiceRequest, MonitorServiceResponse>
       // serviceClient;
       static ConnectedNode connectedNode;
+      static ParameterTree params;
+
       static Log log;
-    
-      static int FSDLength = 26;
+      static int initFSDLength = 27;
+      static int FSDLength = initFSDLength;
       final static int queueSize = 1000;
       static List<MonitorServiceResponse> tmpMonitorResponse = new ArrayList<MonitorServiceResponse>();
       int queryResultNum = -1;
@@ -216,6 +220,8 @@
       public void onStart(final ConnectedNode connectedNode) {
     
         ContextManager.connectedNode = connectedNode;
+        params = connectedNode.getParameterTree();  
+
         ContextManager.log = connectedNode.getLog();
     
       prefixes.put("http://www.arbi.com/ontologies/arbi.owl","arbi");
@@ -301,24 +307,74 @@
                   mRequest.setStatus(request.getStatus());
                   mRequest.setManager("ContextManager");
 
-        String transQuery = Parser.transPredicateQuery(mRequest); // ok
-        MonitorServiceResponse resp;
-    
-        ContextManager.log.info("receive Query: " + transQuery);
-    
-        Query query = new Query(transQuery);
-
-
-        Map<String, Term>[] preResponse = query.allSolutions();
+        	  String transQuery = Parser.transPredicateQuery(mRequest); // ok
+      		  MonitorServiceResponse resp;
     
 
-        for (int i = 0; i < preResponse.length; i++) {
-          resp = mProviderForTM.newMessage();
-          Parser.setResponse(mRequest, preResponse[i], resp);
-          resp.setManager("ContextManager");    
-            tmpMonitorResponse.add(resp);
-          //resp.setParam4(Integer.toString(i));
-        }
+      		  //ContextManager.log.info("receive Query: " + transQuery);
+
+
+      		  Query query = new Query(transQuery);
+
+      		  Map<String, Term>[] preResponse = query.allSolutions();
+    
+
+	  	if(request.getManager().equals("FSD"))FSDLength -=1;
+
+      		for (int i = 0; i < preResponse.length; i++) {
+      		    resp = mProviderForTM.newMessage();
+       		   Parser.setResponse(mRequest, preResponse[i], resp);
+       		   resp.setManager("ContextManager");    
+        	    tmpMonitorResponse.add(resp);
+
+
+        		  if (preResponse.length == 0) {
+       			     resp.setParam1("[None]");
+       			     resp.setManager("ContextManager");
+         		 }
+
+			if(request.getManager().equals("FSD")){
+		  
+			  // make graph
+			  MonitorServiceRequest tmpRequest = tmpMonitorRequestGenerator.newMessage();
+			  tmpRequest.setPredicate(resp.getPredicate());
+			  tmpRequest.setParam1(resp.getParam1());
+			  tmpRequest.setParam2(resp.getParam2());
+			  tmpRequest.setParam3(resp.getParam3());
+			  tmpRequest.setParam4("highLevel");
+			  tmpRequest.setStatus(3);
+			  tmpRequest.setManager("FSD");
+			  tmpMonitorRequestGenerator.publish(tmpRequest);
+
+			  mProviderForDM.publish(tmpRequest);
+			}
+    
+		}
+
+		if(FSDLength == 0){
+			FSDLength = initFSDLength;
+
+
+			sleep(150);
+			MonitorServiceRequest eRequest;
+			eRequest = tmpMonitorRequestGenerator.newMessage();
+			eRequest.setPredicate("End");
+			eRequest.setParam1("B");
+			eRequest.setParam2("C");
+			eRequest.setParam3("D");
+			eRequest.setParam4("highLevel");
+			eRequest.setStatus(4);
+			eRequest.setManager("FSD");
+
+
+			mProviderForDM.publish(eRequest);
+			tmpMonitorRequestGenerator.publish(eRequest);
+
+		  }
+	
+
+
+
                   response.setResponse(tmpMonitorResponse);
     
                 }
@@ -457,7 +513,7 @@
               }
     
               if (status == 9) {
-                ContextManager.log.info("<==============receive success==============>");
+                //ContextManager.log.info("<==============receive success==============>");
 
               } else if (status != 3 && status != 4) {
                 MonitorServiceResponse response = mProviderForPM.newMessage();
@@ -530,7 +586,8 @@
           initialize = "consult('" + basePath + "cmProlog/prolog/init_skku.pl')";
 
         Query query = new Query(initialize);
-        ContextManager.log.info(initialize + " " + (query.hasSolution() ? "successed" : "failed"));
+	status = query.hasSolution() ? 99 : -99;;
+        //ContextManager.log.info(initialize + " " + (query.hasSolution() ? "successed" : "failed"));
     
         /*
          * initialize = "currentObjectPerception(Object, CurrentPerception)"; String
@@ -543,11 +600,13 @@
     
         initialize = "consult('" + basePath + "cmProlog/prolog/monitor.pl')";
         query = new Query(initialize);
-        ContextManager.log.info(initialize + " " + (query.hasSolution() ? "successed" : "failed"));
+	status = query.hasSolution() ? 99 : -99;;
+        //ContextManager.log.info(initialize + " " + (query.hasSolution() ? "successed" : "failed"));
     
         initialize = "start_monitor";
         query = new Query(initialize);
-        ContextManager.log.info(initialize + " " + (query.hasSolution() ? "successed" : "failed"));
+	status = query.hasSolution() ? 99 : -99;;
+        //ContextManager.log.info(initialize + " " + (query.hasSolution() ? "successed" : "failed"));
     
       }
     
@@ -567,6 +626,10 @@
     
         String rdf_assert = "rdf_assert(" + request.getParam1() + "," + request.getPredicate() + "," + request.getParam2();
     
+
+        //log.info(rdf_assert);
+
+
         if (request.getParam4() == null || request.getParam4().equals(""))
           rdf_assert += ",perception)";
         else
@@ -575,6 +638,7 @@
         Query query = new Query(rdf_assert);
     
         status = query.hasSolution() ? 3 : -99;
+
     
       }
     
@@ -626,18 +690,17 @@
             + ",perception)";
         // rdf_assert(S, P, O, perception)
         query = new Query(monitor);
-        ContextManager.log.info(monitor + " " + (query.hasSolution() ? "successed" : "failed"));
+        //ContextManager.log.info(monitor + " " + (query.hasSolution() ? "successed" : "failed"));
     
       }
     
       public void monitored(String params) {
-        ContextManager.log.info("Monitored " + params);
+        //ContextManager.log.info("Monitored " + params);
         String data = null;
         Monitor message = publisherForTM.newMessage();
         setMessage(message, params);
     
-        ContextManager.log.info(message.getPredicate() + " " + message.getParam1() + " " + message.getParam2() + " "
-            + message.getParam3() + " " + message.getParam4());
+        //ContextManager.log.info(message.getPredicate() + " " + message.getParam1() + " " + message.getParam2() + " " + message.getParam3() + " " + message.getParam4());
     
         data = "[";
     
@@ -646,7 +709,7 @@
     
         status = query.hasSolution() ? 1 : -99;
     
-        ContextManager.log.info(message.getPredicate() + " " + (query.hasSolution() ? "successed" : "failed"));
+        //ContextManager.log.info(message.getPredicate() + " " + (query.hasSolution() ? "successed" : "failed"));
     
         String v = null;
         String v2 = null;
@@ -702,7 +765,7 @@
     
         status = query.hasSolution() ? 0 : -99;
     
-        ContextManager.log.info("Registration" + " " + (query.hasSolution() ? "successed" : "failed"));
+        //ContextManager.log.info("Registration" + " " + (query.hasSolution() ? "successed" : "failed"));
       }
     
       public void regist2(TempQuery request) {// MonitorServiceRequest request) {
@@ -720,7 +783,7 @@
     
         status = query.hasSolution() ? 2 : -99;
     
-        ContextManager.log.info("Registration" + " " + (query.hasSolution() ? "successed" : "failed"));
+        //ContextManager.log.info("Registration" + " " + (query.hasSolution() ? "successed" : "failed"));
       }
     
       public void cancel1(TempQuery request) {// MonitorServiceRequest request) {
@@ -738,7 +801,7 @@
     
         status = query.hasSolution() ? -1 : -99;
     
-        ContextManager.log.info("Cancellation" + " " + (query.hasSolution() ? "successed" : "failed"));
+        //ContextManager.log.info("Cancellation" + " " + (query.hasSolution() ? "successed" : "failed"));
       }
     
       public void cancel2(TempQuery request) {// MonitorServiceRequest request) {
@@ -757,7 +820,7 @@
     
         status = query.hasSolution() ? -2 : -99;
     
-        ContextManager.log.info("Cancellation" + " " + (query.hasSolution() ? "successed" : "failed"));
+        //ContextManager.log.info("Cancellation" + " " + (query.hasSolution() ? "successed" : "failed"));
       }
     
       public void query(TempQuery request) {
@@ -765,7 +828,7 @@
         String transQuery = Parser.transPredicateQuery(request); // ok
         MonitorServiceResponse response;// = mProviderForTM.newMessage();
     
-        ContextManager.log.info("receive Query: " + transQuery);
+        //if(ContextManager.params.getString("mode")=="debug")ContextManager.log.info("receive Query: " + transQuery);
     
         long beforeTime = System.currentTimeMillis();
         Query query = new Query(transQuery);
@@ -806,13 +869,13 @@
         if(request.getManager().equals("FSD"))FSDLength -=1;
         if(FSDLength == 0){
 
-   
+
           saveQueryGraph();
 
     
-        FSDLength = 26;
+        FSDLength = initFSDLength;
 
-sleep(1500);
+        sleep(150);
         MonitorServiceRequest mRequest;
         mRequest = tmpMonitorRequestGenerator.newMessage();
         mRequest.setPredicate("End");
@@ -843,13 +906,13 @@ sleep(1500);
         com.setPredicates(request.getPredicate());
         rContextProvider.publish(com);
     
-        ContextManager.log.info("all response: " + transResponse);
+        //ContextManager.log.info("all response: " + transResponse);
         // ContextManager.log.info("predicate:"+response.getPredicate()+",Param1:"+response.getParam1());
-        ContextManager.log.info("<========================= Success =========================>");
+        //ContextManager.log.info("<========================= Success =========================>");
       }
     
       public void query2(TempQuery request) {// MonitorServiceRequest request){
-        ContextManager.log.info("receive Query: " + request.getPredicate());
+        //ContextManager.log.info("receive Query: " + request.getPredicate());
         Query query = new Query(request.getPredicate());
         status = 101;
     
@@ -1270,6 +1333,108 @@ sleep(1500);
         //String outDir = "/home/ubuntu/Desktop/test/social_ws/src/socialrobot/src/socialrobot_knowledge/context_manager/context_manager/src/main/java/org/ros/web_data_send_action/";
         String outDir = basePath + "pyweb/src/webtest/gui/";
         String outFileName = "FSDGraph.json";
+        File outputFile = new File(outDir, outFileName);
+        FileWriter output = new FileWriter(outputFile);
+        BufferedWriter bw = new BufferedWriter(output);
+    
+          bw.write(jsonFile.toJSONString());
+          bw.flush();
+          bw.close();
+          output.close();output=null;
+    
+
+
+      } catch (Exception e) {
+    
+                e.getStackTrace();
+      }
+
+
+       
+
+      }
+
+
+    
+      public void saveKnowRobGraph() {
+        String getGraphData = null;
+        String S = null;
+        String P = null;
+        String O = null;
+        JSONObject jsonFile = new JSONObject();
+        JSONArray node_list = new JSONArray();
+        JSONArray edge_list = new JSONArray();
+        JSONObject nodeElement = new JSONObject();
+        JSONObject edgeElement = new JSONObject();
+    
+        String getQueryGraphData = "rdf(S,P,O,highLevel).";
+        Query getQueryq = new Query(getQueryGraphData);
+    
+        String nodeShape = "dot";
+        String nodeColor = "#FB7E81";
+        String edgeColor = "#9C9894";
+        
+    
+        //answer 
+        Map<String, Term>[] query = getQueryq.allSolutions();
+        
+        
+           Map<String, String> tmpNodes = new HashMap<>();
+        
+        //This is for Object
+        for(int i = 0 ; i < query.length; i++){
+          S = query[i].get("S").toString().replace("#",":");
+          P = query[i].get("P").toString().replace("#",":");
+          O = query[i].get("O").toString().replace("#",":");
+          
+          for (Map.Entry<String, String> prefix : prefixes.entrySet()) {
+            S = S.replace(prefix.getKey(),prefix.getValue());
+            P = P.replace(prefix.getKey(),prefix.getValue());
+            O = O.replace(prefix.getKey(),prefix.getValue());
+          }
+    
+    
+          if(tmpNodes.get(S)==null) {
+              nodeElement.put("id","h"+S);
+              nodeElement.put("label",S);
+              nodeElement.put("shape",nodeShape);
+              nodeElement.put("color",nodeColor);
+              node_list.add(nodeElement);
+              nodeElement = new JSONObject();
+            }
+            if(tmpNodes.get(O)==null) {
+              
+            /*
+              if(O.contains("xsd:")){
+                graspColor="#808080";
+                nodeShape = "square";
+              }*/
+             
+              nodeElement.put("id","h"+O);
+              nodeElement.put("label",O);
+              nodeElement.put("shape",nodeShape);
+              nodeElement.put("color",nodeColor);
+              node_list.add(nodeElement);
+              nodeElement = new JSONObject();
+            }
+                edgeElement.put("from", "h"+S);
+                edgeElement.put("to", "h"+O);
+                edgeElement.put("label", P);
+                edgeElement.put("color",edgeColor);
+                edge_list.add(edgeElement);
+                edgeElement = new JSONObject();
+            tmpNodes.put(S,S);
+            tmpNodes.put(O,O);
+          }
+    
+          jsonFile.put("nodes", node_list);
+        jsonFile.put("edges", edge_list);
+        
+      
+      try {
+        //String outDir = "/home/ubuntu/Desktop/test/social_ws/src/socialrobot/src/socialrobot_knowledge/context_manager/context_manager/src/main/java/org/ros/web_data_send_action/";
+        String outDir = basePath + "pyweb/src/webtest/gui/";
+        String outFileName = "social_temp.json";
         File outputFile = new File(outDir, outFileName);
         FileWriter output = new FileWriter(outputFile);
         BufferedWriter bw = new BufferedWriter(output);

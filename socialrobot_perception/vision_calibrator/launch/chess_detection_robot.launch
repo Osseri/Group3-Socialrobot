@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="image"                    default="/camera/color/image_raw"/>
+  <arg name="checkerboard_columns"     default="6"/>
+  <arg name="checkerboard_rows"        default="4"/>
+  <arg name="checkerboard_square_size" default="0.053"/>
+  <arg name="calibrate"                default="false"/>
+  <arg name="base_frame"               default="/map"/>
+  
+  <!-- detect chessboard with external camera-->
+  <node name="cam_r" pkg="vision_calibrator" type="chess_detector" output="screen">
+      <remap from="image" to="$(arg image)" />
+      <param name="checkerboard_columns" value="$(arg checkerboard_columns)" type="int" />
+      <param name="checkerboard_rows" value="$(arg checkerboard_rows)" type="int" />
+      <param name="checkerboard_square_size" value="$(arg checkerboard_square_size)" type="double" />
+  </node>
+
+  <!-- chess based on base_frame -->
+  <node name="chess_tf_publisher" pkg="vision_calibrator" type="chess_tf_publisher.py" output="screen">
+      <param name="base_frame" value="$(arg base_frame)" type="string" />
+  </node>
+</launch>

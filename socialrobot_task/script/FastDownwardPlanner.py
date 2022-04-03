@@ -16,16 +16,17 @@ class FastDownwardPlanner:
         rospack = rospkg.RosPack()
         PKG_PATH = rospack.get_path('socialrobot_task')        
         self.PLANNER_PATH = PKG_PATH + '/libs/fast-downward/fast-downward.py'
-        self.PLAN_PATH = PKG_PATH + '/data/plan'
+        self.PLAN_PATH = PKG_PATH + '/pddl/plan'
         self.PLAN_OPTION = '--plan-file '+ self.PLAN_PATH
         self.COMPONENT_OPTION = '--search "lazy_greedy([ff()], preferred=[ff()])"'
 
    
     # Planning function
-    def resolvProblem(self, res, domainPath, problemPath):
+    def resolvProblem(self, domainPath, problemPath):
         '''
         '''
         print("Loading PROBLEM and DOMAIN files...")
+        res = GetActionSeqResponse()
         
         # initialize
         operationStatus = "Init"
@@ -54,7 +55,7 @@ class FastDownwardPlanner:
                     act_data = line_data[1:len(line_data)-2].split(' ')
                     action = Action()
                     action.name = act_data.pop(0)
-                    action.parameters = act_data
+                    action.values = act_data
                     res.action_sequence.append(action)
                     res.plan_result = res.SUCCESS
 

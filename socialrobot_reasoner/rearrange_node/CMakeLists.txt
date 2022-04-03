@@ -11,8 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   std_msgs
   message_generation
-  moveit_commander
-  moveit_msgs
   rospy
   sensor_msgs
 )
@@ -72,7 +70,8 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
    DEPENDENCIES
-   geometry_msgs   moveit_msgs   sensor_msgs std_msgs
+   geometry_msgs   
+   sensor_msgs std_msgs
 )
 
 ################################################

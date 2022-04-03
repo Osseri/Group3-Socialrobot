@@ -21,7 +21,7 @@ def client():
 		req.target = "PLAN"
 
 		res = requestActions(req)
-		print res
+		print(res)
 
 	except Exception as e:
 		print("Service call failed : %s"%e)

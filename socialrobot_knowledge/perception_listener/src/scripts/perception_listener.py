@@ -5,16 +5,16 @@ import sys
 import signal
 import rospy
 import rosparam
-import time
 
 from sensor_msgs.msg import *
 from vision_msgs.msg import *
 from geometry_msgs.msg import *
 from std_msgs.msg import *
-from socialrobot_perception_msgs.srv import *
-from socialrobot_perception_msgs.msg import *
+from socialrobot_msgs.srv import *
+from socialrobot_msgs.msg import *
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
+import time
 
 class PerceptionListener():
     def __init__(self):
@@ -25,10 +25,11 @@ class PerceptionListener():
         self.current_joints = {}
 
         self.robot_count=0
+        self.time_interval=0.15
 
-        rospy.Subscriber('/joint_states', JointState, self.callback_joints, queue_size=10)
+        rospy.Subscriber('/joint_state', JointState, self.callback_joints, queue_size=10)
         rospy.Subscriber('/visual_robot_perception', Float32MultiArray, self.callback_robot, queue_size=10)
-        rospy.Subscriber('/perception/objects', Objects, self.callback_objects, queue_size=10)
+        rospy.Subscriber('/socialrobot/knowledge/objects', Objects, self.callback_objects, queue_size=10)
         self.pub_robot = rospy.Publisher("/visual_robot_perceptions", Float32MultiArray, queue_size=10)
         self.pub_objects = rospy.Publisher("/objects_infos", Float32MultiArray, queue_size=10)
         self.pub_joints = rospy.Publisher("/joint_statess", JointState, queue_size=10)
@@ -52,7 +53,7 @@ class PerceptionListener():
             obj_info = []
 
 
-            try:i = self.obj_name2id[dat.name.data]
+            try:i = self.obj_name2id[dat.id]
             except:continue#i = int(dat.name.data.split('_')[-1])
             x = dat.bb3d.center.position.x * 1.0
             y = dat.bb3d.center.position.y * 1.0
@@ -84,8 +85,8 @@ class PerceptionListener():
                  
             #objs.append(obj)   
             #obj.data = obj_info
+            time.sleep(self.time_interval)
             self.pub_objects.publish(data=obj_info)
-
 
     def update(self):
         self.publish_objects()
@@ -101,6 +102,7 @@ class PerceptionListener():
             robot_info = []
             idx = data.data[6]
             d, w, h = 0, 0, 0
+            if idx ==11.0 or idx == 12.0:pass#print("hand data use vrep lua code... (socialrobot code not complete)");return
 
             robot_info.append(data.data[0]) # x
             robot_info.append(data.data[1]) # y
@@ -132,15 +134,14 @@ class PerceptionListener():
 
             robot_info.append(data.data[6]) # x
 
+            time.sleep(self.time_interval)
             self.pub_robot.publish(data=robot_info)
-
         except:pass
 
     def callback_joints(self, data):
+        time.sleep(self.time_interval)
         self.pub_joints.publish(data)
-
         # LFinger_1,LFinger_2,LFinger_3,RFinger_1,RFinger_2,RFinger_3,fridge_top_joint,fridge_bottom_joint
-        pass
         #print(data)
 
 
@@ -159,9 +160,8 @@ if __name__ == '__main__':
     rospy.loginfo('[PerceptionListener] Service Started!')
 
 
-    loop_freq = 10 # 10hz
+    loop_freq = 100 # 10hz
     r = rospy.Rate(loop_freq)
     while not rospy.is_shutdown():
         pm.update()
         r.sleep()
-

@@ -164,9 +164,9 @@ rosrun context_manager context_manager org.ros.rosjava_context_manager.ContextMa
 rosrun context_manager context_manager org.ros.rosjava_context_manager.ContextListener
     #type 'social_robot' or 'skku_robot' on the ContextListener's console for init
 rosrun perception_listener perception_listener.py 
-rosrun context_manager context_manager org.ros.rosjava_context_manager.ContextSaver
 
 #for visualizing ontology
+rosrun context_manager context_manager org.ros.rosjava_context_manager.ContextSaver
 roslaunch rosbridge_server rosbridge_websocket.launch 
 rosrun pywebtest talker.py 
 ```

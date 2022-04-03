@@ -1,0 +1,187 @@
+objects:
+    - name: obj_robot
+      type: dynamic
+      translation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.001
+          y: 0.001
+          z: 0.001
+    - name: obj_chair
+      type: dynamic
+      translation:
+          x: -0.04
+          y: 0.0
+          z: -0.025
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.45
+          y: 0.42
+          z: 0.85
+    - name: obj_tray
+      type: dynamic
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.01
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.235
+          y: 0.31
+          z: 0.02
+    - name: obj_table
+      type: static
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.375
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.7
+          y: 1.2
+          z: 0.73
+    - name: obj_fridge
+      type: static
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.69
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 4.9000e-01
+          y: 4.9500e-01
+          z: 1.3600e+00
+      mesh: obj_fridge
+      affordance:
+         - name: obj_fridge_bottom_door
+           translation:
+               x: +2.7498e-01
+               y: +2.1085e-05
+               z: -2.1505e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 5.0000e-02
+               y: 4.9500e-01
+               z: 9.2000e-01
+         - name: obj_fridge_top_door
+           translation:
+               x: +2.7494e-01
+               y: +6.8992e-06
+               z: +4.6496e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 5.0000e-02
+               y: 4.9500e-01
+               z: 4.2999e-01
+         - name: workspace
+           translation:
+               x: +7.9630e-02
+               y: -1.1921e-06
+               z: -6.0000e-02
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 1.0000e-01
+               y: 4.0000e-01
+               z: 8.0000e-03
+         - name: obj_fridge_handle
+           translation:
+               x: +3.3550e-01
+               y: -1.9999e-01
+               z: -5.6043e-02
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 7.5002e-02
+               y: 3.0004e-02
+               z: 1.5000e-01
+           mesh: obj_fridge_handle
+           grasp_point:
+                - translation:
+                    x: 0.0
+                    y: 0.0
+                    z: 0.0
+                  rotation:
+                    x: 0.0
+                    y: 0.0
+                    z: 1.0
+                    w: 0.0
+         - name: center
+           translation:
+               x: +3.0084e-01
+               y: 0.0
+               z: +1.8495e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.001
+               y: 0.001
+               z: 0.001
+         - name: frame_p1
+           translation:
+               x: +2.4500e-01
+               y: +2.4750e-01
+               z: -6.4005e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.001
+               y: 0.001
+               z: 0.001
+         - name: frame_p2
+           translation:
+               x: +2.4500e-01
+               y: -2.4750e-01
+               z: -6.4005e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.001
+               y: 0.001
+               z: 0.001

@@ -19,42 +19,38 @@ class image_converter:
     rospy.init_node('extrinsic_calibrator')
     self.bridge = CvBridge()
 
-    self.camera_points = []
-    self.robot_points = []
     self.marker_location = []
-    self.marker_location_list = []
-    self.imgpoints_list = []
-
-    self.frame_goal = 1
-    self.frame_cnt = 1000
 
     self.K_camera = np.zeros((3, 3))
     self.distortion_camera = np.zeros((8))
     self.P_camera = np.zeros((3, 4))
 
     self.grid_length = 0.055
-    self.calib_iter = 1
     self.chessboard_size = np.array([6,4])
 
-    self.motion_num = Int32()
-
     self.cam_info=rosparam.get_param(rospy.get_name()+"/cam")
-    
+
     if self.cam_info==0:
-      # For Realsense
+      # subscriber
       self.image_sub = rospy.Subscriber("/camera/color/image_raw", Image, self.img_callback)
       self.intrinsic_sub = rospy.Subscriber("/camera/color/camera_info", CameraInfo, self.camera_callback)
+      # publisher
+      self.image_pub = rospy.Publisher("/camera/calibration/image", Image, queue_size=10)
       self.result_pub = rospy.Publisher("/camera/calibration/result", Float32MultiArray, queue_size=10)
-      # For Azure Kinect
-      # self.image_sub = rospy.Subscriber("/rgb/image_raw", Image, self.img_callback)
-      # self.intrinsic_sub = rospy.Subscriber("/rgb/camera_info", CameraInfo, self.camera_callback)
-      # self.result_pub = rospy.Publisher("/camera/calibration/result", Float32MultiArray, queue_size=10)
+      # service
+      #rospy.ServiceProxy("/camera/get_transform",)  
+      self.cam = 'robocare cam'
+
     elif self.cam_info==1:
       self.image_sub = rospy.Subscriber("/cam_e/color/image_raw", Image, self.img_callback)
       self.intrinsic_sub = rospy.Subscriber("/cam_e/color/camera_info", CameraInfo, self.camera_callback)
+      # publisher
+      self.image_pub = rospy.Publisher("/cam_e/calibration/image", Image, queue_size=10)
       self.result_pub = rospy.Publisher("/cam_e/calibration/result", Float32MultiArray, queue_size=10)
- 
-    rospy.Subscriber("/calibration/start", Bool, self.start_cb)    
+      # service
+      #rospy.ServiceProxy("/cam_e/get_transform",)  
+      self.cam = 'external cam'
+
 
     row = self.chessboard_size[0]
     col = self.chessboard_size[1]
@@ -77,8 +73,8 @@ class image_converter:
       self.distortion_camera[i] = data.D[i]     
 
   def img_callback(self, data):
-    if self.frame_cnt < self.frame_goal:
-      if self.marker_location != []:
+    
+      if len(self.marker_location)>0:
         row = self.chessboard_size[0]
         col = self.chessboard_size[1]        
 
@@ -100,19 +96,8 @@ class image_converter:
               location=(int(imgpoints[i][0]), int(imgpoints[i][1]))
               font = cv2.FONT_HERSHEY_SIMPLEX
               fontScale = 1.0
-              cv2.putText(img, str(i+1), location, font, fontScale, (0, 0, 255), 2)
-            # cv2.imwrite("/home/rise/social_catkin/src/socialrobot_perception/vision_calibrator/output2.png", img)
-            #self.image_pub.publish(self.bridge.cv2_to_imgmsg(img))            
-            
-            print('\n')
-            print("3D loaction\n")
-            print(self.marker_location)
-            print('\n')
-            print("image location\n")
-            print(imgpoints)
-            print('\n')
-
-            # retval, rvec, tvec = cv2.solvePnP(self.marker_location_list, self.imgpoints_list, self.K_camera, self.distortion_camera)             
+              #cv2.putText(img, str(i+1), location, font, fontScale, (0, 0, 255), 2)
+           
             retval, rvec, tvec = cv2.solvePnP(self.marker_location, imgpoints, self.K_camera, None)             
             rotation_matrix = np.zeros((3, 3))
             cv2.Rodrigues(rvec, rotation_matrix)
@@ -131,20 +116,16 @@ class image_converter:
               for i in range(4):
                 result.data.append(H[i])
 
-            print(result.data)
-            print(HT)
-            self.result_pub.publish(result)              
+            # draw axis
+            cv2.aruco.drawAxis(img, self.K_camera, self.distortion_camera, rvec, tvec, 100)  
 
-        rospy.loginfo("Captured image. " + str(self.frame_cnt))
-        self.frame_cnt = self.frame_cnt + 1
+            self.result_pub.publish(result)    
+            self.image_pub.publish(self.bridge.cv2_to_imgmsg(img))  
+            #cv2.imshow(self.cam, img)
+            #cv2.waitKey(1)
+        else:  
+            rospy.logwarn("cannot detect chessboard with " + self.cam)        
         
-    else:
-      pass
-
-  def start_cb(self, data):
-    if data.data:
-      self.frame_cnt=0
-      print("Calibration start")
 
 def main(args):
   ic = image_converter()

@@ -72,8 +72,16 @@ class ActionLib():
         elif req.action_type == req.AVAILABLE_ACTIONS:
             for act_name in self.available_actions.keys():
                 res.actions.append(String(act_name))
+        elif req.action_type == req.COMPOUND_ACTIONS:
+            for act in self.actions:
+                if self.actions[act].has_key('primitives'):
+                    res.actions.append(String(act))
+        elif req.action_type == req.PRIMITIVE_ACTIONS:
+            for act in self.actions:
+                if not self.actions[act].has_key('primitives'):
+                    res.actions.append(String(act))
         else:
-            rospy.logerr("Request parameter 'action_type' should be 'ALL' or 'AVAILABLE_ACTIONS'")
+            rospy.logerr("Request parameter 'action_type' is required.")
 
         return res
 
@@ -108,69 +116,36 @@ class ActionLib():
         '''
 
         res = CheckActionResponse()
+        res.result = True
         
         return res
 
     def _callback_decode_action(self, req):  
-        compound_action = req.compound_action         
+        compound_action = req.compound_action    
+        current_states = req.current_states
         res = GetPrimitiveActionListResponse()
-        res.primitive_action = self._decode_action(compound_action) 
+        res.primitive_action = self._decode_action(compound_action, current_states) 
         return res
 
-    def _decode_action(self, compound_action):
+    def _decode_action(self, compound_action, current_states):
+        '''
+        compound_action : requested action for decoding
+        current_states : [optional] current state predicates
+        '''
         res = []
         if not compound_action.name in self.actions.keys():
             rospy.logerr("Action %s is not in action library." %compound_action.name)
             return res            
         
-        if 'primitives' in self.actions[compound_action.name].keys():
-            primitive_actions = self.actions[compound_action.name]['primitives']
-            for i, primitive_action in enumerate(primitive_actions):
-                action = socialrobot_actionlib.msg.Action()
-                action.name = primitive_action['name']
-
-                # get primitive action parameter from compound action
-                action.parameters = self._decode_param(compound_action, i)
-                
-                action.controller = (self.actions[action.name]['controller'])
-                action.group = (self.actions[action.name]['group'])
-                action.planner = (self.actions[action.name]['planner'])
-                
-                sub_actions = self._decode_action(action)
-                for prim in sub_actions:
-                    res.append(prim)
-
-        # no primitives
-        else:
-            action = socialrobot_actionlib.msg.Action()
-            action.name = compound_action.name
-
-            action.parameters = compound_action.parameters
-            action.controller = (self.actions[action.name]['controller'])
-            action.group = (self.actions[action.name]['group'])
-            action.planner = (self.actions[action.name]['planner'])
-            res.append(action)
-            
+        # get primitive action list
+        primitive_actions = []
+        self.get_primitives(compound_action, current_states, primitive_actions)
+        
+        # groundify parameters
+        for act in primitive_actions:
+            ground_act = self.groundify_action(act['name'], act['value'])
+            res.append(ground_act)
         return res
-
-    def _decode_param(self, compound_action, idx):
-        param_list = []
-        if len(self.actions[compound_action.name]['primitives']) < 1:
-            param_list = compound_action.parameters
-        else:
-            compound_param = []
-            for param in self.actions[compound_action.name]['parameters']:
-                compound_param.append(param['name'])
-            primitive_param = self.actions[compound_action.name]['primitives'][idx]['parameters']
-            for param in primitive_param:
-                if param in compound_param:
-                    idx = compound_param.index(param)
-                    param_list.append(compound_action.parameters[idx])
-                else:
-                    param_list.append(param)
-                    #rospy.logwarn("Cannot find %s action parameter in compound action %s" %(param, compound_action.name))
-
-        return param_list
 
     def _callback_get_action_info(self, req):
         res = GetActionInfoResponse()
@@ -181,92 +156,123 @@ class ActionLib():
             rospy.logwarn("Cannot find '%s' action in the action list." %action_name)
             res.result = False
             return res
-        else:
-        # if 'parameters' in self.actions[action_name].keys():
-        #     for param in self.actions[action_name]['parameters']:
-        #         res.parameters.append(param['name'])          
-        # if 'primitives' in self.actions[action_name].keys():  
-        #     for prim in self.actions[action_name]['primitives']:
-        #         res.primitives.append(prim['name'])                       
-        # if 'controller' in self.actions[action_name].keys():     
-        #     res.controller = self.actions[action_name]['controller']           
-        # if 'group' in self.actions[action_name].keys():             
-        #     res.group = self.actions[action_name]['group']           
-        # if 'planner' in self.actions[action_name].keys(): 
-        #     res.planner = self.actions[action_name]['planner']     
-        # if 'precondition' in self.actions[action_name].keys(): 
-        #     res.precondition.append(pickle.dumps(self.actions[action_name]['precondition'], pickle.HIGHEST_PROTOCOL))     
-        # if 'effect' in self.actions[action_name].keys(): 
-        #     res.effect.append(pickle.dumps(self.actions[action_name]['effect'], pickle.HIGHEST_PROTOCOL))
+        else:        
             res.result = True
-            res.action = self.groundify_action(action_name,params)
+            res.action = self.groundify_action(action_name, params)
 
         return res
 
-    def groundify_action(self, action_name, action_variables):
-        pddl_action = self.actions[action_name]
+    def create_type_map(self, values, parameters):
+        type_map = {}
+        for i, param in enumerate(parameters):
+            type_map.setdefault(param['name'], {})
+            type_map[param['name']]['value'] = values[i]
+            type_map[param['name']]['type'] = param['type']
+        return type_map
+
+    def check_condition(self, condition_predicates, current_states):
+        '''
+        condition_predicates [socialrobot_actionlib/Predicate]
+        current_states [socialrobot_actionlib/Predicate]
+        '''
+        # no current states
+        if not current_states:
+            return True
+            
+        neg_pred = []
+        pos_pred = []
+        current_pred = []
+        for cond in condition_predicates:
+            if not cond.is_negative:
+                pred = [cond.name.lower()]
+                for arg in cond.args:
+                    pred.append(arg.lower())
+                pos_pred.append(pred)
+            else:                
+                pred = [cond.name.lower()]
+                for arg in cond.args:
+                    pred.append(arg.lower())
+                neg_pred.append(pred)
+        for state in current_states:
+            pred = [state.name.lower()]
+            for arg in state.args:
+                pred.append(arg.lower())
+            current_pred.append(pred)
+            
+        for pos in pos_pred:
+            if pos not in current_pred:
+                return False
+        for neg in neg_pred:
+            if neg in current_pred:
+                return False
+        return True
+
+    def groundify_action(self, action_name, action_variables, current_states=None):
+        
+        action_model = self.actions[action_name]
+        
         act = Action()
         act.name = action_name
-        act.controller = pddl_action['controller']
-        act.group = pddl_action['group']
-        act.planner = pddl_action['planner']
+        act.controller = action_model['controller']
+        act.group = action_model['group']
+        act.planner = action_model['planner']
 
-        # create parameter map
-        params = pddl_action['parameters']
-        precond = pddl_action['precondition']
-        effect = pddl_action['effect']
-        type_map = {}
+        params = action_model['parameters']
+        precond = action_model['precondition']
+        effect = action_model['effect']
         for i, param in enumerate(params):
-            type_map.setdefault(param['name'], []).append(action_variables[i])
-        action_param = []
-        for param in pddl_action['parameters']:
-            action_param.append(param['name'])
-        act.parameters = action_variables
+            act.type.append(action_model['parameters'][i]['type'])
+            act.parameters.append(action_model['parameters'][i]['name'])
+        act.values = action_variables
 
-        # groundify primitives
-        primitives = [] 
-        if 'primitives' in pddl_action.keys():
-            for p in pddl_action['primitives']:
-                primitives.append(p['name'])
-                #for i,param in enumerate(p['parameters']):
-                #    primitive.append(action_variables[action_param.index(param)])
-            act.primitives = primitives
+        if action_variables:
+            # create parameter map
+            type_map = self.create_type_map(action_variables, action_model['parameters'])
 
-        # groundify predicates          
-        pos_precond = []
-        neg_precond = []
-        pos_effect = []
-        neg_effect = []              
-        for p in precond:     
-            self.groundify_predicate(p, type_map, pos_precond, neg_precond)        
-        for e in effect:     
-            self.groundify_predicate(e, type_map, pos_effect, neg_effect)
+            # groundify primitives
+            primitive_actions = [] 
+            if 'primitives' in action_model.keys():
+                primitives = []
+                for i in action_model['primitives']:
+                    self.split_primitives(i, primitives)           
+                for i in primitives:                 
+                    act.primitives.append(i['name'])
 
-        # convert to msg format
-        
-        if pos_precond:
-            for precond in pos_precond:
-                fluent = Fluent(predicate=precond[0], args=precond[1])  
-                act.precondition.positives.append(fluent)            
+            # groundify predicates          
+            pos_precond = []
+            neg_precond = []
+            pos_effect = []
+            neg_effect = []              
+            for p in precond:     
+                self.groundify_predicate(p, type_map, pos_precond, neg_precond)        
+            for e in effect:     
+                self.groundify_predicate(e, type_map, pos_effect, neg_effect)
 
-        if neg_precond:
-            for precond in neg_precond:
-                fluent = Fluent(predicate=precond[0], args=precond[1])  
-                act.precondition.negatives.append(fluent)  
+            # convert to msg format
             
-        if pos_effect:
-            for precond in pos_effect:
-                fluent = Fluent(predicate=precond[0], args=precond[1])  
-                act.effect.positives.append(fluent)  
-            
-        if neg_effect:
-            for precond in neg_effect:
-                fluent = Fluent(predicate=precond[0], args=precond[1])  
-                act.effect.negatives.append(fluent)              
+            if pos_precond:
+                for precond in pos_precond:
+                    fluent = Fluent(predicate=precond[0], args=precond[1])  
+                    act.precondition.positives.append(fluent)            
+
+            if neg_precond:
+                for precond in neg_precond:
+                    fluent = Fluent(predicate=precond[0], args=precond[1])  
+                    act.precondition.negatives.append(fluent)  
+                
+            if pos_effect:
+                for precond in pos_effect:
+                    fluent = Fluent(predicate=precond[0], args=precond[1])  
+                    act.effect.positives.append(fluent)  
+                
+            if neg_effect:
+                for precond in neg_effect:
+                    fluent = Fluent(predicate=precond[0], args=precond[1])  
+                    act.effect.negatives.append(fluent)              
 
         return act
 
-    def groundify_predicate(self, predicate, type_map, pos_predicate, neg_predicate):
+    def groundify_predicate(self, predicate, type_map, pos_predicate, neg_predicate, current_state=None):
         '''
         mapping the objects into action parameters
         '''
@@ -301,14 +307,135 @@ class ActionLib():
         if pos_ground_pred:        
             pred, params = pos_ground_pred
             for i,param in enumerate(params):
-                params[i] = type_map[param['name']][0]
+                if type_map.has_key(param['name']):
+                    params[i] = type_map[param['name']]['value'] 
+                else:   # constant value
+                    params[i] = param['name']
             pos_predicate.append(pos_ground_pred)
-
+            
         if neg_ground_pred:
             pred, params = neg_ground_pred
             for i,param in enumerate(params):
-                params[i] = type_map[param['name']][0]        
+                if type_map.has_key(param['name']):
+                    params[i] = type_map[param['name']]['value']
+                else:   # constant value
+                    params[i] = param['name']
             neg_predicate.append(neg_ground_pred)
+
+    def groudify_predicates(self, predicates, type_map):
+        '''
+        assign parameters value into symbolic parameters
+        '''
+        pred_list = []        
+        for p in predicates:
+            pred = Predicate()
+            # negative predicate
+            if p[0] == 'not':
+                p = p[1]
+                pred.is_negative = True
+
+            # positive predicate            
+            pred.name = p[0]
+            pred_params = p[1:]
+            for param in pred_params:
+                value = type_map[param['name']]['value']
+                pred.args.append(value)
+            pred_list.append(pred)
+        return pred_list
+
+    def get_primitives(self, compound_action, current_states, action_list, compound_action_values=None):
+        # create compound action's parameter map
+        action_values = []
+        if compound_action_values != None:
+            type_map = self.create_type_map(compound_action_values, self.actions[compound_action.name]['parameters'])
+        else:
+            type_map = self.create_type_map(compound_action.values, self.actions[compound_action.name]['parameters'])
+
+        for param in self.actions[compound_action.name]['parameters']:
+            #param['value'] = type_map[param['name']]['value']
+            action_values.append(type_map[param['name']]['value'])
+        
+        # high level compound action
+        if 'primitives' in self.actions[compound_action.name].keys():
+            primitives = self.actions[compound_action.name]['primitives']
+
+            for i, p in enumerate(primitives):
+                # conditional primitive case
+                if str(type(p)) != "<type 'dict'>":
+                    cond_type = p[0]
+                    condition_predicates = []
+                    primitive_actions = []
+
+                    # get conditional predicates and primitive actions
+                    if cond_type == 'forall': 
+                        pass
+                    elif cond_type == 'when':
+                        self.split_predicates(p[1][0], condition_predicates)
+                        condition_predicates = self.groudify_predicates(condition_predicates, type_map)
+                        self.split_primitives(p[2], primitive_actions)
+                    elif cond_type == 'exists':
+                        pass
+                    
+                    # add primitive actions if in current condition
+                    if self.check_condition(condition_predicates, current_states):
+                        for a in primitive_actions:
+                            act_msg = self.dict_action_to_action_msg(a)
+                            primitive_values = self.inherit_values(type_map, a['parameters'])
+                            self.get_primitives(act_msg, current_states, action_list, primitive_values)
+
+                # no conditional primitive case
+                else:                    
+                    act_msg = self.dict_action_to_action_msg(p)
+                    primitive_values = self.inherit_values(type_map, p['parameters'])
+                    self.get_primitives(act_msg, current_states, action_list, primitive_values)
+
+        # lowest level primitive action
+        else:
+            action_msg = self.groundify_action(compound_action.name, compound_action.values)
+            dict_action = self.action_msg_to_dict_action(action_msg)
+            if compound_action_values != None:
+                dict_action['value'] = compound_action_values
+            else:
+                dict_action['value'] = compound_action.values
+            action_list.append(dict_action)
+
+    def inherit_values(self, parent_type_map, child_parameters):
+        values = []
+        for param in child_parameters:
+            try:    # value is in the type map
+                values.append(parent_type_map[param]['value'])
+            except: # value is constant value
+                values.append(param)
+        return values
+
+    def split_predicates(self, predicates, pred_list):
+        if predicates[0] == 'and':
+            for p in predicates[1:]:
+                self.split_predicates(p, pred_list)
+        else:
+            pred_list.append(predicates)
+
+    def split_primitives(self, primitive, prim_list):
+        if str(type(primitive)) == "<type 'list'>":
+            if primitive[0] == 'and':
+                for p in primitive[1:]:
+                    self.split_primitives(p, prim_list)
+        elif str(type(primitive)) == "<type 'dict'>":
+            prim_list.append(primitive)
+    
+    def dict_action_to_action_msg(self, dict_action):
+        '''
+        convert dict action format into ROS action msg
+        '''
+        return self.groundify_action(dict_action['name'], dict_action['parameters'])
+
+    def action_msg_to_dict_action(self, action_msg):
+        '''
+        convert ROS action msg format into dict format 
+        '''
+        dict_action = {'name':action_msg.name,
+                        'parameters':action_msg.parameters}
+        return dict_action
 
 if __name__ =='__main__':
     al = ActionLib()

@@ -1,0 +1,15 @@
+{"nodes":[
+  {"label":"3#2","id":"3#2"}
+  ,{"id":"2#2", "label":"2#2"}
+  ,{"id":"3#dd.owl", "label":"3#dd.owl"}
+  ,{"id":"4#dd.owl", "label":"4#dd.wol"}
+  ,{"id":"5#a", "label":"5#a"}
+],
+"edges":[
+  {"from":"3#2", "to":"2#2", "label":"apples"}
+  ,{"from":"3#2", "to":"3#dd.owl", "label":"bananas"}
+  ,{"from":"2#2", "to":"4#dd.owl", "label":"cherries"}
+  ,{"from":"2#2", "to":"5#a", "label":"dates"}
+  ,{"from":"2#2", "to":"3#dd.owl", "label":"EAGLES!"}
+]
+}

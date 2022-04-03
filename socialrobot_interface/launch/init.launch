@@ -3,6 +3,8 @@
 
 	<arg name="robot_name" default="social_robot"/>
     <arg name="use_rviz" default="true"/>
+    <arg name="use_knowledge" default="true"/>
+    <arg name="use_reasoner" default="true"/>
     <arg name="sim" default="false"/>
     <arg name="sim_env" default="default"/>
     <arg name="use_mongodb" default="false"/>
@@ -25,6 +27,8 @@
     <include file="$(find socialrobot_interface)/launch/interface_manager.launch">
        <arg name ="use_mongodb" value="$(arg use_mongodb)"/>
        <arg name ="object_tracking" value="$(arg object_tracking)"/>
+       <arg name ="use_knowledge" value="$(arg use_knowledge)"/>
+       <arg name ="use_reasoner" value="$(arg use_reasoner)"/>
     </include>
 
     <!-- socialrobot_behavior-->
@@ -33,12 +37,18 @@
     <!-- socialrobot_motion-->
     <include file="$(find socialrobot_motion)/launch/motion_plan.launch"/>
 
-    <!-- socialrobot_knowledge-->
-    <include file="$(find context_manager)/launch/mkm.launch"/>
+    <!-- socialrobot_knowledge -->
+    <include if="$(arg use_knowledge)" file="$(find context_manager)/launch/mkm.launch">
+       <arg name ="use_knowledge" value="$(arg use_knowledge)"/>
+    </include>
+    
+    <!-- socialrobot_reasoner -->
+    <include if="$(arg use_reasoner)" file="$(find ir_repositioning)/launch/reasoner.launch"/>
 
-    <!-- socialrobot_relocation-->
-    <include file="$(find relocation_node)/launch/relocate.launch"/>
-
+    <!-- socialrobot_perception -->
+    <include if="$(arg sim)" file="$(find perception_interface)/launch/fake_perception.launch"/>
+    <include unless="$(arg sim)" file="$(find perception_interface)/launch/perception.launch"/> 
+    
 	<!-- state machine-->
 	<include file="$(find socialrobot_interface)/launch/state_machine.launch">
        <arg name ="use_state_viewer" value="$(arg use_state_viewer)"/>

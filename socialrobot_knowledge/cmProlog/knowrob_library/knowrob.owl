@@ -11251,6 +11251,14 @@ Cf. Surface, whose instances are two-dimensional, intangible regions of space.</
     <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#VisualRobotHandPerception">
         <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#VisualRobotPerception"/>
     </owl:Class>
+
+
+
+    <!-- http://knowrob.org/kb/knowrob.owl#VisualRobotFingerPerception -->
+
+    <owl:Class rdf:about="http://knowrob.org/kb/knowrob.owl#VisualRobotFingerPerception">
+        <rdfs:subClassOf rdf:resource="http://knowrob.org/kb/knowrob.owl#VisualRobotPerception"/>
+    </owl:Class>
     
 
 

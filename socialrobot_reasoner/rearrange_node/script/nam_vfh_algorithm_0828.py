@@ -321,8 +321,8 @@ def g_ore(in_tar_pos, in_obs_pos, in_tar_r, in_obs_r, in_rob_pos, in_ws_zero, in
 
     x_min = in_ws_zero[0]
     x_max = in_ws_zero[0] + in_ws_wd[0]
-    y_min = in_ws_zero[1]
-    y_max = in_ws_zero[1] + in_ws_wd[1]
+    y_min = in_ws_zero[1] - 1
+    y_max = in_ws_zero[1] + in_ws_wd[1] + 1
     #
     # print "\nrobot_pose", robot_pose
     # print "\ntarget_id", target_id

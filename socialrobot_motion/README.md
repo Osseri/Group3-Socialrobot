@@ -13,15 +13,15 @@
 
 **Package summary**
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+socialrobot motion planner package.
 
 - Maintainer status: maintained
 - Maintainers
-  - John Doe (john1@organization.com)
-  - John Doe (john2@organization.com)
-  - John Doe (john3@organization.com)
+  - Jeongmin Jeon (nicky707@daum.net)
+  - Hong-ryul Jung (jung.hr.1206@gmail.com)
+  - Hyungpil Moon (hyungpil@skku.edu)
 - Author
-  - John Doe (john0@organization.com)
+  - Jeongmin Jeon (nicky707@daum.net)
 - License: {License Name}
 - Source: git https://gitlab.com/social-robot/socialrobot_motion.git
 
@@ -29,12 +29,18 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 <div style="flex:40%; padding-left:10px;">
 
 **Table of Contents**
-1. [Overview](#overview)
-2. [Installation methods](#installation-methods)
-   1. [Install manually](#install-manually)
-3. [Features](#features)
-   1. [arm_planner](#arm_planner)
-   2. [grasp_planner](#grasp_planner)
+- [socialrobot_motion](#socialrobot_motion)
+  - [Overview](#overview)
+  - [Installation methods](#installation-methods)
+    - [Install manually](#install-manually)
+  - [Dependencies](#dependencies)
+    - [Frameworks](#frameworks)
+    - [Third-party libraries](#third-party-libraries)
+    - [Social Robot Project Modules](#social-robot-project-modules)
+    - [Hardware requirements](#hardware-requirements)
+  - [Features](#features)
+    - [arm_planner](#arm_planner)
+    - [grasp_planner](#grasp_planner)
 
 </div>
 </div>
@@ -43,32 +49,8 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+ROS package for Motion planning interface. This module managing MoveIt, GraspIt planner packages.
 
-```mermaid
-classDiagram
-	Animal <|-- Duck
-	Animal <|-- Fish
-	Animal <|-- Zebra
-	Animal : +int age
-	Animal : +String gender
-	Animal: +isMammal()
-	Animal: +mate()
-	class Duck{
-		+String beakColor
-		+swim()
-		+quack()
-	}
-	class Fish{
-		-int sizeInFeet
-		-canEat()
-	}
-	class Zebra{
-		+bool is_wild
-		+run()
-	}
-					
-```
 
 ## Installation methods
 
@@ -126,11 +108,31 @@ classDiagram
    catkin_make
    ```
 
+## Dependencies
+
+### Frameworks
+
+- ROS Kinetic/Melodic
+
+### Third-party libraries
+
+- [moveit](https://github.com/ros-planning/moveit)
+- [GraspIt](https://graspit-simulator.github.io/)
+- pyassimp > 4.1.3
+
+### Social Robot Project Modules
+
+- Robot description packages including urdf file.
+
+### Hardware requirements
+
+This package does not require any hardware device.
+
 ## Features
 
 ### arm_planner
 
-Object mesh file path : ../socialrobot_motion/mesh/moveit/
+Object mesh file path : `../socialrobot_motion/mesh/moveit/`
 
 1. Caculate manipulability
    - targetPose에서의 maipulability를 구함
@@ -144,7 +146,7 @@ Object mesh file path : ../socialrobot_motion/mesh/moveit/
       - Input : targetBody, obstacle_ids, obstacles, goalType, targetPose or targetJointState, currentJointState(default :current joint state in moveit!)
       - Output : planResult, jointTrajectory
 
-`예제`
+`example`
 
 ```
 from socialrobot_motion.srv import *
@@ -169,17 +171,17 @@ def main():
 
 - Gripper model
    - name : robot_name + "_left", "_right"
-   - path : ../.graspit/models/robots/
+   - path : `../.graspit/models/robots/`
    - 필요한 gripper model은 [[Robocare 패키지에서 social_robot_description/graspit_model]](https://gitlab.com/social-robot/robocare/-/tree/master/social_robot_arm/social_robot_description/graspit_model)로 들어가면 찾을 수 있다.
 - Object model
-   - path : ../socialrobot_motion/mesh/graspit/
+   - path : `../socialrobot_motion/mesh/graspit/`
    - 기존 물체 목록: [socialrobot_commons/object_dataset/object_lists.md](https://gitlab.com/social-robot/socialrobot_commons/-/blob/master/object_dataset/object_lists.md)
 - Input value
    - targetBody, obstacle_ids, obstacles, targetObject, gripper_pose(default :current gripper pose in moveit!)
 - Output value
    - planResult, endEffectorPose, graspQuality, dofs
 
-`예제`
+`example`
 
 ```
 from socialrobot_motion.srv import *

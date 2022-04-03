@@ -3,7 +3,6 @@ import rospy
 
 from socialrobot_actionlib.srv import *
 from socialrobot_actionlib.msg import *
-import cPickle as pickle
 
 ##############################
 # Main function
@@ -16,8 +15,8 @@ if __name__ == '__main__':
 
     # set action name
     req = GetActionInfoRequest()
-    req.action_name = 'relocate_obstacle'
-    req.params = ['obj_left_hand', 'obj_gotica', 'obj_red_gotica', 'pos_red_gotica', 'relocateposition']
+    req.action_name = 'open_container'
+    req.params = ['obj_mobile', 'obj_right_hand', 'obj_juice', 'pos_mobile', 'pos_right_hand', 'pos_juice']
     res = srv(req)
 
     print(res)

@@ -1,0 +1,4 @@
+<launch>
+    <node name="pusher_node" pkg="pusher_node" type="main.py" output="screen">
+    </node>
+</launch>

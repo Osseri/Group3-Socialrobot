@@ -42,14 +42,18 @@ public class ContextListener extends AbstractNodeMain {
 	int visualRobotBodyPerceptionCount = 0;
 	int visualRobotHandPerceptionCount = 0;
 	int visualRobotLeftHandPerceptionCount = 0;
+	int[] visualRobotLeftFingerPerceptionCount = new int[3];
 	int visualRobotRightHandPerceptionCount = 0;
+	int[] visualRobotRightFingerPerceptionCount = new int[3];
 	int jointPerceptionCount = 0;
 
 	int visualObjectPerceptionInterval = 0;
 	int visualRobotBodyPerceptionInterval = 0;
 	int visualRobotHandPerceptionInterval = 0;
 	int visualRobotLeftHandPerceptionInterval = 0;
+	int[] visualRobotLeftFingerPerceptionInterval = new int[3];
 	int visualRobotRightHandPerceptionInterval = 0;
+	int[] visualRobotLefRightFingerPerceptionInterval = new int[3];
 	int jointPerceptionInterval = 0;
 
 	int removeTime = 10;
@@ -60,7 +64,7 @@ public class ContextListener extends AbstractNodeMain {
 	static List<String>  oProperty = new ArrayList<String>();
 	static List<String>  oObject = new ArrayList<String>();
 	static List<String>  oGraph = new ArrayList<String>();
-	static int[] oStatus = new int[1000];
+	static int[] oStatus = new int[10000];
 	static int oInd;
 	static List<String>  oManager = new ArrayList<String>();
 
@@ -69,7 +73,7 @@ public class ContextListener extends AbstractNodeMain {
 	static List<String>  bProperty = new ArrayList<String>();
 	static List<String>  bObject = new ArrayList<String>();
 	static List<String>  bGraph = new ArrayList<String>();
-	static int[] bStatus = new int[1000]; 
+	static int[] bStatus = new int[10000]; 
 	static int bInd;
 	static List<String>  bManager = new ArrayList<String>();
 
@@ -77,7 +81,7 @@ public class ContextListener extends AbstractNodeMain {
 	static List<String>  hProperty = new ArrayList<String>();
 	static List<String>  hObject = new ArrayList<String>();
 	static List<String>  hGraph = new ArrayList<String>();
-	static int[] hStatus = new int[1000];
+	static int[] hStatus = new int[10000];
 	static int hInd;
 	static List<String>  hManager = new ArrayList<String>();
 
@@ -85,14 +89,14 @@ public class ContextListener extends AbstractNodeMain {
 	static List<String>  jProperty = new ArrayList<String>();
 	static List<String>  jObject = new ArrayList<String>();
 	static List<String>  jGraph = new ArrayList<String>();
-	static int[] jStatus = new int[1000];
+	static int[] jStatus = new int[10000];
 	static int jInd;
 	static List<String>  jManager = new ArrayList<String>();
 
 	static List<String> fsdSubject = new ArrayList<String>();
 	static List<String> fsdProperty = new ArrayList<String>();
 	static List<String> fsdObject = new ArrayList<String>();
-	static int[] fsdStatus = new int[1000];
+	static int[] fsdStatus = new int[10000];
 	static int fsdInd;
 	static List<String> fsdManager = new ArrayList<String>();
 
@@ -134,7 +138,6 @@ public class ContextListener extends AbstractNodeMain {
 		scan = new Scanner(System.in);
 		log = connectedNode.getLog();
 
-
 		Subscriber<std_msgs.Float32MultiArray> object_subscriber = connectedNode.newSubscriber("/objects_infos",
 				std_msgs.Float32MultiArray._TYPE);// Subscriber node --> object
 		Subscriber<std_msgs.Float32MultiArray> visual_robot_subscriber = connectedNode
@@ -159,6 +162,34 @@ public class ContextListener extends AbstractNodeMain {
 		 */
 
 		// VisualObjectPerception
+
+
+
+try {
+			sleep(500);
+			MainServiceRequest mRequest = requestor.newMessage();
+			List<String> req = new ArrayList<String>();
+			req.add("init");
+			int[] st = {99};
+			mRequest.setPredicate(req);
+			mRequest.setStatus(st);
+
+			req = new ArrayList<String>();
+			req.add("ContextManager");
+			mRequest.setManager(req);
+			req = new ArrayList<String>();
+			req.add("social_robot"); //scan.next());
+			mRequest.setParam1(req);
+
+			requestor.publish(mRequest);
+			sleep(1000);
+}catch(Exception e)
+{
+		e.printStackTrace();
+}
+
+
+
 
 		answerer.addMessageListener(new MessageListener<QueryServiceResponse>() {
 			@Override
@@ -287,7 +318,7 @@ public class ContextListener extends AbstractNodeMain {
 					ID = "eiffel_tower_mug";
 					oIdInd=25;
 				} 
-				/*else if (IDN == (float) 102) {
+				else if (IDN == (float) 102) {
 					ID = "chips_can_3";
 					oIdInd=2;
 				} 
@@ -297,8 +328,8 @@ public class ContextListener extends AbstractNodeMain {
 				} else if (IDN == (float) 104) {
 					ID = "coffee_can_2";
 					oIdInd=4;
-				} else if (IDN == (float) 105) {
-					ID = "cracker_box_1";
+				} else if (IDN == (float) 26) { //105
+					ID = "cracker_box"; //  ID = "cracker_box_1";
 					oIdInd=5;
 				} else if (IDN== (float) 106) {
 					ID = "cracker_box_2";
@@ -306,14 +337,14 @@ public class ContextListener extends AbstractNodeMain {
 				} else if (IDN == (float) 107) {
 					ID = "cracker_box_3";
 					oIdInd=7;
-				} else if (IDN == (float) 108) {
-					ID = "jelly_box_1";
+				} else if (IDN == (float) 28) { //108
+					ID = "gelatin_box"; //	ID = "jelly_box_1";
 					oIdInd=8;
 				} else if (IDN == (float) 109) {
 					ID = "jelly_box_2";
 					oIdInd=9;
-				} else if (IDN == (float) 110) {
-					ID = "sugar_box_1";
+				} else if (IDN == (float) 29) { //110
+					ID = "sugar_box"; //	ID = "sugar_box_1";
 					oIdInd=10;
 				} else if (IDN == (float) 111) {
 					ID = "sugar_box_2";
@@ -321,8 +352,8 @@ public class ContextListener extends AbstractNodeMain {
 				}else if (IDN == (float) 112) {
 					ID = "sugar_box_3";
 					oIdInd=12;
-				}  else if (IDN == (float) 113) {
-					ID = "tomato_soup_1";
+				}  else if (IDN == (float) 27) { //113
+					ID = "tomato_soup_can"; //  ID = "tomato_soup_1";
 					oIdInd=13;
 				} else if (IDN == (float) 114) {
 					ID = "tomato_soup_2";
@@ -330,7 +361,16 @@ public class ContextListener extends AbstractNodeMain {
 				}else if (IDN == (float) 115) {
 					ID = "tomato_soup_3";
 					oIdInd=15;
-				}*/
+				}else if (IDN == (float) 30) {
+					ID = "fridge";
+					oIdInd=15;
+				}else if (IDN == (float) 31) {
+					ID = "courier_box";
+					oIdInd=15;
+				}else if (IDN == (float) 32) {
+					ID = "tray";
+					oIdInd=15;
+				}
 				else {
 					oIdInd=49;
 					continue;
@@ -345,29 +385,27 @@ public class ContextListener extends AbstractNodeMain {
 				visualObjectPerceptionCount=subVisualObjectPerceptionCount;
 
 				time = (int) (System.currentTimeMillis() / 1000);//currentTimeMillis() : 1/1000 s return --> 0m 1s = 100 --> 1s  
-
+	
 
 				retractString = "arbi:"+ID+" knowrob:widthOfObject A objectPerception o";
 				retractTriple(retractString);
-				
 				assertString = "arbi:"+ID+" knowrob:widthOfObject literal(type(xsd,'" + width + "'))"
 				+ " objectPerception o";
 				assertTriple(assertString);
 
+				//System.out.println(assertString);
+
 				retractString = "arbi:"+ID+" knowrob:depthOfObject A objectPerception o";
 				retractTriple(retractString);
-
 				assertString = "arbi:"+ID+" knowrob:depthOfObject literal(type(xsd,'" + depth + "'))"
 				+ " objectPerception o";
 				assertTriple(assertString);
 
 				retractString = "arbi:"+ID+" knowrob:heightOfObject A objectPerception o";
 				retractTriple(retractString);
-
 				assertString = "arbi:"+ID+" knowrob:heightOfObject literal(type(xsd,'" + height + "'))"
 				+ " objectPerception o";
 				assertTriple(assertString);
-
 
 				assertString = "'http://www.arbi.com/ontologies/arbi.owl#visualObjectPerception" +"_"+ID+"_"
 						+ visualObjectPerceptionCount
@@ -550,12 +588,30 @@ public class ContextListener extends AbstractNodeMain {
 				if (id == (float) 10) {
 					ID = "socialrobot";//"hubo_1";//"robot_body"
 					bIdInd=0;
-				} else if (id == (float) 12) {
+				} else if (id == (float) 11) {
 					ID = "left_hand_1";//"hubo_left_hand_1";//robot_hand";
 					hIdInd=0;
-				} else if (id == (float) 11) {
+				} else if (id == (float) 12) {
 					ID = "right_hand_1";//"robot_finger_mid";
 					hIdInd=1;
+				}else if (id == (float) 13) {
+					ID = "LFinger_1_2";
+					hIdInd=2;
+				}else if (id == (float) 14) {
+					ID = "LFinger_2_2";
+					hIdInd=3;
+				}else if (id == (float) 15) {
+					ID = "LFinger_3_2";
+					hIdInd=4;
+				}else if (id == (float) 16) {
+					ID = "RFinger_1_2";
+					hIdInd=5;
+				}else if (id == (float) 17) {
+					ID = "RFinger_2_2";
+					hIdInd=6;
+				}else if (id == (float) 18) {
+					ID = "RFinger_3_2";
+					hIdInd=7;
 				} else {
 					bIdInd=49;
 					hIdInd=49;
@@ -826,6 +882,132 @@ public class ContextListener extends AbstractNodeMain {
 					
 
 
+				} else if (13 <= (int)id || (int)id <= 18) {//System.out.println(11);
+					
+				if ((int)id <= 15)
+				visualRobotHandPerceptionCount=visualRobotLeftFingerPerceptionCount[(int)id-13]++;
+				else
+				visualRobotHandPerceptionCount=visualRobotRightFingerPerceptionCount[(int)id-16]++;
+				subVisualRobotHandPerceptionCount=hIdCount[hIdInd][1]++;
+
+				time = (int) (System.currentTimeMillis() / 1000);
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#visualRobotFingerPerception" +"_"+ID+"_"
+							+ visualRobotHandPerceptionCount
+							+ "' 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' 'http://knowrob.org/kb/knowrob.owl#VisualRobotFingerPerception'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					// startTime
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#visualRobotFingerPerception" +"_"+ID+"_"
+							+ visualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#startTime' 'http://www.arbi.com/ontologies/arbi.owl#timepoint_"
+							+ time + "'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					// objectActedOn
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#visualRobotFingerPerception" +"_"+ID+"_"
+							+ visualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#objectActedOn' 'http://www.arbi.com/ontologies/arbi.owl#"
+							+ ID + "'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					// eventOccursAt
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#visualRobotFingerPerception" +"_"+ID+"_"
+							+ visualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#eventOccursAt' 'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_"
+							+ ID + subVisualRobotHandPerceptionCount + "'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					// rotationMatrix3D
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' 'http://knowrob.org/kb/knowrob.owl#RotationMatrix3D'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + spaceName
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' 'http://knowrob.org/kb/knowrob.owl#RotationMatrix3D'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					//inFrontOf-Generally
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + spaceName 
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#inFrontOf-Generally' 'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount	+ "'"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					// x,y,z
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m03' literal(type('http://www.w3.org/2001/XMLSchema#double','"
+							+ x + "'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m13' literal(type('http://www.w3.org/2001/XMLSchema#double','"
+							+ y + "'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m23' literal(type('http://www.w3.org/2001/XMLSchema#double','"
+							+ z + "'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+			
+					// a,b,g
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m02' literal(type('http://www.w3.org/2001/XMLSchema#double','"
+							+ a + "'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m12' literal(type('http://www.w3.org/2001/XMLSchema#double','"
+							+ b + "'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m22' literal(type('http://www.w3.org/2001/XMLSchema#double','"
+							+ c + "'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+					
+					assertString = "'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID
+							+ subVisualRobotHandPerceptionCount
+							+ "' 'http://knowrob.org/kb/knowrob.owl#m32' literal(type('http://www.w3.org/2001/XMLSchema#double','0'))"
+							+ " robotPerception h";
+
+					assertTriple(assertString);
+
+
+
+					
+
+
 				}else if (ID.equals("robot_finger_mid")) {
 
 					subVisualRobotHandPerceptionCount=hIdCount[hIdInd][1];
@@ -884,6 +1066,7 @@ public class ContextListener extends AbstractNodeMain {
 					if(hIdCount[hIdInd][1]%removeTime==0){
 						for(int i=hIdCount[hIdInd][0];i<hIdCount[hIdInd][1]-removeInterval;i++){
 							retractTriple("'http://www.arbi.com/ontologies/arbi.owl#visualRobotHandPerception" +"_"+ID+"_"+i+"' A"+" B C h");
+							retractTriple("'http://www.arbi.com/ontologies/arbi.owl#visualRobotFingerPerception" +"_"+ID+"_"+i+"' A"+" B C h");
 
 							retractTriple("'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + ID+i+"' A"+" B C h");
 							retractTriple("'http://www.arbi.com/ontologies/arbi.owl#rotationMatrix3D_" + spaceName+i+"' A"+" B C h");
@@ -901,7 +1084,7 @@ public class ContextListener extends AbstractNodeMain {
 				result = "[Perception_Manager/robot_hand_perception] time:"+time+
 				"  Object_name:" + ID + ", Object Pose(X: " + x + " Y: "+ y+ " Z: " + z + "),Object Orientation(A: " + 
 				a+ " B: " + b+ " G: " + c;
-				 System.out.println(result);
+				//System.out.println(result);
 				 
 				 }
 		});
@@ -1013,40 +1196,14 @@ public class ContextListener extends AbstractNodeMain {
 			public void onNewMessage(Person message) {
 				//int time = message.getHeader().getStamp().secs;
 				//String model;
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!1");
+				//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!1");
 				for(int i = 0; i < message.getObjName().size(); i++){
-					System.out.println("~~~~~~~~~~"+message.getObjName().get(i));
+					//System.out.println("~~~~~~~~~~"+message.getObjName().get(i));
 				}
 				//System.out.println("message!~~~~"+message.getModel());
 
 			}
 		},queueSize);
-
-
-try {
-			sleep(1000);
-			MainServiceRequest mRequest = requestor.newMessage();
-			List<String> req = new ArrayList<String>();
-			req.add("init");
-			int[] st = {99};
-			mRequest.setPredicate(req);
-			mRequest.setStatus(st);
-
-
-			//sleep(500);
-			req = new ArrayList<String>();
-			req.add("ContextManager");
-			mRequest.setManager(req);
-			req = new ArrayList<String>();
-			req.add("social_robot");//			req.add(scan.next());
-			mRequest.setParam1(req);
-
-			requestor.publish(mRequest);
-			sleep(1000);
-}catch(Exception e)
-{
-		e.printStackTrace();
-}
 
 
 
@@ -1226,7 +1383,7 @@ try {
 			oProperty = new ArrayList<String>();
 			oObject = new ArrayList<String>();
 			oGraph = new ArrayList<String>();
-			oStatus = new int[1000];
+			oStatus = new int[10000];
 			oManager = new ArrayList<String>();
 		} else if (str.equals("bb")) {
 
@@ -1242,7 +1399,7 @@ try {
 			bProperty = new ArrayList<String>();
 			bObject = new ArrayList<String>();
 			bGraph = new ArrayList<String>();
-			bStatus = new int[1000];
+			bStatus = new int[10000];
 			bManager = new ArrayList<String>();
 		} else if (str.equals("hb")) {
 
@@ -1258,7 +1415,7 @@ try {
 			hProperty = new ArrayList<String>();
 			hObject = new ArrayList<String>();
 			hGraph = new ArrayList<String>();
-			hStatus = new int[1000];
+			hStatus = new int[10000];
 			hManager = new ArrayList<String>();
 		} else if (str.equals("jb")) {
 
@@ -1274,7 +1431,7 @@ try {
 			jProperty = new ArrayList<String>();
 			jObject = new ArrayList<String>();
 			jGraph = new ArrayList<String>();
-			jStatus = new int[1000];
+			jStatus = new int[10000];
 			jManager = new ArrayList<String>();
 		}
 

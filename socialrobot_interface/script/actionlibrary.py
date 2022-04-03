@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import rospy
-import rospkg
 
 from interface import InterfaceBase
-from std_msgs.msg import String
 import socialrobot_interface
 from socialrobot_actionlib.srv import *
 from socialrobot_actionlib.msg import *

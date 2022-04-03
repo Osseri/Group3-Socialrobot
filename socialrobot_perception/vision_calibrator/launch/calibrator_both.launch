@@ -1,4 +1,20 @@
 <launch>
-    <include file="$(find vision_calibrator)/launch/calibrator_external.launch" />
-    <include file="$(find vision_calibrator)/launch/calibrator_robocare.launch" />
+
+    <arg name="base_frame"               default="/map"/>
+
+    <!-- 
+    <include file="$(find vision_calibrator)/launch/chess_detection_external.launch" />
+    <include file="$(find vision_calibrator)/launch/chess_detection_robot.launch" />
+    -->
+    
+    <!-- external camera tf publisher -->
+    <node name="cam_e_calibrator" pkg="vision_calibrator" type="chess_calibrator.py" output="screen">
+        <param name="base_frame" value="$(arg base_frame)" type="string" />
+    </node> 
+
+    <!-- map initializer 
+    <node name="chess_tf_publisher" pkg="vision_calibrator" type="chess_tf_publisher.py" output="screen">
+      <param name="base_frame" value="$(arg base_frame)" type="string" />
+    </node>-->
+
 </launch>

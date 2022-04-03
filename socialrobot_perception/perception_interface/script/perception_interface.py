@@ -12,8 +12,9 @@ from std_msgs.msg import *
 from socialrobot_perception_msgs.srv import *
 from socialrobot_perception_msgs.msg import *
 from socialrobot_hardware.msg import *
+from socialrobot_msgs import msg as social_robot_msg
 from obj_msg.msg import *
-from visualization_msgs.msg import Marker
+from visualization_msgs.msg import Marker, MarkerArray
 from vision_msgs.msg import Detection3DArray
 
 import tf
@@ -39,6 +40,7 @@ class PerceptionManager():
 
         # Publisher
         self.pub_objects = rospy.Publisher("/perception/objects", Objects, queue_size=10)
+        self.pub_social_objects = rospy.Publisher("/socialrobot/perception/objects", social_robot_msg.Objects, queue_size=10)
         self.pub_marker = rospy.Publisher('/perception/objects_marker', Marker, queue_size=10)
         self.pub_trans_marker = rospy.Publisher('/perception/transformed_marker', Marker, queue_size=10)
 
@@ -47,7 +49,7 @@ class PerceptionManager():
         self.read_dataset()
 
         # get static tf from head to camera link
-        self.calculate_head_to_camera_matrix()
+        #self.calculate_head_to_camera_matrix()
 
     def read_dataset(self):
         fname = self.CONFIG_PATH + 'dataset.txt'
@@ -99,6 +101,7 @@ class PerceptionManager():
 
         self.head_to_camera_mat['trans'] = trans
         self.head_to_camera_mat['rot'] = rot
+        
         self.publish_camera_tf('/Head_Pitch', '/camera_link', 
                                 self.head_to_camera_mat['trans'], 
                                 self.head_to_camera_mat['rot'])
@@ -163,86 +166,10 @@ class PerceptionManager():
             textMarker.lifetime = rospy.Duration(10)
             self.pub_marker.publish(textMarker)   
 
-    # def _callback_objects(self, data):
-    # 	'''
-    # 	data.pt : Obj3dInfo[] 
-	# 	data.header : std_msgs/Header 
-	# 	Obj3dInfo :
-	# 		int16 id
-	# 		float32 score
-
-	# 		geometry_msgs/Point[8] bb_pts
-	# 		geometry_msgs/Vector3[3] bb_uv
-	# 		geometry_msgs/Vector3 bb_sc
-
-	# 		float32 bv_min_x
-	# 		float32 bv_min_y
-	# 		float32 bv_min_z
-	# 		float32 bv_max_x
-	# 		float32 bv_max_y
-	# 		float32 bv_max_z
-    # 	'''
-    #     # object matching
-    #     for pt in data.pt:
-    #         idx = 999
-    #         for i, d3d in enumerate(self.detected_object):
-    #             if d3d.header.frame_id == str(pt.id):
-    #                 idx = i
-    #         if(idx != 999):
-    #             self.detected_object[idx].bbox.size.x = pt.bb_sc.x
-    #             self.detected_object[idx].bbox.size.y = pt.bb_sc.y
-    #             self.detected_object[idx].bbox.size.z = pt.bb_sc.z       
-    #     pass        
-
     def _callback_bbox_3d(self, data):
         self.detected_object = []
         for d3d in data.detections:
-            d3d.bbox.size.z += 0.04
-            d3d.bbox.center.position.z += 0.01 + 0.02
-            self.detected_object.append(d3d)   
-
-        # add static object(table)
-        d3d = Detection3D()   
-        d3d.tracking_id = int(0)
-        d3d.bbox.center.position.x = 0.550006
-        d3d.bbox.center.position.y = 0
-        d3d.bbox.center.position.z = 0.4 + 0.01
-        d3d.bbox.center.orientation.x = 0
-        d3d.bbox.center.orientation.y = 0
-        d3d.bbox.center.orientation.z = 0
-        d3d.bbox.center.orientation.w = 1    
-        d3d.bbox.size.x = 0.7088739275932312
-        d3d.bbox.size.y = 1.2642161893844604
-        d3d.bbox.size.z = 0.80   
-        self.detected_object.append(d3d)
-         
-    # def _callback_grasp(self, data):
-    # 	'''
-    # 	data.header : std_msgs/Header
-	# 	data.gr : GraspMsg[]
-	# 	GraspMsg :
-	# 		int8 num_type
-	# 		int8 id
-	# 		float32 grasp_cx
-	# 		float32 grasp_cy
-	# 		float32 grasp_cz
-	# 		GraspElem[] gr_elements		
-	# 	'''
-    #     self.detected_object = []
-    #     detected_object = []
-    #     for gr in data.gr:
-    #         bbox3d = BoundingBox3D()
-    #         d3d = Detection3D()   
-    #         d3d.header.frame_id = str(gr.id)
-    #         d3d.bbox.center.position.x = gr.grasp_cx
-    #         d3d.bbox.center.position.y = gr.grasp_cy
-    #         d3d.bbox.center.position.z = gr.grasp_cz + 0.08
-    #         d3d.bbox.center.orientation.x = 0
-    #         d3d.bbox.center.orientation.y = 0
-    #         d3d.bbox.center.orientation.z = 0
-    #         d3d.bbox.center.orientation.w = 1
-    #         detected_object.append(d3d)
-    #     self.detected_object = detected_object            
+            self.detected_object.append(d3d)         
         
     def transform_boundingbox_frame(self, objects, from_tf, to_tf):
         transformed_objects = Objects()
@@ -320,6 +247,10 @@ class PerceptionManager():
         obj.bb3d.center.position = d3d.bbox.center.position
         obj.bb3d.center.orientation = d3d.bbox.center.orientation
         obj.bb3d.size = d3d.bbox.size
+        # adjust object size
+        if 'gotica' in obj.name.data:
+            obj.bb3d.size.x = 0.065 
+            obj.bb3d.size.y = 0.065 
         return obj
 
     def update(self):  
@@ -328,17 +259,31 @@ class PerceptionManager():
         
         for d3d in self.detected_object:
             objs.detected_objects.append(self.convert_msg(d3d))
-        if len(objs)>0:
+        if len(objs.detected_objects)>0:
             self.publish_data(objs) 
 
-        # if(objs.detected_objects):
-        #     # change frame 
-        #     objs_in_perception = self.transform_pose(objs, "/base_footprint", "/perception_link")
-        #     objs_in_camera = self.transform_pose(objs_in_perception, "/camera_depth_optical_frame", "/base_footprint")
-        #     self.publish_data(objs_in_camera) 
 
     def publish_data(self, objects):
         self.publish_marker(objects)
+
+        # convert format
+        social_objs = social_robot_msg.Objects()
+        obj_list = []
+        marker_array = MarkerArray()
+
+        # publish object info based on robot base
+        for obj in objects.detected_objects:
+            social_obj = social_robot_msg.Object()
+            social_obj.header = obj.header
+            social_obj.id = obj.name.data
+            social_obj.type = 'dynamic'
+
+            social_obj.bb3d = obj.bb3d   
+            social_objs.detected_objects.append(social_obj)
+            obj_list.append(obj.name.data)
+
+        # publish socialrobot_msgs format
+        self.pub_social_objects.publish(social_objs)        
         self.pub_objects.publish(objects)
         
 ##############################
@@ -355,8 +300,9 @@ if __name__ == '__main__':
     rospy.loginfo('[PerceptionInterface] Started!')
 
 
-    loop_freq = 10 # 10hz
+    loop_freq = 20 # hz
     r = rospy.Rate(loop_freq)
     while not rospy.is_shutdown():
         pm.update()
-        r.sleep
+        #r.sleep
+        rospy.sleep(0.02)

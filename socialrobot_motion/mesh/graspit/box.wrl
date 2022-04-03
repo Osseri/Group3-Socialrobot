@@ -1,7 +1,7 @@
 #VRML V2.0 utf8
 
 Transform {
-	scale         64.9999976158 64.9999976158 235.440000892 
+	scale         50.0000007451 50.0000007451 200.00000298 
 	children [
 Group {
 	children [

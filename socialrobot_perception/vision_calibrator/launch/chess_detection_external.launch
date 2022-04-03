@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- INTEL REALSENSE -->
+  <arg name="image"                    default="/cam_e/color/image_raw"/>
+  <arg name="external_camera_link"     default="/cam_e_link"/>
+  <!-- AZURE KINECT -->
+  <!-- <arg name="image"                    default="/rgb/image_raw"/> --> 
+  <!-- <arg name="external_camera_link"     default="/rgb_camera_link"/> -->
+  <arg name="checkerboard_columns"     default="6"/>
+  <arg name="checkerboard_rows"        default="4"/>
+  <arg name="checkerboard_square_size" default="0.053"/>
+  <arg name="calibrate"                default="false"/>
+  
+  <!-- detect chessboard with external camera-->
+  <node name="cam_e" pkg="vision_calibrator" type="chess_detector" output="screen">
+      <remap from="image" to="$(arg image)" />
+      <param name="checkerboard_columns" value="$(arg checkerboard_columns)" type="int" />
+      <param name="checkerboard_rows" value="$(arg checkerboard_rows)" type="int" />
+      <param name="checkerboard_square_size" value="$(arg checkerboard_square_size)" type="double" />
+  </node>
+
+  <!-- external camera based on odom frame -->
+  <node name="cam_e_calibrator" pkg="vision_calibrator" type="chess_calibrator.py" output="screen">
+    <param name="external_camera_link" value="$(arg external_camera_link)" type="string" />
+  </node>
+  
+</launch>

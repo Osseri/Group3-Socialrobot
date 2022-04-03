@@ -1,0 +1,24 @@
+# It assumes that a robot and a object are square, and uses a circular model for collision detection.
+float32 robot_width_meter
+float32 object_width_meter
+
+geometry_msgs/Pose2D object_start
+geometry_msgs/Pose2D object_goal
+# If ignore_goal_orientation == True, `object_goal.theta` will be ignored.
+bool ignore_goal_orientation
+
+# Motion model will define the type of successor sampling.
+int8 motion_model
+int8 WEDGE=0
+int8 FULL_CIRCLE=1
+int8 SM_CIRCLE=2
+int8 OMNI=3
+
+# This **obstacles** is considered a set of points, not a polygon of connected points.
+geometry_msgs/Polygon obstacles
+
+---
+
+uint32 path_length
+nav_msgs/Path object_path
+nav_msgs/Path robot_path

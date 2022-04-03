@@ -31,7 +31,7 @@
 
 @author Moritz Tenorth, Lars Kunze
 @license BSD
-
+ 
 */
 :- module(arbi_comp_spatial,
     [
@@ -41,6 +41,7 @@
     insideAreaOfRoom/2,
     insideOfRoom/2,
     near/2,
+    near_for_object/2,
     far/2,
     %on_Physical/2,
     %on_Physical_at_time/3,
@@ -446,7 +447,8 @@ create_pose2([M00, M01, M02, M03, M10, M11, M12, M13, M20, M21, M22, M23, M30, M
 
 near(Robot, Object) :-
     currentObjectPose(Object, Opose),
-    currentRobotBodyPose(Robot, Rpose),
+    (currentObjectPose(Robot, Rpose);currentRobotBodyPose(Robot, Rpose)),
+    Object \= Robot,
     rdfs_individual_of(Object,  knowrob:'SpatialThing'),
 
     nth0(0, Opose, PoseXO),
@@ -458,6 +460,23 @@ near(Robot, Object) :-
     nth0(2, Rpose, PoseZR),
     
     Distance = sqrt((PoseXO - PoseXR)**2 + (PoseYO - PoseYR)**2 + (PoseZO - PoseZR)**2),
+    Distance<2.
+
+near_for_object(Robot, Object) :-
+    currentObjectPose(Object, Opose),
+    currentObjectPose(Robot, Rpose),
+    rdfs_individual_of(Object,  knowrob:'SpatialThing'),
+
+    nth0(0, Opose, PoseXO),
+    nth0(1, Opose, PoseYO),
+    nth0(2, Opose, PoseZO),
+
+    nth0(0, Rpose, PoseXR),
+    nth0(1, Rpose, PoseYR),
+    nth0(2, Rpose, PoseZR),
+    
+    Distance = sqrt((PoseXO - PoseXR)**2 + (PoseYO - PoseYR)**2 + (PoseZO - PoseZR)**2),
+
     Distance<2.
 
 far(Robot, Object) :-

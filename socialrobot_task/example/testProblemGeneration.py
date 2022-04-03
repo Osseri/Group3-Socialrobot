@@ -115,8 +115,8 @@ def generate_problem(predicate):
 
 	# add goals
 	for obj in predicate['Demo']['goal']:
-		if len(obj)>2:
-			add_goal(problem, obj[0], obj[1], True)
+		if obj[0] == 'not':
+			add_goal(problem, obj[1][0], obj[1][1], True)
 		else:
 			add_goal(problem, obj[0], obj[1])
 

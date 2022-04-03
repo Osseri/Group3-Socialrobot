@@ -1,0 +1,24 @@
+
+<!-- -->
+<launch>
+  <arg name="robot_name" default="social_robot"/>
+  <arg name="sim_env" default="default"/>
+  <arg name="sync_mode" default="false"/>
+
+  <group if="$(eval arg('sync_mode') == false)">
+    <node name="sim_interface" pkg="socialrobot_hardware" type="coppelia_interface_async.py" output="screen">
+      <param name="vrep_environment" value="$(arg sim_env)"/>
+      <param name="robot_name" value="$(arg robot_name)"/>
+    </node>
+  </group>
+
+  <group if="$(eval arg('sync_mode') == true)">
+    <node name="sim_interface" pkg="socialrobot_hardware" type="coppelia_interface_sync.py" output="screen">
+      <param name="vrep_environment" value="$(arg sim_env)"/>
+      <param name="robot_name" value="$(arg robot_name)"/>
+    </node>
+  </group>
+
+  <node name="moveit_vrep_interface" pkg="socialrobot_hardware" type="vrep_interface" />  
+
+</launch>

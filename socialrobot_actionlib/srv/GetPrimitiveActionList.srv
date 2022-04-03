@@ -1,3 +1,4 @@
 socialrobot_actionlib/Action compound_action
+socialrobot_actionlib/Predicate[] current_states
 ---
 socialrobot_actionlib/Action[] primitive_action

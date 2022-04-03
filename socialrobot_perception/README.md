@@ -12,39 +12,41 @@
 <div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
 
 **Package summary**
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+ROS meta-package for perception modules.
 
 - Maintainer status: maintained
 - Maintainers
-  - John Doe (john1@organization.com)
-  - John Doe (john2@organization.com)
-  - John Doe (john3@organization.com)
+  - Jeongmin Jeon (nicky707@daum.net)
+  - Hong-ryul Jung (jung.hr.1206@gmail.com)
+  - Hyungpil Moon (hyungpil@skku.edu)
 - Author
-  - John Doe (john0@organization.com)
-- License: {License Name}
-- Source: git https://{Git URL}.git
+  - Jeongmin Jeon (nicky707@daum.net)
+- Source: git https://gitlab.com/social-robot/socialrobot_perception.git
 
 </div>
 <div style="flex:40%; padding-left:10px;">
 
 **Table of Contents**
-1. [Overview](#overview)
-2. [Installation methods](#installation-methods)
-   1. [Install using the convenience script](#install-using-the-convenience-script)
-   2. [Install using the Docker images](#install-using-the-docker-images)
-   3. [Install manually](#install-manually)
-3. [Dependencies](#dependencies)
-   1. [Frameworks](#frameworks)
-   2. [Third-party libraries](#third-party-libraries)
-   3. [Social Robot Project Modules](#social-robot-project-modules)
-   4. [Hardware requirements](#hardware-requirements)
-4. [Quick start](#quick-start)
-5. [Features](#features)
-   1. [Example](#example)
-6. [Nodes](#nodes)
-   1. [{Node1 Name}](#node1-name)
-   2. [{Node2 Name}](#node2-name)
+- [socialrobot_perception](#socialrobot_perception)
+  - [Overview](#overview)
+  - [Installation methods](#installation-methods)
+    - [Install using the Docker images](#install-using-the-docker-images)
+  - [Dependencies](#dependencies)
+    - [Frameworks](#frameworks)
+    - [Third-party libraries](#third-party-libraries)
+  - [hardware requirements](#hardware-requirements)
+  - [Quick start](#quick-start)
+  - [Nodes](#nodes)
+    - [Aff_node](#aff_node)
+      - [Subscribed topics](#subscribed-topics)
+      - [Published topics](#published-topics)
+    - [gen_grasp_node](#gen_grasp_node)
+      - [Subscribed topics](#subscribed-topics-1)
+      - [Published topics](#published-topics-1)
+  - [Messages](#messages)
+    - [/obj_aff](#obj_aff)
+    - [/gr_info](#gr_info)
+    - [/obj_info](#obj_info)
 
 </div>
 </div>
@@ -53,223 +55,135 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+This package detect affordances of objects and generate grasp information using grasp affordance and point clouds. 
 
-```mermaid
-classDiagram
-	Animal <|-- Duck
-	Animal <|-- Fish
-	Animal <|-- Zebra
-	Animal : +int age
-	Animal : +String gender
-	Animal: +isMammal()
-	Animal: +mate()
-	class Duck{
-		+String beakColor
-		+swim()
-		+quack()
-	}
-	class Fish{
-		-int sizeInFeet
-		-canEat()
-	}
-	class Zebra{
-		+bool is_wild
-		+run()
-	}
-					
-```
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ## Installation methods
 
-### Install using the convenience script
-
-```sh
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/${TARGET_URL}.sh)"
-```
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
 ### Install using the Docker images
-
-```sh
-docker pull $REGISTRY_IMAGE:melodic-latest
-```
+`$ docker pull kape67/sr3_affnet_grsp:1.0.0`
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-### Install manually
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ## Dependencies
 
 ### Frameworks
 
 - ROS Kinetic/Melodic
-  - ROS Package1
-  - ROS Package2
-  - ROS Package3
 
 ### Third-party libraries
+- caffe
+- opencv
 
-- Lib1
-- Lib2
-- Lib3
+## hardware requirements
+The GPU ram must be over 8GB.
 
-### Social Robot Project Modules
-
-- Package1
-- Package2
-- Package3
-
-### Hardware requirements
-
-This package does not require any hardware device.
-
-## Quick start 
-
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-1. Lorem ipsum dolor sit amet, consectetur adipisicing elit
-
-## Features
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-### Example
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+## Quick start
+Launch camera package, then luanch perception module
+```
+$roslaunch realsense2_camera rs_rgbs.launch
+$ roslaunch obj_detect_3d obj_pose.launch
+```
 
 ## Nodes
 
-### {Node1 Name}
+### Aff_node
 
-<div style="padding-left:40px;">
+#### Subscribed topics
+- /kinect2/qhd/image_color ([sensor_msgs/Image])
+   - To extract affordances of objects, use RGB data
 
-#### Subscribed Topics
+#### Published topics
+- /aff_det_img ([sensor_msgs/Image])
+   - Show detected bounding boxes and mask of objects
+- /aff_img ([sensor_msgs/Image])
+   - Show detected affordance mask
+- /obj_aff ([obj_msg/AffArray])
+   - id, score, bounding box, affordance mask and affordance mask score per object
 
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+### gen_grasp_node
 
-#### Published Topics
+#### Subscribed topics
+- /obj_aff ([obj_msg/AffArray])
+   - duplicate
 
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+#### Published topics
+- /obj_info([obj_msg/ObjInfoArrayMsg])
+   - id, score, 8 points of bounding volume, 3-axis scale of bounding volume and 3-axis unit vector of bounding volume per objects
+- /gr_info([obj_msg/GraspArray])
+   - The important information when grasping
+- /grsp_point_cloud([sensors_msgs/PointCloud2])
+   - point clouds of grasp affordances
 
-#### Messages
+## Messages
+Main published topics
+- /obj_aff : Information about affordance 
+- /gr_info : Information needed when grasping an object
+- /obj_info : Grasp affordance information of object (3d)
 
-- {message_name}.msg
-  - header (`Header`)
-    - Standard metadata for higher-level stamped data types.
-  - paramA (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  - paramB (`type`)
-    - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+### /obj_aff 
+obj_aff : AffArray.msg 
 
-#### Services
+AffArray.msg :  std_msgs/Header 
 
-- {Service Name} (pkg_name/srv_file.srv)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                AffBboxElem[] ( AffBboxElem[] : the array of AffBboxElem.msg  )
 
-<div style="display:flex; padding-left:50px">
-<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
+AffBboxElem.msg :   id ( object id )
 
-Request
+                    score ( probability of the id )
 
-- InputParamX (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- InputParamY (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    bb_lt_p ( x coordiante of left top point of bounding box. pixel unit ) 
 
-</div>
-<div style="flex:50%; padding-left:10px;">
+                    bb_lt_q ( y coordiante of left top point of bounding box. pixel unit )
 
-Response
+                    bb_rb_p ( x coordiante of right bottom point of bounding box. pixel unit )
 
-- OutputParam1 (`int64`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- OutputParam2 (`int64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    bb_rb_q ( y coordiante of right bottom point of bounding box. pixel unit )
 
-</div>
-</div>
+                    aff_mask ( mask map which has affordance id per img pixel of bounding box )
 
-#### Services Called
+                    aff_score_mask ( probability of aff id per img pixel of bounding box )
 
-- ~<some_name>/<service_name> ([nav_msgs/GetMap](http://docs.ros.org/api/nav_msgs/html/srv/GetMap.html))
-  - This node calls this service to do {something}.
 
-#### Parameters
+### /gr_info 
 
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+gr_info : GraspArray.msg 
 
-</div>
+GraspArray.msg  :   std_msgs/Header
 
-### {Node2 Name}
+                    GraspMsg[] gr ( GraspMsg[] : the list of GraspMsg.msg)
 
-<div style="padding-left:40px;">
+GraspMsg.msg    :   num_type
 
-#### Subscribed Topics
+                    id ( object id )
 
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    grasp_cx ( grasp affordance center x. meter unit )
 
-#### Published Topics
+                    grasp_cy ( grasp affordance y. meter unit )
 
-- ~<some_name>/<topic_name> ([geometry_msgs/Point](http://docs.ros.org/api/geometry_msgs/html/msg/Point.html))
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    grasp_cz ( grasp affordance z. meter unit )
 
-#### Services
+                    GraspElem[] gr_elements ( GraspElem[] : the list of GraspElem.msg )
 
-- {Service Name} (pkg_name/srv_file.srv)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+GraspElem.msg   :   grasp_0x, y, z ( the direction in which **the** robot **finger** approaches the object )
 
-<div style="display:flex; padding-left:50px">
-<div style="flex:50%; padding-right:10px; border-right: 1px solid #dcdde1">
+                    grasp_1x, y, z ( the direction in which **the other** robot **finger** approaches the object )
+                    
+                    grasp_appx, y, z ( the direction in which robot **hand** approaches the object ) 
 
-Request
+### /obj_info
 
-- InputParamX (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- InputParamY (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+obj_info : ObjInfoArrayMsg.msg
 
-</div>
-<div style="flex:50%; padding-left:10px;">
+ObjInfoArrayMsg.msg :   std_msgs/Header
 
-Response
+                        Obj3dInfo[] pt ( Obj3dInfo[] : the list of Obj3dInfo.msg )
 
-- OutputParam1 (`int64`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- OutputParam2 (`int64`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- OutputParam3 (`float64[]`)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-</div>
-</div>
-
-#### Services Called
-
-- ~<some_name>/<service_name> ([nav_msgs/GetMap](http://docs.ros.org/api/nav_msgs/html/srv/GetMap.html))
-  - This node calls this service to do {something}.
-
-#### Parameters
-
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- ~parameter_name (int, default: 100)
-  - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Obj3dInfo.msg  :  id ( object id )
+                  score ( probability of the id)
+                  bb_pts ( 8 points coordinates of grasp affordance 3d bounding box , ([geometry_msgs/Point[8]]) ) 
+                  bb_uv ( 3-axis unit vector of grasp affordance 3d bounding box, ([geometry_msgs/Vector3[3]]))
+                  bb_sc ( 3-axis scale of vector of grasp affordance 3d bounding box, ([geometry_msgs/Vector3]))
 
 </div>
 

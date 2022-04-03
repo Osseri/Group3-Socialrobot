@@ -1,0 +1,4 @@
+string behavior_name
+---
+bool result
+string[] requirements

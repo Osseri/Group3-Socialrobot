@@ -132,10 +132,24 @@ class DomainGenerator:
             self._write_action_predicates(file, pred[2])
             file.write("\t\t\t)\n")
 
+        elif pred_name == "exists":
+            # set parameters
+            file.write("\t\t\t(exists (")
+            for idx, param in enumerate(pred[1]):
+                file.write(param['name'])
+                file.write(" - ")
+                file.write(param['type'])
+                if not idx == len(pred[1])-1:
+                    file.write(" ")
+            file.write(")\n")
+            # set predicates
+            self._write_action_predicates(file, pred[2])
+            file.write("\t\t\t)\n")
+
         elif pred_name == "when":
             file.write("\t\t\t(when \n")
             # set parameters
-            self._write_action_predicates(file, pred[1])
+            self._write_action_predicates(file, pred[1][0])
             # set predicates
             self._write_action_predicates(file, pred[2])
             file.write("\t\t\t)\n")

@@ -1,4 +1,5 @@
 std_msgs/Header header
+string behavior_name
 trajectory_msgs/JointTrajectory trajectory
 nav_msgs/Path path
 ---

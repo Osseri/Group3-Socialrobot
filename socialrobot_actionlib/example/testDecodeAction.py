@@ -17,14 +17,14 @@ if __name__ == '__main__':
     req= GetPrimitiveActionListRequest()
     req.compound_action = socialrobot_actionlib.msg.Action()
     req.compound_action.name = 'open_container'       
-    req.compound_action.parameters = ['obj_socialrobot', 'obj_right_hand', 'obj_fridge' ,'pos_socialrobot', 'pos_right_hand','pos_fridge']
+    req.compound_action.values = ['obj_socialrobot', 'obj_right_hand', 'obj_fridge' ,'pos_socialrobot', 'pos_right_hand','pos_fridge']
     
     # get primitive actions
     res = srv(req)
-    #print (res)
+    print (res)
     print ('Compound action:')
-    print(req.compound_action.name, req.compound_action.parameters) 
+    print(req.compound_action.name, req.compound_action.values) 
     print ('\nPrimitive actions:')
     for act in res.primitive_action:
-        print(act.name, act.parameters)
+        print(act.name, act.values)
    

@@ -1,0 +1,12 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/rise-zenbook/Workspace/ROS/social_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "/home/rise-zenbook/Dev/affordance-net/caffe-affordance-net/python"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/rise-zenbook/Workspace/ROS/social_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "/home/rise-zenbook/Dev/affordance-net/caffe-affordance-net/python"
+    ]
+}

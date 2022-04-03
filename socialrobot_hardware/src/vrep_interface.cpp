@@ -14,6 +14,9 @@ int main(int argc, char **argv)
   // action server for socialrobot system
   ArmController arm_controller("arm_controller/follow_joint_trajectory",n);
 
+  // gripper server 
+  GripperController gripper_controller("gripper_controller/follow_joint_trajectory",n);
+
   ros::Rate rate(5000);
 
   while(ros::ok()){
@@ -23,6 +26,7 @@ int main(int argc, char **argv)
     dual_arm.compute();
     arm_controller.compute();
 
+    gripper_controller.compute();
     rate.sleep();
   }
 

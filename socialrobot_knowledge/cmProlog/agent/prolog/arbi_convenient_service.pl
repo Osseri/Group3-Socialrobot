@@ -13,7 +13,7 @@
     on_placementpoint/2
     ]).
 
-
+ 
 getAngle(Radian, Angle):-
    Angle is ( Radian * (180/3.14)).
 getRadian(Angle, Radian):-

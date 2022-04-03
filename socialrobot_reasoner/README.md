@@ -17,20 +17,20 @@ The meta-package of metric reasoner for the social robot project.
 
 - Maintainer status: maintained
 - Maintainers
-  - John Doe (john1@organization.com)
-  - John Doe (john2@organization.com)
-  - John Doe (john3@organization.com)
+  - Jeongmin Jeon (nicky707@daum.net)
+  - Hong-ryul Jung (jung.hr.1206@gmail.com)
+  - Hyungpil Moon (hyungpil@skku.edu)
 - Author
-  - John Doe (john0@organization.com)
-- License: {License Name}
+  - Jeongmin Jeon (nicky707@daum.net)
 - Source: git https://gitlab.com/social-robot/socialrobot_reasoner.git
 
 </div>
 <div style="flex:40%; padding-left:10px;">
 
 **Table of Contents**
-1. [Overview](#overview)
-2. [Contents](#contents)
+- [Social Robot Metric Reasoner](#social-robot-metric-reasoner)
+  - [Overview](#overview)
+  - [Contents](#contents)
 
 </div>
 </div>

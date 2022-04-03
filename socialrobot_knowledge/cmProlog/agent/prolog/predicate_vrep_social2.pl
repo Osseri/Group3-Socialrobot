@@ -23,6 +23,7 @@
     currentArtifactPose/2,
     currentObjectPose/2,
     currentHandPose/2,
+    currentFingerPose/2,
     currentSpaceSurroundedByHandPose/2,
     currentSpaceSurroundedByHandVertex/2,
     currentRobotBodyPose/2,
@@ -43,6 +44,7 @@
     currentJointEffort/2,
     currentJointVelocity/2,
     currentHandPerception/2,
+    currentFingerPerception/2,
 	currentRobotBodyPerception/2,
     type/2,
     detected_object/1,
@@ -60,7 +62,13 @@
     closed_hand_test/2,
     detected_object_test/2,
     locatedAt/2,
-    pre_currentObjectPerception/2
+    pre_currentObjectPerception/2,
+    grasped_with_one_hand/1,
+    grasped_with_both_hand/1,
+    grasped_with_one_and_both_hand/1,
+    currentOneHandArtifact/1,
+    currentBothHandArtifact/1,
+    currentOneAndBothHandArtifact/1
     ]).
 
 set([], []).
@@ -106,9 +114,14 @@ currentObjectPerception(Object, CurrentPerception):-
    not(rdfs_individual_of(Object,  knowrob:'Hand')),
    latest_detection_of_object(Object, CurrentPerception).
 
+
 currentHandPerception(Hand, CurrentPerception):-
    rdfs_individual_of(Hand,  knowrob:'Hand'),
    latest_detection_of_hand(Hand, CurrentPerception).
+
+currentFingerPerception(Finger, CurrentPerception):-
+   rdfs_individual_of(Finger,  srdl2comp:'FixedUrdfJoint'),
+   latest_detection_of_finger(Finger, CurrentPerception).
 
 currentRobotBodyPerception(Hand, CurrentPerception):-
    rdfs_individual_of(Hand,  knowrob:'Robot'),
@@ -242,6 +255,20 @@ currentHandPose(Hand, Pose) :-
    rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m22',literal(type(_,O1c))),atom_to_term(O1c,O1C,_),
    rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m32',literal(type(_,O1d))),atom_to_term(O1d,O1D,_),
    Pose = [P1X, P1Y, P1Z, O1A, O1B, O1C, O1D].
+
+currentFingerPose(Finger, Pose) :-
+   currentFingerPerception(Finger, CurrentPerception),
+   rdf(CurrentPerception, knowrob:eventOccursAt, Object_Matrix),
+   rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m03',literal(type(_,P1x))),atom_to_term(P1x,P1X,_),
+   rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m13',literal(type(_,P1y))),atom_to_term(P1y,P1Y,_),
+   rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m23',literal(type(_,P1z))),atom_to_term(P1z,P1Z,_),
+   rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m02',literal(type(_,O1a))),atom_to_term(O1a,O1A,_),
+   rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m12',literal(type(_,O1b))),atom_to_term(O1b,O1B,_),
+   rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m22',literal(type(_,O1c))),atom_to_term(O1c,O1C,_),
+   %rdf(Object_Matrix,'http://knowrob.org/kb/knowrob.owl#m32',literal(type(_,O1d))),atom_to_term(O1d,O1D,_),
+   rdf(Joint, srdl2comp:subComponent,  Finger), rdfs_individual_of(Joint, srdl2comp:'FixedUrdfJoint'), currentJointAngle(Joint,O1D),
+   Pose = [P1X, P1Y, P1Z, O1A, O1B, O1C, O1D].
+
 
 currentSpaceSurroundedByHandPose(Space, Pose) :-
    currentHandPerception(Hand, CurrentPerception),
@@ -548,30 +575,30 @@ intersects(Hand, Object, IntersectPer):-
    (Z3E > Z4E -> Z3 = Z4E, Z4 = Z3E;Z3 = Z3E, Z4 = Z4E),
    
    once((X2<X3, LengthX is 0);
-   (X1<X3, X3<X2, X2<X4, LengthX is X2-X3);
-   (X1<X3, X3<X2, X4<X2, LengthX is X4-X3);
-   (X3<X1, X2<X4, LengthX is X2-X1);
-   (X3<X1, X1<X4, X4<X2, LengthX is X4-X1);
-   (X4<X1, LengthX is 0)),
+   (X1-0.015<X3, X3<X2+0.015, X2<X4+0.015, LengthX is X2-X3);
+   (X1-0.015<X3, X3<X2+0.015, X4<X2+0.015, LengthX is X4-X3);
+   (X3-0.015<X1, X2<X4+0.015, LengthX is X2-X1);
+   (X3-0.015<X1, X1<X4+0.015, X4<X2+0.015, LengthX is X4-X1);
+   (X4-0.015<X1, LengthX is 0)),
    
    once((Y2<Y3, LengthY is 0);
-   (Y1<Y3, Y3<Y2, Y2<Y4, LengthY is Y2-Y3);
-   (Y1<Y3, Y3<Y2, Y4<Y2, LengthY is Y4-Y3);
-   (Y3<Y1, Y2<Y4, LengthY is Y2-Y1);
-   (Y3<Y1, Y1<Y4, Y4<Y2, LengthY is Y4-Y1);
-   (Y4<Y1, LengthY is 0)),
+   (Y1-0.015<Y3, Y3<Y2+0.015, Y2<Y4+0.015, LengthY is Y2-Y3);
+   (Y1-0.015<Y3, Y3<Y2+0.015, Y4<Y2+0.015, LengthY is Y4-Y3);
+   (Y3-0.015<Y1, Y2<Y4+0.015, LengthY is Y2-Y1);
+   (Y3-0.015<Y1, Y1<Y4+0.015, Y4<Y2+0.015, LengthY is Y4-Y1);
+   (Y4-0.015<Y1, LengthY is 0)),
    
-   once((Z2<Z3, LengthZ is 0);
+   once((Z2-0.01<Z3, LengthZ is 0);
    (Z1<Z3, Z3<Z2, Z2<Z4, LengthZ is Z2-Z3);
    (Z1<Z3, Z3<Z2, Z4<Z2, LengthZ is Z4-Z3);
    (Z3<Z1, Z2<Z4, LengthZ is Z2-Z1);
    (Z3<Z1, Z1<Z4, Z4<Z2, LengthZ is Z4-Z1);
    (Z4<Z1, LengthZ is 0)),
    
-   SpaceLengthX is X2-X1, SpaceLengthY is Y2-Y1, SpaceLengthZ is Z2-Z1,
+   SpaceLengthX is X2-X1+0.015, SpaceLengthY is Y2-Y1+0.015, SpaceLengthZ is Z2-Z1,
    SpaceVolume is SpaceLengthX*SpaceLengthY*SpaceLengthZ,
    IntersectVolume is LengthX*LengthY*LengthZ,
-   IntersectPer is IntersectVolume/SpaceVolume.
+   IntersectPer is abs(IntersectVolume/SpaceVolume).
 
 intersects3(Object, IntersectVolume):-
    rdfs_individual_of(Hand,  knowrob:'Hand'),
@@ -666,9 +693,8 @@ empty_hand_test(Hand,Object,IntersectPer):-
    %nb_current(predicate__empty_hand_intersectPer_threshold, IntersectPer_threshold),
    rdfs_individual_of(Hand,  knowrob:'Hand'),
    intersects(Hand, Object, IntersectPer),
-   currentObjectPerception(Object, CurrentPerception).
-   %findall(Object,  (currentObjectPerception(Object, CurrentPerception)), Objects),
-   %foreach(member(O,Objects), intersects(Hand, O, IntersectPer)).
+   findall(Object,  (currentObjectPerception(Object, CurrentPerception)), Objects),
+   foreach(member(O,Objects), intersects(Hand, O, IntersectPer)).
 
 type(Object, Type):-
 	rdf(Object, rdf:type, Type).
@@ -677,7 +703,7 @@ type(Object, Type):-
 overlap_hand(Hand,Object):-
    %nb_current(predicate__overlap_hand_intersectPer_threshold, IntersectPer_threshold),
    intersects(Hand, Object, IntersectPer),
-   IntersectPer > 0.05.%IntersectPer_threshold.
+   IntersectPer > 0.003.
 
 full_hand(Hand):-
    currentHandPerception(Hand, CurrentPerception),
@@ -725,11 +751,11 @@ joint_check(Hand, Number):-
   length(Angles,L),
    once((L =\= 1, [A1,A2,A3|_] = Angles);([A1|_]=Angles,A2 = A1, A3 = A1)),
    %AN1 is 1, AN2 is 1, AN3 is 0,
-   once((A1 < -15, AN1 is 1);
+   once((A1 < -19.65, AN1 is 1);
 	(AN1 is 0)),
-   once((A2 < -15, AN2 is 1);
+   once((A2 < -19.65, AN2 is 1);
 	(AN2 is 0)),
-   once((A3 < -15, AN3 is 1);
+   once((A3 < -19.65, AN3 is 1);
 	(AN3 is 0)),
    Number is (AN1+AN2+AN3).
 
@@ -945,6 +971,21 @@ latest_detection_of_hand(Object, LatestDetection) :-
     nth0(0, Dsorted, Latest),
     nth0(0, Latest, LatestDetection))).
 
+latest_detection_of_finger(Object, LatestDetection) :-
+
+  ((rdf_has(Object, knowrob:latestDetectionOfObject, LatestDetection),!);
+
+   (% old version without linked list of detections
+    findall([D_i,Hand,St], (rdf_has(D_i, knowrob:objectActedOn, Object),
+                              (rdfs_individual_of(D_i,  knowrob:'VisualRobotFingerPerception')),
+                              detection_starttime(D_i, St)), Detections),
+
+    predsort(compare_object_detections, Detections, Dsorted),
+
+    % compute the homography for the newest perception
+    nth0(0, Dsorted, Latest),
+    nth0(0, Latest, LatestDetection))).
+
 
 
 
@@ -1012,3 +1053,29 @@ compare_object_detections(Delta, P1, P2) :-
     nth0(2, P1, St1),
     nth0(2, P2, St2),
     compare(Delta, St2, St1).
+
+
+currentOneHandArtifact(Object):-
+    rdfs_individual_of(Object,  'http://knowrob.org/kb/ias_semantic_map.owl#OneHandObject'),
+    detected_object(Object).
+
+currentBothHandArtifact(Object):-
+    rdfs_individual_of(Object,  'http://knowrob.org/kb/ias_semantic_map.owl#BothHandObject'),
+    detected_object(Object).
+
+currentOneAndBothHandArtifact(Object):-
+    rdfs_individual_of(Object,  'http://knowrob.org/kb/ias_semantic_map.owl#OneAndBothHandObject'),
+    detected_object(Object).
+
+grasped_with_one_hand(Object):-
+    rdfs_individual_of(Object,  'http://knowrob.org/kb/ias_semantic_map.owl#OneHandObject'),
+    graspedBy(Object, Hand).
+
+grasped_with_both_hand(Object):-
+    rdfs_individual_of(Object,  'http://knowrob.org/kb/ias_semantic_map.owl#BothHandObject'),
+    graspedBy(Object, Hand).
+
+grasped_with_one_and_both_hand(Object):-
+    rdfs_individual_of(Object,  'http://knowrob.org/kb/ias_semantic_map.owl#OneAndBothHandObject'),
+    graspedBy(Object, Hand).
+

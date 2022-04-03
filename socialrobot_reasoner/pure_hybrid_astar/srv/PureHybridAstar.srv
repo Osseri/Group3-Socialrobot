@@ -1,0 +1,35 @@
+# Mobile motion model
+int8 HOLONOMIC=0
+int8 MONOCYCLE=1
+int8 BICYCLE=2
+int8 motion_model
+
+bool backward_motion
+
+# 30 sec recommended
+float32 timeout_in_sec
+float32 ws_xmin
+float32 ws_xmax
+float32 ws_ymin
+float32 ws_ymax
+
+# It assumes that a robot is a square, and uses a circular model for collision detection.
+float32 robot_width_meter
+# Safety offset works like this: http://oldsite.dartographer.com/assets/images/rounded_regular_polygon_slices.png
+float32 safety_radius
+
+# geometry_msgs/Pose2D start
+# start is always (0, 0) 0 deg.
+
+geometry_msgs/Pose2D goal
+# If ignore_goal_orientation == True, `goal.theta` will be ignored.
+bool ignore_goal_orientation
+
+# ===== Optional ======
+vision_msgs/BoundingBox3D[] obstacles
+# (TODO) nav_msgs/OccupancyGrid occupancy_map
+
+---
+
+uint32 path_length
+nav_msgs/Path robot_path

@@ -27,7 +27,7 @@ if __name__ == '__main__':
     initDomain(['Arm','Gripper','Mobile'])
 
     # get available actions
-    get_action_req.action_type = GetActionListRequest().AVAILABLE_ACTIONS
+    get_action_req.action_type = GetActionListRequest().PRIMITIVE_ACTIONS
     get_action_res = get_action_srv(get_action_req)
     action_list = get_action_res.actions
     print '\nAvailable action list:'

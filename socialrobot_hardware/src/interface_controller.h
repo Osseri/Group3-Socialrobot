@@ -8,7 +8,6 @@
 #include <trajectory_msgs/JointTrajectory.h>
 #include <sensor_msgs/JointState.h>
 #include <Eigen/Dense>
-#include <socialrobot_hardware/SetJointTrajectory.h>
 
 class ArmController
 {
@@ -51,18 +50,20 @@ private:
   void gPreemptCB();
 
   ros::Time goal_start_time;
+  ros::Duration traj_time;
 
   sensor_msgs::JointState joint_command_msg;
   ros::Publisher joint_command_pub;
   ros::NodeHandle nh_;
 
-
   std::string action_name_;
-  actionlib::SimpleActionServer<control_msgs::GripperCommandAction> as_;
+  actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> as_;
 
-  control_msgs::GripperCommandFeedback feedback_;
-  control_msgs::GripperCommandResult result_;
-  control_msgs::GripperCommandGoalConstPtr goal_;
+  control_msgs::FollowJointTrajectoryFeedback feedback_;
+  control_msgs::FollowJointTrajectoryResult result_;
+  control_msgs::FollowJointTrajectoryGoalConstPtr goal_;
+  
+  int as_joint_size;
 };
 
 #endif // MOVEITCONTROLLER_H

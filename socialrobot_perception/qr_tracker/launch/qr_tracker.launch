@@ -1,23 +1,21 @@
 <!-- -->
 <launch>
-
-    <node pkg="tf"
-        type="static_transform_publisher"
-        name="perception_tf"
-        args="0.136358 0.0325221 0.0923757
-                -0.00668052 0.246952 0.0271398 0.968625
-                Head_Pitch camera_link 100" />
+    <arg name="marker_size"          default="0.046"/>
+    <arg name="camera_frame"         default="/cam_e_color_optical_frame"/>
+    <arg name="color_topic"          default="/cam_e/color/image_raw"/>
+    <arg name="color_info"           default="/cam_e/color/camera_info"/>
 
     <!-- Detect QR code -->
-    <node name="qr_tracker" pkg="qr_tracker" type="qr_tracker" output="screen">
-        <param name="marker_size" value="0.05"/>
-        <param name="camera_frame" value="camera_color_optical_frame"/>
-        <param name="color_topic" value="/camera/color/image_raw"/>
-        <param name="color_info" value="/camera/color/camera_info"/>
+    <node name="aruco_detector" pkg="qr_tracker" type="aruco_detector.py" output="screen">
+        <param name="~marker_size" value="$(arg marker_size)"/>      <!--m-->
+        <param name="~camera_frame" value="$(arg camera_frame)"/> <!--rgb optical frame-->
+        <param name="~color_topic" value="$(arg color_topic)"/>     <!-- rgb image -->
+        <param name="~color_info" value="$(arg color_info)"/>    <!-- rgb camera info-->
     </node>
 
     <!-- visualization of objects-->
     <node name="object_creator" pkg="qr_tracker" type="qr_to_object.py" output="screen">
-        <param name="~marker_size" value="0.05"/>
-    </node>
+         <param name="~base_frame" value="base_footprint"/> 
+    </node> 
+
 </launch>

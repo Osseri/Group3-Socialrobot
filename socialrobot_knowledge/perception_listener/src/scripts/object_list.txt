@@ -24,4 +24,10 @@ obj_red_cup
 obj_elephant_mug
 obj_kettle
 obj_eiffel_tower_mug
-
+obj_cracker_box
+obj_tomato_soup_can
+obj_gelatin_box
+obj_sugar_box
+obj_fridge
+obj_courier_box
+obj_tray

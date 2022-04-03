@@ -1,5 +1,7 @@
 string name
+string[] type
 string[] parameters
+string[] values
 string[] primitives
 string[] controller
 string[] group

@@ -3,22 +3,25 @@
   <arg name="robot_name" default="social_robot"/>
   <arg name="sim_env" default="default"/>
   <arg name="sim" default="true"/>
+  <arg name="sync_mode" default="false"/>
+  <arg name="max_lin_vel" default="0.05"/>
+  <arg name="max_ang_vel" default="0.08"/>
+	
+  <!-- VREP interface -->
+  <include if="$(arg sim)" file="$(find socialrobot_hardware)/launch/sim.launch">
+      <arg name="sim_env" value="$(arg sim_env)"/>
+      <arg name="sync_mode" value="$(arg sync_mode)"/>
+      <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
 
-  <group if="$(eval arg('sim') == true)">
-    <node name="sim_interface" pkg="socialrobot_hardware" type="coppelia_interface_async.py" output="screen">
-      <param name="vrep_environment" value="$(arg sim_env)"/>
-    </node>
+  <!-- Robot interface -->
+  <include unless="$(arg sim)" file="$(find socialrobot_hardware)/launch/robot.launch">
+      <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
 
-    <!-- moveit_vrep_interface  -->
-    <node name="moveit_vrep_interface" pkg="socialrobot_hardware" type="vrep_interface" />  
-  </group>
-
-  <group if="$(eval arg('sim') == false)">
-    <node name="hw_interface" pkg="socialrobot_hardware" type="hw_interface.py" output="screen">
-      <param name="robot_name" value="$(arg robot_name)"/>
-    </node>
-  </group>
-
-  <!-- mobile path controller-->
-   <node name="path_follower" pkg="socialrobot_hardware" type="path_follower.py" output="screen"/>
+  <!-- mobile path controller -->
+   <node name="path_follower" pkg="socialrobot_hardware" type="path_follower.py" output="screen">
+     <param name="max_lin_vel" value="$(arg max_lin_vel)"/>
+     <param name="max_ang_vel" value="$(arg max_ang_vel)"/>
+   </node>
 </launch>

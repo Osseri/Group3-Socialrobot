@@ -50,6 +50,17 @@ public class ContextSaver extends AbstractNodeMain {
 
     final static int queueSize = 1000;
 
+
+    static List<String> fSubject = new ArrayList<String>();
+    static List<String>  fProperty = new ArrayList<String>();
+    static List<String>  fObject = new ArrayList<String>();
+    static List<String>  fGraph = new ArrayList<String>();
+    static int[] fStatus = new int[1000];
+    static int fInd;
+    static List<String>  fManager = new ArrayList<String>();
+
+
+
     static Publisher<MonitorServiceRequest> FSDRequestor;
 
     static Publisher<MainServiceRequest> requestor;
@@ -64,7 +75,7 @@ public class ContextSaver extends AbstractNodeMain {
 
     static Log log;
 
-    static int timeInterval=40;
+    static int timeInterval=35;
 
     @Override
     public GraphName getDefaultNodeName() {
@@ -101,10 +112,10 @@ public class ContextSaver extends AbstractNodeMain {
         //==========================//
         // 텍스트 파일 읽기
         //==========================//
+/*
         String texts = "";
         BufferedReader br = null;
         BufferedWriter bw = null;
-        /*
         try {
             br = new BufferedReader(new FileReader(response.getPath()));
             bw = new BufferedWriter(new FileWriter(outFile));
@@ -158,7 +169,6 @@ public class ContextSaver extends AbstractNodeMain {
             response.setPath(graphDirectoryPath+graphFileName2);
 
             provider.publish(response);} catch (IOException e) {}
-        
         }*/
 
 				
@@ -177,10 +187,10 @@ public class ContextSaver extends AbstractNodeMain {
 
 
 		while(true){
-                sleep(500);
-                t+=500;
+                sleep(1000);
+                t+=1000;
 
-				if(t%8000 == 0){
+				if(t%6000 == 0){
 				 mRequest = requestor.newMessage();
 			     st[0] = 104;
 				 req =  new ArrayList<String>();
@@ -194,9 +204,9 @@ public class ContextSaver extends AbstractNodeMain {
 
                  log.info("Graph Save request");
                  
-                 t=0;
+                 //t=0;
                 }
-                if(t%500 == 0){
+                if(t%1000 == 0){
                     sendFSD();
                 }
 
@@ -227,411 +237,168 @@ public class ContextSaver extends AbstractNodeMain {
     public void sendFSD(){
         try{
 
-        // String message="";
-        MonitorServiceRequest request = FSDRequestor.newMessage();
-        //message = queryInput.nextLine();
-        //setMessage(request,message);
+            // String message="";
+            MonitorServiceRequest request = FSDRequestor.newMessage();
+            String query = "";
+            //message = queryInput.nextLine();
+            //setMessage(request,message);
 
-       
-       //start here!!!
-       request.setPredicate("currentObjectPose");
-       request.setParam1("Object");
-       request.setParam2("Pose");
-       request.setParam3("0");
-       request.setParam4("0");
-       request.setStatus(100);
-       request.setManager("FSD");
-       FSDRequestor.publish(request);
-       log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
+        /*
+            //start here!!!
+            query = "obstruct Obstacle Target 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
-       request.setPredicate("currentHandPose");
-        request.setParam1("Hand");
-        request.setParam2("Pose");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "reachable Body Object 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
-        request.setPredicate("handSize");
-        request.setParam1("Hand");
-        request.setParam2("Size");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "lookAt Robot Object 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
-        request.setPredicate("objectSize");
-        request.setParam1("Object");
-        request.setParam2("Size");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> objectSize O S 0 0 100"));
-       Thread.sleep(timeInterval);
 
-        request.setPredicate("robotBodySize");
-        request.setParam1("Robot");
-        request.setParam2("Size");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
+*/
+            //Perceptual
+            query = "far Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        request.setPredicate("currentRobotBodyPose");
-        request.setParam1("Robot");
-        request.setParam2("Pose");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
-        
-        
-        request.setPredicate("currentJointAngle");
-        request.setParam1("Joint");
-        request.setParam2("Angle");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "near Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        request.setPredicate("currentJointVelocity");
-        request.setParam1("Joint");
-        request.setParam2("Velocity");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "toTheLeftOf Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        request.setPredicate("currentJointEffort");
-        request.setParam1("Joint");
-        request.setParam2("Effort");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
-        
+            query = "toTheRightOf Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        //===========================
 
-        request.setPredicate("locatedAt");
-        request.setParam1("Object");
-        request.setParam2("Place");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> locatedAt Object Place 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "currentFingerPose Object1 Pose 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        //===============
+            query = "inFrontOf Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        request.setPredicate("near");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> near Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "behind Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
-        request.setPredicate("far");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> near Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("toTheLeftOf");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> behind Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("toTheRightOf");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> behind Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("inFrontOf");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> inFrontOf Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("behind");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> inFrontOf Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("belowOf");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> belowOf Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("aboveOf");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> aboveOf Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("on_Physical");
-        request.setParam1("Top");
-        request.setParam2("Bottom");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("in_ContGeneric");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> in_ContGeneric Object1 Object2 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        //#############
-        request.setPredicate("empty_hand");
-        request.setParam1("Hand");
-        request.setParam2("0");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> empty_hand Hand 0 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("full_hand");
-        request.setParam1("Hand");
-        request.setParam2("0");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> empty_hand Hand 0 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("opened_hand");
-        request.setParam1("Hand");
-        request.setParam2("0");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> opened_hand Hand 0 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("closed_hand");
-        request.setParam1("Hand");
-        request.setParam2("0");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> opened_hand Hand 0 0 0 100"));
-       Thread.sleep(timeInterval);
-
-        request.setPredicate("graspedBy");
-        request.setParam1("Object");
-        request.setParam2("Hand");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> graspedBy Object Hand 0 0 100"));
-       Thread.sleep(timeInterval);
 /*
-        request.setPredicate("intersects3");
-        request.setParam1("Object");
-        request.setParam2("Hand");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> graspedBy Object Hand 0 0 100"));
-        Thread.sleep(20);
-        */
-        
-        request.setPredicate("empty_container");
-        request.setParam1("Object");
-        request.setParam2("0");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> empty_container Object 0 0 0 100"));
-       Thread.sleep(timeInterval);
+            query = "belowOf Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
-        /*
-        request.setPredicate("empty_container");
-        request.setParam1("0");
-        request.setParam2("0");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("ContextManager");
-        requestor.publish(request);
-        Thread.sleep(5000);
-        */
-        /*
-        while(true){
-          //Thread.sleep(2000);
-          //ContextManager.setMessage(request,scan.nextLine());
-          //request.setManager("TaskManager");
-  
-          String message="";
-          MonitorServiceRequest request = requestor.newMessage();
-          message = queryInput.nextLine();
-          setMessage(request,message);
-          requestor.publish(request);
-        }*/
+            query = "aboveOf Object1 Object2 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
+*/
 
+            query = "on_Physical Top Bottom 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
+/*
+            query = "in_ContGeneric Inner_Object Outer_Object 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
+*/
 
-        /*
-        //start here!!!
-        request.setPredicate("on_Physical");
-        request.setParam1("Top");
-        request.setParam2("Bottom");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> on_Physical Top Bottom 0 0 100"));
-        Thread.sleep(100);
+            //attribute
+            query = "empty_hand Hand 0 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
+
+            query = "full_hand Hand 0 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
+
+            query = "closed_hand Hand 0 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
+
+            query = "opened_hand Hand 0 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
+
+            query = "graspedBy Hand Target 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(timeInterval);
 
 
+/*
+            query = "opened_door Door 0 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
-        request.setPredicate("near");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> empty_hand Hand 0 0 0 100"));
-        Thread.sleep(100);
+            query = "closed_door Door 0 0 0 100 FSD";
+            setRequset(request, query);
+            FSDRequestor.publish(request);
+            log.info(String.format(query));
+            Thread.sleep(100);
 
+*/
 
-        request.setPredicate("aboveOf");
-        request.setParam1("Top");
-        request.setParam2("Bottom");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> opened_hand Hand 0 0 0 100"));
-        Thread.sleep(100);
-
-        request.setPredicate("belowOf");
-        request.setParam1("Bottom");
-        request.setParam2("Top");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> graspedBy Object Hand 0 0 100"));
-        Thread.sleep(100);
-
-
-        request.setPredicate("inFrontOf");
-        request.setParam1("Object1");
-        request.setParam2("Object2");
-        request.setParam3("0");
-        request.setParam4("0");
-        request.setStatus(100);
-        request.setManager("FSD");
-        FSDRequestor.publish(request);
-        log.info(String.format("send ========> detected_object Object 0 0 0 100"));
-        Thread.sleep(100);
-
-        */
 
       } catch (Exception e) {
         e.printStackTrace();
       }
 
+    }
+
+    public void setRequset(MonitorServiceRequest request, String query){
+        request.setPredicate(query.split(" ")[0]);
+        request.setParam1(query.split(" ")[1]);
+        request.setParam2(query.split(" ")[2]);
+        request.setParam3(query.split(" ")[3]);
+        request.setParam4(query.split(" ")[4]);
+        request.setStatus(Integer.parseInt(query.split(" ")[5]));
+        request.setManager(query.split(" ")[6]);
     }
 
     public void sleep(int n) {

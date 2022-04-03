@@ -1,0 +1,49 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/social-robot-master/social_robot/part3_ws/devel/include/**",
+        "/opt/ros/kinetic/include/**",
+        "/home/social-robot-master/social_robot/catkin_ws/devel/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/devel/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/robocare_nav/camera_to_laser/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/DynamixelSDK/ros/dynamixel_sdk/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/dynamixel-workbench/dynamixel_workbench_controllers/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/dynamixel-workbench/dynamixel_workbench_operators/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/dynamixel-workbench/dynamixel_workbench_toolbox/include/**",
+        "/home/social-robot-master/social_robot/part3_ws/src/graspit_interface/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/industrial_core/industrial_robot_client/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/industrial_core/industrial_trajectory_filters/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/industrial_core/industrial_utils/include/**",
+        "/home/social-robot-master/social_robot/part3_ws/src/socialrobot_motion_planner/mobile_motion_planner/include/**",
+        "/home/social-robot-master/social_robot/part3_ws/src/obj_msg/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/robocare_nav/pcm_ws/pcl_tools/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/robocare_nav/pcm_ws/plane_extractor/include/**",
+        "/home/social-robot-master/social_robot/part3_ws/src/socialrobot/src/socialrobot_perception/qr_tracker/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/robocare_nav/robocare_frame/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/robocare_nav/robocare_navigation/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_motion/robocare_tts/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robotis_manipulator/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/rplidar_ros/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/industrial_core/simple_message/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/social_recharge/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_robot_arm/social_robot_arm_control_gui/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_robot_arm/social_robot_arm_controller/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_robot_arm/social_robot_arm_libs/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/tool_class/include/**",
+        "/home/social-robot-master/social_robot/catkin_ws/src/tuw_marker_detection-kinetic/tuw_aruco/include/**",
+        "/home/social-robot-master/social_robot/catkin_ws/src/tuw_marker_detection-kinetic/tuw_checkerboard/include/**",
+        "/home/social-robot-master/social_robot/robocare_ws/src/robocare/social_nav/urg_node/include/**",
+        "/home/social-robot-master/social_robot/part3_ws/src/socialrobot/src/socialrobot_perception/vision_calibrator/include/**",
+        "/home/social-robot-master/social_robot/part3_ws/src/vision_msgs/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

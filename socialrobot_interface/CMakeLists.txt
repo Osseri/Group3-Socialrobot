@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
   trajectory_msgs
   nav_msgs
+  shape_msgs
   socialrobot_perception_msgs
   socialrobot_task
 )
@@ -24,12 +25,8 @@ add_message_files(
 
 add_service_files(
   FILES
-  Task.srv
-  Perception.srv
-  Knowledge.srv
-  Actionlib.srv
-  System.srv
-  Behavior.srv
+  SetCommand.srv
+  SetGoalPredicate.srv
 )
 
 add_action_files(
@@ -44,6 +41,7 @@ generate_messages(
     vision_msgs
     trajectory_msgs
     nav_msgs
+    shape_msgs
     actionlib_msgs
     socialrobot_perception_msgs
     socialrobot_behavior

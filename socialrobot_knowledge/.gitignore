@@ -4,7 +4,3 @@ context_manager/.gradle/
 context_manager/context_manager/build/
 
 .vscode/
-
-pyweb/src/webtest/gui/FSDGraph.json
-
-*.json

@@ -1,0 +1,6 @@
+<!-- -->
+
+<launch>
+   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find vision_calibrator)/rviz/calibration.rviz" />
+
+</launch>

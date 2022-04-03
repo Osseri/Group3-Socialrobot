@@ -169,7 +169,7 @@ class ProblemGenerator:
         if problem == None:
             problem = Problem()
             rospack = rospkg.RosPack()
-            task_pkg_dir = rospack.get_path("socialrobot_task_planner")
+            task_pkg_dir = rospack.get_path("socialrobot_task")
             file_path = task_pkg_dir + '/pddl/example/' + demo_name + '.yaml'
             with open(file_path, 'r') as f:
                 example = yaml.load(f) 
@@ -199,15 +199,20 @@ class ProblemGenerator:
 
     def _add_fact(self, problem, name, args):
         msg = problem
-        predicate = socialrobot_task_msgs.msg.Predicate()
+        predicate = Predicate()
         predicate.name = name			    
         predicate.args = args			   
         msg.facts.append(predicate)   
         return msg
 
     def _add_goal(self, problem, name, args):
+        predicate = Predicate()
+        if name == 'not':
+            predicate.is_negative = True
+        name = args[0]
+        args = args[1]
+
         msg = problem
-        predicate = socialrobot_task_msgs.msg.Predicate()
         predicate.name = name			   
         predicate.args = args			  
         msg.goals.append(predicate)   
@@ -217,5 +222,5 @@ if __name__ == "__main__":
 
     rospy.init_node('problem_generator', anonymous=True)
     pg = ProblemGenerator()
-    pg.set_problem(demo_name = 'prob_default')
+    pg.set_problem(demo_name = 'prob_fridge')
     pg.generate()

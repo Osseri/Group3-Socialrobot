@@ -1,0 +1,31 @@
+<!-- -->
+<launch>
+
+  <arg name="server" default="190.168.0.105"/>
+  <arg name="use_mapping" default="false"/>
+
+  <!-- vrpn -->
+  <node pkg="vrpn_client_ros" type="vrpn_client_node" name="vrpn_client_node" output="screen">
+    <rosparam subst_value="true">
+      server: $(arg server)
+      port: 3883
+
+      update_frequency: 100.0
+      frame_id: world
+
+      # Use the VRPN server's time, or the client's ROS time.
+      use_server_time: false
+      broadcast_tf: false
+
+      # Must either specify refresh frequency > 0.0, or a list of trackers to create
+      refresh_tracker_frequency: 1.0
+      #trackers:
+      #- FirstTracker
+      #- SecondTracker
+    </rosparam>
+  </node>
+
+  <!-- mapping -->
+  <node if="$(arg use_mapping)" pkg="qr_tracker" type="optitrack_mapping.py" name="optitrack_mapping" output="screen"/>
+
+</launch>

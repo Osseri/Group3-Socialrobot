@@ -1,0 +1,8 @@
+socialrobot_actionlib/Predicate[] goal_predicates
+string target_object         
+   
+--- 
+
+int32 result
+int32 SUCCESS = 1
+int32 FAIL = 0

@@ -1,0 +1,8 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/social-robot-master/social_robot/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/home/social-robot-master/social_robot/part3_ws/devel/lib/python2.7/dist-packages",
+        "/home/social-robot-master/social_robot/robocare_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/kinetic/lib/python2.7/dist-packages"
+    ]
+}

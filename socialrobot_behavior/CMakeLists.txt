@@ -10,7 +10,10 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   vision_msgs
   trajectory_msgs
+  socialrobot_msgs
+  socialrobot_actionlib
   nav_msgs
+  shape_msgs
 )
 
 add_message_files(
@@ -23,6 +26,7 @@ add_service_files(
   FILES
   GetBehaviorList.srv
   SetBehavior.srv
+  GetRequirements.srv
   GetMotion.srv
   ExecuteAction.srv
 )
@@ -34,13 +38,14 @@ generate_messages(
   sensor_msgs
   vision_msgs
   trajectory_msgs
+  socialrobot_msgs
   nav_msgs
 )
 
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES socialrobot_ar
-  CATKIN_DEPENDS message_runtime rospy std_msgs sensor_msgs vision_msgs geometry_msgs trajectory_msgs nav_msgs
+  CATKIN_DEPENDS message_runtime rospy std_msgs sensor_msgs vision_msgs geometry_msgs trajectory_msgs nav_msgs socialrobot_msgs
 #  DEPENDS system_lib
 )
 

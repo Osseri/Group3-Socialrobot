@@ -35,7 +35,7 @@ class TaskPlanner:
             rospack = rospkg.RosPack()
             PKG_PATH = rospack.get_path('socialrobot_task')
             self.LIB_PATH = PKG_PATH + '/libs'
-            self.JSON_PATH = PKG_PATH + '/data/plan.json'
+            self.JSON_PATH = PKG_PATH + '/pddl/plan.json'
             self.PLANNER_PATH = PKG_PATH + '/data/pddl4j-3.8.2.jar'
         sys.path.append(self.LIB_PATH)        
         globals()['adaptator'] = __import__('AdaptatorPlanJsonPython')

@@ -29,103 +29,78 @@ class MoveArmBehavior(BehaviorBase):
         elif self._hardware_if == 'hw':
             self.service_name = '/hw_interface/set_motion'
             self.service_type = SetJointTrajectory
+        armplan_srv = '/motion_plan/move_arm'
 
-    def check_requirement(self):
-        rospy.loginfo('checking...%s' % self._name)
-        self.service_list = rosservice.get_service_list()
+        self.srv_plan = rospy.ServiceProxy(armplan_srv, MotionPlan)
 
-        if self.service_name in self.service_list:
-            return True
-
-        return False
+        self.input_args = ['robot_group',
+                            'static_object',
+                            'dynamic_object']
+        self.hardware_group = ['arm']
 
     def prepare_behavior(self):
         rospy.loginfo('preparing...%s' % self._name)
         return True
 
-    def run_behavior(self):
-        rospy.loginfo('running...%s' % self._name)
-        if self._hardware_if == 'vrep':
-            move_srv = rospy.ServiceProxy(self.service_name, self.service_type)
-            move_req = VrepSetJointTrajectoryRequest()
-            move_req.trajectory = self.behavior_data.get('trajectory')
-            move_req.duration = self.behavior_data.get('duration')
-
-            res = move_srv(move_req)
-
-            if res.result == VrepSetJointTrajectoryResponse.OK:
-                return 1
-
-        elif self._hardware_if == 'hw':
-            move_srv = rospy.ServiceProxy(self.service_name, self.service_type)
-            move_req = SetJointTrajectoryRequest()
-            move_req.trajectory = self.behavior_data.get('trajectory')
-            move_req.duration = self.behavior_data.get('duration')
-
-            res = move_srv(move_req)
-
-            if res.result == SetJointTrajectoryResponse.OK:
-                return 1
-
-        return -1
+    def run_behavior(self): 
+        rospy.loginfo('running...%s' % self._name)   
+        return 1
 
     def get_motion(self, inputs):
         '''
         return the trajectory 
         '''
-        rospy.loginfo("Calculating manipulator motion..")
-
+        rospy.loginfo("Calculating move arm motion..")
         res = self._call_ros_service(inputs)
-        if res.planResult == MotionPlanResponse.SUCCESS:
-            rospy.loginfo("Motion planning is done.")
-            self.motion_trajectory = res.jointTrajectory
-        else:
-            rospy.loginfo("Motion planning is failed.")
         return res        
 
     def finish_behavior(self):
         rospy.loginfo('finishing...%s' % self._name)
         return True
 
-    def _call_ros_service(self, inputs):
-        service_name = '/motion_plan/move_arm'   
-        plan_res = MotionPlanResponse()
+    def _call_ros_service(self, requirements):
         try:
-            # call the ros service
-            plan_arm = rospy.ServiceProxy(service_name, MotionPlan)
             plan_req = MotionPlanRequest()
-            
-            # target body
-            body_type = inputs.targetBody
-            if body_type != MotionPlanRequest.LEFT_ARM and body_type != MotionPlanRequest.RIGHT_ARM and body_type != MotionPlanRequest.BOTH_ARM:
-                rospy.logerr('[MoveArm] Target robot part is not Manipulator!')
-                return (MotionPlanResponse.ERROR_INPUT, None)
-            plan_req.targetBody = body_type
+            plan_res = MotionPlanResponse(planResult=MotionPlanResponse.ERROR_FAIL)
+
+           # target body
+            robot_group = requirements.robot_group[0]    
+            if robot_group == MotionPlanRequest.RIGHT_ARM or robot_group == MotionPlanRequest.RIGHT_GRIPPER:
+                robot_group = MotionPlanRequest.RIGHT_ARM
+            elif robot_group == MotionPlanRequest.LEFT_ARM or robot_group == MotionPlanRequest.LEFT_GRIPPER:
+                robot_group = MotionPlanRequest.LEFT_ARM
+            elif robot_group == MotionPlanRequest.BOTH_ARM:
+                robot_group = MotionPlanRequest.BOTH_ARM
+            plan_req.targetBody = robot_group
+
+            # get bounding box of target object
+            if len(requirements.target_object) > 0:
+                for obj in requirements.target_object:
+                    plan_req.targetObject = [obj.id]
+
+            # set obstacles
+            obstacles = requirements.static_object + requirements.dynamic_object
+            for obs in obstacles:
+                plan_req.obstacle_ids.append(obs.id)
+                plan_req.obstacles.append(obs.bb3d)
 
             # target pose
-            target_pose = inputs.poseGoal
-            target_joint_state = inputs.jointGoal
-            plan_req.targetPose = target_pose
+            goal_pose = requirements.goal_position
+            if goal_pose == []:
+                rospy.logerr("[MoveArm] goal position is not decided.")
+                return plan_res
+            
+            target_pose = goal_pose[0].pose
+            target_joint_state = goal_pose[0].joint_state
             if target_joint_state.position:
-                plan_req.targetJointState = target_joint_state
                 plan_req.goalType = MotionPlanRequest.JOINT_SPACE_GOAL
+                plan_req.targetJointState = [target_joint_state]
             else:
                 plan_req.goalType = MotionPlanRequest.CARTESIAN_SPACE_GOAL
+                plan_req.targetPose = [target_pose]
 
-            # target object (move object within hand)
-            target_object = inputs.targetObject
-            plan_req.targetObject = target_object
-
-            # obstacles
-            plan_req.obstacle_ids = inputs.obstacle_ids
-            plan_req.obstacles = inputs.obstacles
-            
-            plan_res = plan_arm(plan_req)
-
-            if plan_res.planResult == MotionPlanResponse.SUCCESS:
-                return plan_res
-
-            plan_res.planResult = MotionPlanResponse.ERROR_NO_SOLUTION
+            # request to motion planner
+            plan_res = self.srv_plan(plan_req)
             return plan_res
 
         except rospy.ServiceException as e:

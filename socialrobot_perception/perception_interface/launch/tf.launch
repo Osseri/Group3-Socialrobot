@@ -1,0 +1,91 @@
+<!-- -->
+<launch>
+<!-- 
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="test"
+        args="1.180 0.4028 0.93925
+                0.7071 0.0 -0.7071 0.0
+                base_footprint cam_r_chess 100" />
+
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="test2"
+        args="-0.06467981  0.10446405  1.16236752
+                -3.07596904e-02  1.74488928e-01 -7.34284665e-04  9.84178295e-01
+                base_footprint camera_test 100" /> -->
+
+    <!-- RISE tf between head_pitch and camera 
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="head_to_cam"
+        args="0.11012634426697665 0.01917692875986141 0.156833756099364
+              0.04180286811504617 -0.2506501251094734 -0.022162955066491522 -0.9669208025596938
+                Head_Pitch camera_link 100" />-->
+
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="chess_to_fridge"
+        args="-0.35 0.13 0
+              0 0 0.707 0.707
+                chessboard QR:50 100" />
+<!--
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="chess_to_fridge"
+        args="-0.45 0.37 0.180
+              0.5 -0.5 0.5 0.5 
+                cam_e_chessboard temp_tf 100" />
+
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="chess_to_fridge2"
+        args="0 0 -0.01
+              0.0 -0.044 0.0 0.999
+                temp_tf temp_tf2 100" />       
+
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="chess_to_fridge3"
+        args="0 0 0
+              0.0 0.0 0.017 1.0
+                temp_tf2 QR:50 100" />    -->     
+
+    <!-- RISE tf between base_footprint and camera 
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="perception_tf"
+        args="-0.0818641 0.06069196 1.14907503
+            -0.05186032 0.18759983 -0.01166223 0.9808062
+            base_footprint perception_link 100" /> -->
+
+    <!-- tf between base_footprint and camera 
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="perception_tf"
+        args="-0.05373692  0.03228047  1.10943806
+                0.58899471 -0.55459358  0.40502386 -0.42215926
+                base_footprint camera_color_optical_frame 100" /> -->
+
+    <!-- tf between LHand_Base and Calibration marker 
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="calibration_tf"
+        args="-3.4332e-05 +2.0801e-03 +1.9697e-01
+              0.7071 0.0 0.0 0.7071
+                LHand_base hand_plate 100" /> -->
+
+    <!-- <node pkg="tf"
+        type="static_transform_publisher"
+        name="cali_tf"
+        args="1.95 0.135 0.23
+              -0.707 0 0.707 0
+                base_footprint chess_board 100" />  -->
+<!-- 
+    <node pkg="tf"
+        type="static_transform_publisher"
+        name="cali_tf2"
+        args="-0.9708009901083134 0.10959442294143446 1.8426989548147161
+              -0.8406057565948215 -0.01095820569096181 0.5399302112546441 -0.0416792121883096
+                chess_board camera 100" />  -->
+</launch>

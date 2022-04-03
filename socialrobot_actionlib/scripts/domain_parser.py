@@ -8,6 +8,7 @@ class PDDL_Parser:
                             ':adl',
                             ':disjunctive-preconditions',
                             ':negative-preconditions',
+                            ':conditional-effects',
                             ':typing',
                             ':equality']
     action = ''
@@ -148,10 +149,12 @@ class PDDL_Parser:
                 self.actions[name]['planner'] = planner
                 self.actions[name]['controller'] = controller
                 self.actions[name]['group'] = hardware_group
-            elif t == ':primitives': 
-                self.split_primitives(group.pop(0), primitives)
-                self.actions[name]['primitives'] = primitives
-            else: print(str(t) + ' is not recognized in action')
+            elif t == ':primitives':
+                p = group.pop(0)     
+                self.actions[name]['primitives'] = self.parse_primitives(p)                
+            else: 
+                #print(str(t) + ' is not recognized in action')
+                pass
 
 
     #-----------------------------------------------
@@ -175,7 +178,19 @@ class PDDL_Parser:
         for pred in pred_list:
             self.split_predicates(pred, predicates)
         return predicates 
+
+    #-----------------------------------------------
+    # Parse primitives
+    #-----------------------------------------------
+    def parse_primitives(self, group):
+        primitives = []
+        #remove first 'and'
+        prim_list = group[1:]
+        for prim in prim_list:
+            self.split_primitives(prim, primitives)
         
+        return primitives 
+                
     #-----------------------------------------------
     # Split contraints
     #-----------------------------------------------
@@ -208,24 +223,67 @@ class PDDL_Parser:
     # Split primitives
     #-----------------------------------------------
     def split_primitives(self, group, primitives):
-        if not type(group) is list:
-            raise Exception('Error with primitives')
+                    
+        if group:
+            # check predicate condition
+            cond = group[0]
+            prim = group[1:]
             
-        parameters = []
-        untyped_primitives = []
-        
-        while group:
-            t = group.pop(0)
-            if t == '-':
-                if not untyped_primitives:
-                    raise Exception('Unexpected hyphen in primitives')
-                ptype = group.pop(0)
-                action = {'name': ptype, 'parameters':[]}
-                while untyped_primitives:
-                    action['parameters'].append(untyped_primitives.pop(0))
-                primitives.append(action)
+            # if there is primitive conditions            
+            if cond == "not" or cond == "and" or cond == "or":
+                prim_list = [cond]
+                for p in prim:
+                    self.split_primitives(p, prim_list)
+                primitives.append(prim_list)
+
+            elif cond == "forall":
+                #forall [type] [primitives]
+                t = group[1]
+                prim_list = [cond, self.split_primitives(t)]
+                self.split_primitives(group[2], prim_list)
+                primitives.append(prim_list)
+                
+            elif cond == "exists":
+                #exists [type] [primitives]
+                t = group[1]
+                prim_list = [cond, self.split_primitives(t)]
+                self.split_primitives(group[2], prim_list)
+                primitives.append(prim_list)
+
+            elif cond == "when":
+                #when [condition_predicates] [primitives]
+                p = group[1]
+                cond_pred = []
+                self.split_predicates(p, cond_pred)
+                prim_list = [cond, cond_pred]
+                self.split_primitives(group[2], prim_list)
+                primitives.append(prim_list)
+
+            elif cond == '=':
+                param_type = self.get_action_parameter_type(pred)
+                prim_list = ['equal']
+                prim_list.append(self.struct_parameter(pred[0], param_type))
+                prim_list.append(self.struct_parameter(pred[1], param_type))   
+                primitives.append(prim_list)
+
+            # no condition
             else:
-                untyped_primitives.append(t)        
+                parameters = []
+                untyped_primitives = []
+                while group:
+                    p = group.pop(0)
+                    if p == '-':
+                        if not untyped_primitives:
+                            raise Exception('Unexpected hyphen in primitives')
+                        ptype = group.pop(0)
+                        action = {'name': ptype, 'parameters':[]}
+                        while untyped_primitives:
+                            action['parameters'].append(untyped_primitives.pop(0))
+                        primitives.append(action)
+                    else:
+                        untyped_primitives.append(p)    
+        else:
+            pass
 
     #-----------------------------------------------
     # Split predicates
@@ -234,45 +292,57 @@ class PDDL_Parser:
     def split_predicates(self, group, predicates):
         if group:        
             # check predicate condition
-            t = group.pop(0)
-            if t == "not" or t == "and" or t == "or":
-                pred_list = [t]
-                self.split_predicates(group.pop(0), pred_list)
+            cond = group[0]
+            pred = group[1:]
+
+            if cond == "not" or cond == "and" or cond == "or":
+                pred_list = [cond]
+                for p in pred:
+                    self.split_predicates(p, pred_list)
                 predicates.append(pred_list)
 
-            elif t == "forall":
+            elif cond == "forall":
                 #forall [type] [predicates]
-                p = group.pop(0)
-                pred_list = [t, self.split_parameters(p)]
-                self.split_predicates(group.pop(0), pred_list)
+                t = group[1]
+                pred_list = [cond, self.split_parameters(t)]
+                self.split_predicates(group[2], pred_list)
                 predicates.append(pred_list)
                 
-            elif t == "when":
+            elif cond == "exists":
+                #forall [type] [predicates]
+                t = group[1]
+                pred_list = [cond, self.split_parameters(t)]
+                self.split_predicates(group[2], pred_list)
+                predicates.append(pred_list)
+
+            elif cond == "when":
                 #when [condition_predicates] [predicates]
-                p = group.pop(0)
+                p = group[1]
                 cond_pred = []
                 self.split_predicates(p, cond_pred)
-                pred_list = [t, cond_pred[0]]
-                self.split_predicates(group.pop(0), pred_list)
+                pred_list = [cond, cond_pred]
+                self.split_predicates(group[2], pred_list)
                 predicates.append(pred_list)
 
-            elif t == '=':
-                param_type = self.get_action_parameter_type(group[0])
+            elif cond == '=':
+                param_type = self.get_action_parameter_type(pred)
                 pred_list = ['equal']
-                pred_list.append(self.struct_parameter(group[0], param_type))
-                pred_list.append(self.struct_parameter(group[1], param_type))   
+                pred_list.append(self.struct_parameter(pred[0], param_type))
+                pred_list.append(self.struct_parameter(pred[1], param_type))   
                 predicates.append(pred_list)
 
-            else:
+            else:   # no condition
+                #single predicate
                 pred_list = []
-                predicate = list(self.predicates[t])
-                pred_list.append(t)
+                pred_name = cond
+                predicate = list(self.predicates[pred_name])
+                pred_list.append(pred_name)
                 for i, param in enumerate(predicate):
                     predicate[i] = {}          
-                    predicate[i]['type'] = self.predicates[t][i]['type']              
-                    predicate[i]['name'] = group[i]
+                    predicate[i]['type'] = self.predicates[pred_name][i]['type']  
+                    predicate[i]['name'] = pred[i]
                     pred_list.append(predicate[i])
-                predicates.append(pred_list)     
+                predicates.append(pred_list)      
         else:
             pass        
 

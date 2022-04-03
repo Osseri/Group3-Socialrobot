@@ -1,0 +1,10 @@
+<launch>
+    <!-- <arg name="config" default="robocare_right_arm_sample" /> -->
+    <!-- <arg name="config" default="robocare_right_irm" /> -->
+    <!-- <arg name="base_radius" default="0.3" /> -->
+
+    <node name="ir_server" pkg="ir_repositioning" type="solver.py" output="screen">
+        <!-- <param name="config" value="$(arg config)" /> -->
+        <!-- <param name="base_radius" value="$(arg base_radius)" /> -->
+    </node>
+</launch>

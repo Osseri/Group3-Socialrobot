@@ -35,6 +35,11 @@ add_service_files(
   SetPathTrajectory.srv
   GetRobotState.srv
 )
+# Declare the service files to be built
+add_action_files(
+  FILES
+  FollowPathTrajectory.action
+)
 
 generate_messages(
   DEPENDENCIES

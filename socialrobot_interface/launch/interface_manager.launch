@@ -3,8 +3,13 @@
     <rosparam param="moveit_status" subst_value="true">False</rosparam>
 	<arg name="use_mongodb" default="false"/>
 	<arg name="object_tracking" default="false"/>
+	<arg name ="use_knowledge" default="false"/>
+	<arg name ="use_reasoner" default="true"/>
+
 	<param name="use_mongodb" value="$(arg use_mongodb)" />
 	<param name="object_tracking" value="$(arg object_tracking)" />
+	<param name="use_knowledge" value="$(arg use_knowledge)" />
+	<param name="use_reasoner" value="$(arg use_reasoner)" />
 
     <!-- launch the mongoDB -->
 	<include if="$(arg use_mongodb)" file="$(find socialrobot_interface)/launch/db.launch"/>

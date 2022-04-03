@@ -269,3 +269,7 @@ CTestTestfile.cmake
 _deps
 
 #################################
+
+pddl/plan
+
+pddl/sas_plan

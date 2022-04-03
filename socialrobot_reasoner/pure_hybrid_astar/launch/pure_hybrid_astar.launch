@@ -1,0 +1,4 @@
+<launch>
+    <node name="pure_hybrid_astar" pkg="pure_hybrid_astar" type="main.py" output="screen">
+    </node>
+</launch>

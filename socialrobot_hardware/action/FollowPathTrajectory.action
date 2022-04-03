@@ -1,0 +1,11 @@
+#goal
+nav_msgs/Path trajectory
+float64 duration
+---
+#result
+int32 result
+int32 OK = 0
+int32 ERROR = 1
+---
+#feedback
+geometry_msgs/Pose current_pose

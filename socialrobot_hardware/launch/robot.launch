@@ -1,0 +1,9 @@
+<!-- -->
+<launch>
+  <arg name="robot_name" default="social_robot"/>	
+
+  <node name="hw_interface" pkg="socialrobot_hardware" type="hw_interface.py" output="screen">
+    <param name="robot_name" value="$(arg robot_name)"/>
+  </node>
+
+</launch>

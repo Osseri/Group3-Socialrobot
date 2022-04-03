@@ -6,6 +6,7 @@
 		:adl
 		:disjunctive-preconditions
 		:negative-preconditions
+        :conditional-effects
 		:typing
 		:equality
 	)
@@ -13,438 +14,488 @@
 	(:types
 		Position
 		Object
+        ObjectType
 	)
 
 	(:constants
-		DualArm Arm Mobile Gripper - Object        
-        TempPosition RelocatePosition HandoverPosition - Position 
+		DualArm Arm Mobile - ObjectType        
+        TempPosition RelocatePosition HandoverPosition CurrentPosition - Position 
 	)
 
 	(:predicates
-        (metric)
-		(obstruct ?hand - Object ?target - Object ?obstacle - Object)
-		(transferred ?hand ?object - Object)
-		(aboveOf ?obj1 - Object ?obj2 - Object)
-		(accesible ?robotpart - Object ?object - Object)
-		(inContGeneric ?container - Object ?content - Object)
-		(graspable ?hand - Object ?object - Object)
-		(clear ?position - Position)
-		(graspedBy ?hand - Object ?object - Object)
-		(detectedObject ?object - Object)
-		(locatedAt ?object - Object ?location - Position)
-		(openedHand ?hand - Object)
-		(openedContainer ?container - Object)
-		(inWorkspace ?robotBase - Object ?target - Object)
-		(heavyWeight ?obj - Object)
-		(largeSized ?obj - Object)
-		(type ?object - Object ?type - Object)
-		(emptyHand ?hand - Object)
+        (primitive)
+        (obstruct ?hand - Object ?target - Object ?obstacle - Object)
+        (accesible ?robot_group - Object ?object - Object)
+        (inContGeneric ?content - Object ?container - Object)
+        (graspedBy ?hand - Object ?object - Object)
+        (clear ?position - Position)
+        (detectedObject ?object - Object)
+        (locatedAt ?object - Object ?location - Position)
+        (openedHand ?hand - Object)
+        (openedContainer ?container - Object)
+        (inWorkspace ?robot_group - Object ?target - Object)
+        (heavyWeight ?obj - Object)
+        (largeSized ?obj - Object)
+        (type ?object - Object ?type - ObjectType)
+        (emptyHand ?hand - Object)
         (rearranged ?object - Object)
-		(onPhysical ?object - Object ?supportPlane - Object)
-		(near ?obj1 - Object ?obj2 - Object)
-		(inFrontOf ?obj1 - object ?obj2 - object)
-		(belowOf ?obj1 - object ?obj2 - object)
-		(behind ?obj1 - object ?obj2 - object)
-		(emptyContainer ?obj - object)
-        (standby ?robotpart - Object)
+        (onPhysical ?object - Object ?supportPlane - Object)
+        (near ?obj1 - Object ?obj2 - Object)
+        (inFrontOf ?obj1 - object ?obj2 - object)
+        (belowOf ?obj1 - object ?obj2 - object)
+        (behind ?obj1 - object ?obj2 - object)
+        (aboveOf ?obj1 - Object ?obj2 - Object)
+        (emptyContainer ?obj - object)
+        (standby ?robot_group - Object)
+        (affordanceOf ?object - Object ?affordance - Object)
+        (transferred ?object ?to - Object)
+        (delivered ?object ?to - Object)
+        (oneHandGraspable ?object - Object)
+        (twoHandGraspable ?object - Object)
+        (handedover ?robot_group ?object - Object)
 	)
 
 	;;;;;;;;;;;;;;;;;;;;;;;;;;; Define actions ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;; DO NOT add duplicate action name
+
+    ; initialize robot pose
 	(:action standby
-		:parameters (?robotPart - Object)
+		:parameters (?robot_group - Object)
         :precondition 
             (and   
-                (not (standby ?robotPart))                  
+                (not (standby ?robot_group))                  
             )
         :effect
             (and
-                (standby ?robotPart)
+                (standby ?robot_group)
             ) 
 		:constraints (?position - controller ?Arm - hardware_group ?standby - planner)  
 	)
 
-	(:action move_arm
-		:parameters (?robotArm - Object ?initPosition ?goalPosition - Position)
-        :precondition 
-            (and       
-                (metric)              
-            )
-        :effect
-            (and
-            ) 
-		:constraints (?position - controller ?Arm - hardware_group ?movearm - planner)  
-	)
-
-    (:action move_base
-		:parameters (?robotBase - Object ?initPosition ?goalPosition - Position)
+    ; initialize robot pose with grasped object
+    (:action standby_with_object
+		:parameters (?robot_group ?target_object - Object)
         :precondition 
             (and   
-                (metric)
+                (primitive)
             )
         :effect
             (and
             ) 
-		:constraints (?position - controller ?Mobile - hardware_group ?movebase - planner)  
+		:constraints (?position - controller ?Arm - hardware_group ?standbywithobject - planner)  
 	)
 
-    (:action carry_object
-		:parameters (?robotBase ?robotPart ?targetObject - Object ?initPosition ?goalPosition - Position)
-        :precondition 
-            (and   
-                (type ?robotBase Mobile)
-                (locatedat ?robotBase ?initPosition)
-                (graspedBy ?robotPart ?targetObject)
-            )
-        :effect
-            (and
-                (not (locatedat ?robotBase ?initPosition))
-                (locatedat ?robotBase ?goalPosition)
-            ) 
-		:constraints (?position - controller ?Mobile - hardware_group ?movebase - planner)  
-		:primitives (?robotBase ?initPosition ?goalPosition - move_base)
-	)
-
-	(:action release_object
-		:parameters (?robotPart ?targetObject - Object ?initPosition - Position)
-        :precondition 
-            (and
-                (type ?robotPart Gripper)
-                (not (openedHand ?robotPart)) 
-                (not (emptyHand ?robotPart))
-                (graspedBy ?robotPart ?targetObject) 
-                (locatedAt ?robotPart ?initPosition)
-                (locatedAt ?targetObject ?initPosition)
-            )
-        :effect
-            (and
-                (openedHand ?robotPart)
-                (emptyHand ?robotPart)
-                (not (graspedBy ?robotPart ?targetObject))
-            )
-		:constraints (?position - controller ?Gripper - hardware_group ?grasp - planner)
-		:primitives (?robotPart - open_hand)
-	)
-
-	(:action open_hand
-		:parameters (?robotPart - Object)
+    ; open robot gripper
+    (:action open_hand
+		:parameters (?robot_group - Object)
         :precondition 
             (and         
-                (type ?robotPart Gripper)
-                (not (openedHand ?robotPart))   
-            )
-        :effect
-            (and
-                (openedHand ?robotPart)
-            )
-		:constraints (?position - controller ?Gripper - hardware_group ?openclose - planner)
-	)
-
-	(:action hold_object
-		:parameters (?robotPart ?targetObject - Object ?initPosition ?objectPosition - Position)
-        :precondition 
-            (and
-                (type ?robotPart Gripper)
-                (detectedObject ?targetObject)
-                (not (heavyWeight ?targetObject))
-                (not (largeSized ?targetObject))
-                (openedHand ?robotPart)
-                ;(emptyHand ?robotPart)
-                (not (graspedBy ?robotPart ?targetObject)) 
-                (locatedAt ?robotPart ?initPosition)
-                (locatedAt ?targetObject ?objectPosition)                
-                (forall (?objects - Object) 
-                    (not (obstruct ?robotPart ?targetObject ?objects))
+                (or
+                    (type ?robot_group Arm)
+                    (type ?robot_group DualArm)
                 )
-                (inWorkspace ?robotPart ?targetObject)
+                (not (openedHand ?robot_group))   
             )
         :effect
             (and
-                (not (openedHand ?robotPart))
-                ;(not (emptyHand ?robotPart))
-                (graspedBy ?robotPart ?targetObject)
-                (locatedAt ?robotPart ?objectPosition)
-                (not (locatedAt ?robotPart ?initPosition))
+                (openedHand ?robot_group)
+                ; (when (type ?robot_group DualArm)   ;when dual arm open, all single arm also open
+                ;     (forall (?arm - object)
+                ;         (when (type ?arm Arm)
+                ;             (openedHand ?arm)
+                ;         )
+                ;     ) 
+                ; )
+			    (forall (?objects - object)     ;if object is graspedby gripper, not graspedby effect
+				    (when (graspedby ?robot_group ?objects)
+					    (not (graspedby ?robot_group ?objects))
+				    )
+			    )
             )
-		:constraints (?position - controller ?Gripper - hardware_group ?grasp - planner)
-		:primitives (?robotPart ?targetObject ?initPosition ?objectPosition - approach_arm ?robotPart ?targetObject ?objectPosition - grasp_object)				
-	)
+		:constraints (?position - controller ?Gripper - hardware_group ?openhand - planner)
+	)    
 
-    ; (:action hold_object_with_dualarm
-	; 	:parameters (?leftArm ?rightArm ?targetObject - Object ?leftArmPosition ?rightArmPosition ?objectPosition - Position)
-    ;     :precondition 
-    ;         (and
-    ;             (or
-    ;                 (heavyWeight ?targetObject)
-    ;                 (largeSized ?targetObject)
-    ;             )
-    ;             (not (= ?rightArm ?leftArm))
-    ;             (detectedObject ?targetObject)
-    ;             (openedHand ?leftArm)
-    ;             (openedHand ?rightArm)
-    ;             (emptyHand ?leftArm)
-    ;             (emptyHand ?rightArm)
-    ;             (not (graspedBy ?leftArm ?targetObject)) 
-    ;             (not (graspedBy ?rightArm ?targetObject)) 
-    ;             (locatedAt ?leftArm ?leftArmPosition)
-    ;             (locatedAt ?rightArm ?rightArmPosition)
-    ;             (locatedAt ?targetObject ?objectPosition)                
-
-    ;             (inWorkspace ?leftArm ?targetObject)
-    ;             (inWorkspace ?rightArm ?targetObject)
-    ;         )
-    ;     :effect
-    ;         (and
-    ;             (not (openedHand ?leftArm))
-    ;             (not (openedHand ?rightArm))
-    ;             (not (emptyHand ?leftArm))
-    ;             (not (emptyHand ?rightArm))
-    ;             (graspedBy ?leftArm ?targetObject)
-    ;             (graspedBy ?rightArm ?targetObject)
-    ;             (locatedAt ?leftArm ?objectPosition)
-    ;             (locatedAt ?rightArm ?objectPosition)
-    ;             (not (locatedAt ?leftArm ?leftArmPosition))
-    ;             (not (locatedAt ?rightArm ?rightArmPosition))
-    ;         )
-	; 	:constraints (?position - controller ?Gripper - hardware_group ?grasp - planner)
-	; )
-
-    (:action relocate_obstacle
-		:parameters (?robotPart - Object ?targetObject - Object ?relocateObstacle - Object ?initPosition ?goalPosition - Position)
-        :precondition 
-        (and  
-            (type ?robotPart Gripper)
-            (detectedObject ?relocateObstacle)
-            (locatedAt ?robotPart ?initPosition)
-            (locatedAt ?relocateObstacle ?initPosition)            
-            (= ?goalPosition RelocatePosition)
-            (not (locatedAt ?robotPart ?goalPosition)) 
-            (not (locatedAt ?relocateObstacle ?goalPosition)) 
-            (graspedBy ?robotPart ?relocateObstacle)
-            (obstruct ?robotPart ?targetObject ?relocateObstacle)   
-        )
-        :effect 
-        (and 
-            (not (locatedAt ?robotPart ?initPosition))
-            (locatedAt ?robotPart ?goalPosition)
-            (locatedAt ?relocateObstacle ?goalPosition)
-            (not (locatedAt ?relocateObstacle ?initPosition))
-            (not (obstruct ?robotPart ?targetObject ?relocateObstacle))
-        )
-		:constraints (?position - controller ?Arm - hardware_group ?relocate - planner)
-	)
-
-    (:action rearrange_object
-		:parameters (?robotPart - Object ?targetObject - Object ?initPosition ?rearragePosition - Position)
-        :precondition 
-        (and  
-            (type ?robotPart Gripper)
-            (detectedObject ?targetObject)
-            (locatedAt ?robotPart ?initPosition)     
-            (locatedAt ?targetObject ?initPosition)            
-            (= ?rearragePosition RelocatePosition)
-            (not (locatedAt ?robotPart ?rearragePosition)) 
-            (not (locatedAt ?targetObject ?rearragePosition)) 
-            (graspedBy ?robotPart ?targetObject)
-        )
-        :effect 
-        (and 
-            (not (locatedAt ?robotPart ?initPosition))
-            (not (locatedAt ?targetObject ?initPosition))
-            (locatedAt ?robotPart ?rearragePosition)
-            (locatedAt ?targetObject ?rearragePosition)
-            (rearranged ?targetObject)
-        )
-		:constraints (?position - controller ?Arm - hardware_group ?relocate - planner)
-	)
-    
+    ; close robot gripper
 	(:action close_hand
-		:parameters (?robotPart - Object)
+		:parameters (?robot_group - Object)
         :precondition 
             (and 
-                (type ?robotPart Gripper)
-                (openedHand ?robotPart)              
+                (or
+                    (type ?robot_group Arm)
+                    (type ?robot_group DualArm)
+                )
+                (openedHand ?robot_group)              
             )
         :effect
             (and
-                (not (openedHand ?robotPart))
+                (not (openedHand ?robot_group))
             )
-		:constraints (?position - controller ?Gripper - hardware_group ?openclose - planner)
+		:constraints (?position - controller ?Gripper - hardware_group ?closehand - planner)
 	)
 
-	(:action grasp_object
-		:parameters (?robotPart ?targetObject - Object ?nearPosition ?goalPosition - Position)
+    ; hold object using single-arm
+	(:action hold_object
+		:parameters (?robot_group ?target_object - Object ?initPosition ?objectPosition - Position)
+        :precondition 
+            (and
+                (type ?robot_group Arm)
+                (not (type ?robot_group DualArm))
+                (not (type ?robot_group Mobile))
+                (not (type ?target_object Arm))
+                (not (type ?target_object DualArm))
+                (not (type ?target_object Mobile))
+                (detectedObject ?target_object)
+                (not (heavyWeight ?target_object))
+                (not (largeSized ?target_object))
+                (emptyHand ?robot_group)
+                (openedHand ?robot_group)
+                (not (graspedBy ?robot_group ?target_object)) 
+                (locatedAt ?robot_group ?initPosition)
+                (locatedAt ?target_object ?objectPosition)                
+                (forall (?objects - Object) 
+                    (and
+                        (not (obstruct ?robot_group ?target_object ?objects))
+                        (not (graspedBy ?robot_group ?objects))
+                    )
+                )    
+                (forall (?objects - Object)    
+                    (and
+                        (not (graspedBy ?objects ?target_object))
+                    )
+                )      
+                ; TODO: 
+                (or 
+                    (exists (?object - Object)    ; if target in container, container should be opened
+                        (and
+                            (inContGeneric ?target_object ?object)
+                            (openedContainer ?object)
+                        )
+                    ) 
+                    (forall (?objects - Object)   ; target not in containers
+                        (not (inContGeneric ?target_object ?object))
+                    )
+                )
+            )
+        :effect
+            (and
+                (not (openedHand ?robot_group))
+                (graspedBy ?robot_group ?target_object)
+                (locatedAt ?robot_group ?objectPosition)
+                (not (locatedAt ?robot_group ?initPosition))
+            )
+		:constraints (?position - controller ?Arm ?Gripper - hardware_group ?grasp - planner)
+		:primitives 
+            (and      
+                (when (not (inWorkspace ?robot_group ?target_object))
+                    (and 
+                        (?robot_group ?target_object ?initPosition ?objectPosition - approach_base)
+                    )
+                )                
+                (?robot_group ?target_object ?initPosition ?objectPosition - approach_arm)
+                (?robot_group ?target_object ?initPosition ?objectPosition - grasp_object)
+            )				
+	)
+
+    ; hold object using dual-arm
+    (:action hold_object_dualarm
+		:parameters (?robot_group ?target_object - Object ?initPosition ?objectPosition - Position)
+        ; robot_group = [left_arm, right_arm]
+        :precondition 
+            (and
+                (or
+                    (heavyWeight ?target_object)
+                    (largeSized ?target_object)
+                    (twoHandGraspable ?target_object)
+                )
+                (type ?robot_group DualArm)
+                (detectedObject ?target_object)
+                (openedHand ?robot_group)
+                (forall (?objects - Object) 
+                    (and
+                        (not (obstruct ?robot_group ?target_object ?objects))
+                        (not (graspedBy ?robot_group ?objects))
+                    )
+                )          
+                (forall (?objects - Object) 
+                    (and
+                        (not (obstruct ?robot_group ?target_object ?objects))
+                        (not (graspedBy ?robot_group ?objects))
+                        (not (inContGeneric ?target_object ?objects))
+                    )
+                )    
+                (forall (?objects - Object) 
+                    (and
+                        (not (graspedBy ?objects ?target_object))
+                    )
+                )
+                (locatedAt ?robot_group ?initPosition)  
+                (locatedAt ?target_object ?objectPosition)           
+                ;(inWorkspace ?robot_group ?target_object)
+            )
+        :effect
+            (and                
+                (not (openedHand ?robot_group))
+                (graspedBy ?robot_group ?target_object)
+                ;(locatedAt ?robot_group ?objectPosition)
+            )
+		:constraints (?position - controller ?Arm ?Gripper - hardware_group ?grasp - planner)
+        :primitives 
+            (and 
+                ;(when (not (inWorkspace ?robot_group ?target_object))
+                ;    (and 
+                        (?robot_group ?target_object ?initPosition ?objectPosition - approach_base)
+                ;    )
+                ;) 
+                (?robot_group ?target_object ?initPosition ?objectPosition - approach_dualarm)
+                (?robot_group ?target_object ?initPosition - grasp_object)
+            )
+	)
+
+    ;move arm
+    (:action move_arm
+		:parameters (?robot_group ?target_object - Object ?initPosition ?targetPosition - Position)
         :precondition
             (and
+                (primitive)
+            )
+        :effect
+            (and
+            )
+		:constraints (?position - controller ?Arm - hardware_group ?movearm - planner)
+	)
+
+    ;move arm for the pre-grasping with single arm
+	(:action approach_arm
+		:parameters (?robot_group ?target_object - Object ?initPosition ?targetPosition - Position)
+        :precondition
+            (and
+                (primitive)
+                (type ?robot_group Arm)
+                (openedHand ?robot_group)
+                (detectedObject ?target_object)
+                (not (= ?initPosition ?targetPosition))
+                (not (graspedBy ?robot_group ?target_object))
+                (locatedAt ?robot_group ?initPosition)
+                (locatedAt ?target_object ?targetPosition)
+                (forall (?objects - Object) 
+                    (not (obstruct ?robot_group ?target_object ?objects))
+                )
+                (inWorkspace ?robot_group ?target_object)
+            )
+        :effect
+            (and
+                (not (locatedAt ?robot_group ?initPosition))
+                (locatedAt ?robot_group ?targetPosition)
+                (not (emptyHand ?robot_group))
+            )
+		:constraints (?position - controller ?Arm - hardware_group ?approacharm - planner)
+	)
+
+    ;move dual arm for the pre-grasping 
+	(:action approach_dualarm
+		:parameters (?robot_group ?target_object - Object ?initPosition ?targetPosition - Position)
+        :precondition
+            (and
+            )
+        :effect
+            (and
+            )
+		:constraints (?position - controller ?Arm - hardware_group ?approachdualarm - planner)
+	)
+
+    ; move base to hold target object with gripper
+	(:action approach_base
+    :parameters (?robot_group ?target_object - Object ?initPosition ?targetPosition - Position)
+    :precondition
+        (and           
+            (primitive)
+            (type ?robot_group Arm)
+            (not (type ?target_object Gripper))
+            (detectedObject ?target_object)
+            (not (= ?robot_group ?target_object))
+            (locatedAt ?robot_group ?initPosition)
+            (locatedAt ?target_object ?targetPosition)  
+            (not (inWorkspace ?robot_group ?target_object))
+            (not (graspedBy ?robot_group ?target_object))
+        )    
+    :effect
+        (and
+            (inWorkspace ?robot_group ?target_object)
+        )
+		:constraints (?position - controller ?Mobile - hardware_group ?approachbase - planner)
+	)
+
+    ; grasp object just closing gripper
+	(:action grasp_object
+		:parameters (?robot_group ?target_object - Object ?initPosition - Position)
+        :precondition
+            (and
+                (primitive)
+                (or
+                    (type ?robot_group Arm)
+                    (type ?robot_group DualArm)
+                )
+                (openedHand ?robot_group)
+                (not (emptyHand ?robot_group))
+                (not (graspedBy ?robot_group ?target_object)) 
+                (locatedAt ?robot_group ?initPosition)
+                (locatedAt ?target_object ?initPosition)
             )    
         :effect
             (and
+                (not (openedHand ?robot_group)) 
+                (graspedBy ?robot_group ?target_object) 
             )
-		:constraints (?position - controller ?Gripper - hardware_group ?grasp - planner)
-		:primitives (?robotPart - close_hand)	
+		:constraints (?position - controller ?Gripper - hardware_group ?graspobject - planner)
+		:primitives 
+            (and 
+                (?robot_group - close_hand)
+            )	
 	)
 
-	; (:action handover_dualarm
-	; 	:parameters (?fromPart ?toPart ?targetObject - Object ?fromPartPosition ?toPartPosition ?objectPosition ?handoverPosition - Position)
-    ;     :precondition 
-    ;         (and         
-    ;             (type ?fromPart Gripper)
-    ;             (type ?toPart Gripper)
-    ;             (emptyhand ?toPart)
-    ;             (openedHand ?toPart)
-    ;             (emptyhand ?fromPart)
-    ;             (openedHand ?fromPart)
-    ;             (detectedObject ?targetObject)
-    ;             (= ?handoverPosition HandoverPosition)
-    ;             (not (heavyWeight ?targetObject))
-    ;             (not (largeSized ?targetObject))             
-    ;             (not (graspedBy ?fromPart ?targetObject))
-    ;             (not (graspedBy ?toPart ?targetObject))
-    ;             (locatedAt ?targetObject ?objectPosition)
-    ;             (locatedAt ?fromPart ?fromPartPosition)
-    ;             (locatedAt ?toPart ?toPartPosition)
-    ;             (inWorkspace ?fromPart ?targetObject)
-    ;             (not (inWorkspace ?toPart ?targetObject))
-    ;         )
-    ;     :effect
-    ;         (and
-    ;             (inWorkspace ?toPart ?targetObject)
-    ;             (locatedAt ?fromPart ?handoverPosition)
-    ;             (locatedAt ?targetObject ?handoverPosition)
-    ;             (locatedAt ?toPart ?handoverPosition)
-    ;             (forall (?objects - Object) 
-	; 			    (not (obstruct ?topart ?targetObject ?objects))
-	; 		    )
-    ;             (graspedBy ?toPart ?targetObject)
-    ;         )
-	; 	:constraints (?position - controller ?Arm - hardware_group ?handover - planner)
-	; 	:primitives (?fromPart ?targetObject ?fromPartPosition ObjectBottom - approach_arm
-    ;                 ?fromPart - close_hand
-    ;                 ?fromPart ?toPart ?targetObject ?fromPartPosition ?objectPosition ?handoverPosition - handover_object
-    ;                 ?toPart ?targetObject ?toPartPosition ?handoverPosition - takeover_object
-    ;                 ?toPart - close_hand
-    ;                 ?fromPart - open_hand)
-	; )
-
-	(:action handover_object
-		:parameters (?fromPart ?toPart ?targetObject - Object ?fromPartPosition ?objectPosition ?handoverPosition - Position)
+    ; relocate obstacle to hold target object
+    (:action relocate_obstacle
+		:parameters (?robot_group - Object ?target_object1 - Object ?target_object2 - Object ?target_object3 - Object ?initPosition ?goalPosition - Position)
+        ;target_object1 : graping target
+        ;target_object2 : obstacle
+        ;target_object3 : workspace
         :precondition 
-            (and      
-                (metric)
-            )
-        :effect
-            (and
-                (inWorkspace ?toPart ?targetObject)
-                (locatedAt ?fromPart ?handoverPosition)
-                (locatedAt ?targetObject ?handoverPosition)
-                (locatedAt ?toPart ?handoverPosition)
-            )
-		:constraints (?position - controller ?Arm - hardware_group ?handover - planner)
+        (and  
+            (type ?robot_group Arm)
+            (not (openedHand ?robot_group))
+            (detectedObject ?target_object1)
+            (detectedObject ?target_object2)
+            (locatedAt ?robot_group ?initPosition)
+            (locatedAt ?target_object2 ?initPosition)            
+            (= ?goalPosition RelocatePosition)
+            (not (locatedAt ?robot_group ?goalPosition)) 
+            (not (locatedAt ?target_object2 ?goalPosition)) 
+            (graspedBy ?robot_group ?target_object2)
+            (obstruct ?robot_group ?target_object1 ?target_object2)  
+			(or
+				(incontgeneric ?target_object2 ?target_object3)
+				(onPhysical ?target_object2 ?target_object3)
+			) 
+        )
+        :effect 
+        (and 
+            (not (locatedAt ?robot_group ?initPosition))
+            (locatedAt ?robot_group ?goalPosition)
+            (locatedAt ?target_object2 ?goalPosition)
+            (not (locatedAt ?target_object2 ?initPosition))
+            (not (obstruct ?robot_group ?target_object1 ?target_object2))
+        )
+		:constraints (?position - controller ?Arm - hardware_group ?relocateobstacle - planner)
 	)
 
-	(:action takeover_object
-		:parameters (?toPart ?targetObject - Object ?toPartPosition ?handoverPosition - Position)
-        :precondition 
-            (and         
-                (metric)
-            )
-        :effect
-            (and
-                (not (emptyhand ?toPart))
-            )
-		:constraints (?position - controller ?Arm - hardware_group ?approach - planner)
-        :primitives (?toPart ?targetObject ?toPartPosition ObjectTakeover - approach_arm)
-	)
-
-	(:action approach_arm
-		:parameters (?robotArm ?targetObject - Object ?initPosition ?targetPosition - Position)
-        :precondition
-            (and
-                (type ?robotArm Gripper)
-                (openedHand ?robotArm)
-                (detectedObject ?targetObject)
-                (not (= ?initPosition ?targetPosition))
-                (not (graspedBy ?robotArm ?targetObject))
-                (locatedAt ?robotArm ?initPosition)
-                (locatedAt ?targetObject ?targetPosition)
-                (forall (?objects - Object) 
-                    (not (obstruct ?robotArm ?targetObject ?objects))
-                )
-                (inWorkspace ?robotArm ?targetObject)
-                (not (graspable ?robotArm ?targetObject))
-            )
-        :effect
-            (and
-                ;(graspable ?robotArm ?targetObject)
-                ;(not (locatedAt ?robotArm ?initPosition))
-                ;(locatedAt ?robotArm ?targetPosition)
-                (not (emptyHand ?robotArm))
-            )
-		:constraints (?position - controller ?Arm - hardware_group ?approach - planner)
-	)
-
-	; (:action approach_base
-    ; :parameters (?robotBase ?robotPart ?targetObject - Object ?initPosition ?targetPosition - Position)
-    ; :precondition
-    ;     (and             
-    ;         (type ?robotBase Mobile)
-    ;         (type ?robotPart Gripper)
-    ;         (not (type ?targetObject Gripper))
-    ;         (detectedObject ?targetObject)
-    ;         (not (= ?robotBase ?robotPart))
-    ;         (not (= ?robotBase ?targetObject))
-    ;         (not (= ?robotPart ?targetObject))
-    ;         (locatedAt ?robotBase ?initPosition)
-    ;         (locatedAt ?targetObject ?targetPosition)  
-    ;         (not (inWorkspace ?robotPart ?targetObject))
-    ;         (not (graspedBy ?robotPart ?targetObject))
-    ;     )    
-    ; :effect
-    ;     (and
-    ;         (not (locatedAt ?robotBase ?initPosition))
-    ;         (locatedAt ?robotBase ?targetPosition)
-    ;         (inWorkspace ?robotPart ?targetObject)
-    ;     )
-	; 	:constraints (?position - controller ?Mobile - hardware_group ?approachbase - planner)
-	; )
-
-    (:action open_container
-    :parameters (?robotBase ?robotPart ?targetContainer - Object ?robotPos ?robotPartPos ?containerPos - Position)
+    ; take out object from container object
+    (:action takeout_object
+    :parameters (?robot_group1 ?robot_group2 ?target_object1 ?target_object2 - Object ?mobile_position ?arm_position ?container_position ?target_position - Position)
+    ; robot_group1 = mobile
+    ; robot_group2 = single arm
+    ; target_object1 = target object
+    ; target_object2 = container
     :precondition
         (and            
-            (type ?robotBase Mobile) 
-            (not (= ?robotBase ?targetContainer))
-            (not (openedContainer ?targetContainer)) 
-            (locatedAt ?robotBase ?robotPos)
-            (locatedAt ?robotPart ?robotPartPos)  
-            (locatedAt ?targetContainer ?containerPos)            
+            (type ?robot_group1 Mobile)
+            (type ?robot_group2 Arm)
+            (not (type ?target_object1 Arm))
+            (not (type ?target_object2 Arm))
+            (not (= ?robot_group1 ?robot_group2))
+            (locatedAt ?robot_group1 ?mobile_position)
+            (locatedAt ?robot_group2 ?arm_position)  
+            (locatedAt ?target_object2 ?container_position)   
+            (locatedAt ?target_object1 ?target_position)   
+            ;(openedHand ?robot_group2)
+            (inContGeneric ?target_object1 ?target_object2)      
+            ;(not (graspedBy ?robot_group2 ?target_object1))    
+            (graspedBy ?robot_group2 ?target_object1)
+            (openedContainer ?target_object2)                    
+            (forall (?objects - Object) 
+                (and
+                    (not (obstruct ?robot_group2 ?target_object1 ?objects))
+                )
+            )  
+        )    
+    :effect
+        (and
+            ; (when (not (openedContainer ?target_object2))
+            ;     (openedContainer ?target_object2)                    
+            ; )
+            ; (detectedObject ?target_object1)
+            ; (inWorkspace ?robot_group2 ?target_object1)
+            (graspedBy ?robot_group2 ?target_object1)
+            (not (openedHand ?robot_group2))
+            (not (emptyHand ?robot_group2))
+            (not (inContGeneric ?target_object1 ?target_object2))
+            (not (locatedAt ?robot_group2 ?arm_position)) 
+            (locatedAt ?robot_group2 ?target_position)   
+        )
+		:constraints (?position - controller ?Mobile - hardware_group ?opencontainer - planner)
+        :primitives 
+            (and
+                ; (when (not (openedContainer ?target_object2))
+                ;     (and 
+                ;         (?robot_group1 ?robot_group2 ?target_object2 ?mobile_position ?arm_position ?container_position - open_container)
+                ;     )
+                ; )                 
+                ;(?robot_group2 ?target_object1 ?arm_position ?target_position - hold_object)
+                (?robot_group1 ?initPos [-0.3,0.0,0.0] - move_base)
+                (?robot_group2 ?target_object1 - standby_with_object)
+            )
+	)
+
+    ;open fridge container 
+    (:action open_container
+    :parameters (?robot_group1 ?robot_group2 ?target_object - Object ?initPos ?armPos ?goal_position - Position)
+    ; robot_group1 = mobile
+    ; robot_group2 = single arm
+    ; target_object = container
+    :precondition
+        (and
+            ;(primitive)
+            (type ?robot_group1 Mobile)
+            (type ?robot_group2 Arm)
+            (not (= ?robot_group1 ?robot_group2))
+            (not (openedContainer ?target_object)) 
+            (emptyHand ?robot_group2)
+            (openedHand ?robot_group2)
+            (locatedAt ?robot_group1 ?initPos)
+            (locatedAt ?robot_group2 ?armPos)  
+            (locatedAt ?target_object ?goal_position)    
+            (openedHand ?robot_group2)        
         )    
     :effect
         (and           
-		    (openedContainer ?targetContainer)
+		    (openedContainer ?target_object)
             (forall (?object - Object)
-                (when (inContGeneric ?targetContainer ?object)
+                (when (inContGeneric ?target_object ?object)
                     (and 
-                        ;(detectedObject ?object)
-                        (inWorkspace ?robotPart ?object)
+                        (detectedObject ?object)
+                        (inWorkspace ?robot_group2 ?object)
                     )
                 )
             )
         )
-		:constraints (?position - controller ?Mobile - hardware_group ?approach - planner)
-        :primitives (?robotPart ?robotPos containerHandle - move_arm
-        ?robotPart - close_hand
-        ?robotPart ?targetContainer ?containerPos - open_door
-        ?robotPart - open_hand
-        ?robotPart - standby
-        ?robotBase ?robotPos ?containerPos - move_base
-        )
+		:constraints (?position - controller ?Mobile - hardware_group ?opencontainer - planner)
+        :primitives 
+            (and                
+                (?robot_group1 ?target_object ?initPos ?goal_position - approach_base)
+                (?robot_group2 ?target_object ?armPos ?goal_position - approach_arm)
+                (?robot_group2 ?target_object ?armPos ?goal_position - grasp_object)
+                (?robot_group2 ?target_object ?initPos ?goal_position - open_door)
+                (?robot_group2 - open_hand)
+                (?robot_group2 - standby)
+                (?robot_group1 ?target_object ?initPos ?goal_position - approach_base)
+            )
 	)
 
+    ; open fridge door
     (:action open_door
-    :parameters (?robotBase ?targetContainer - Object ?containerPosition - Position)
+    :parameters (?robot_group ?target_object - Object ?current_position ?goal_position - Position)
     :precondition
         (and      
-                (metric)        
+                (primitive)        
         )    
     :effect
         (and 
@@ -452,54 +503,165 @@
 		:constraints (?position - controller ?Mobile - hardware_group ?opendoor - planner)
     )
 
-    (:action close_container
-    :parameters (?robotBase ?targetContainer - Object ?containerPosition - Position)
-    :precondition
-        (and         
-            (type ?robotBase Mobile)   
-            (not (= ?robotBase ?targetContainer))
-		    (openedContainer ?targetContainer)
-            (locatedAt ?robotBase ?containerPosition)
-            (locatedAt ?targetContainer ?containerPosition)  
-        )    
-    :effect
-        (and            
-            (not (openedContainer ?targetContainer))
-        )
-		:constraints (?position - controller ?Arm - hardware_group ?approach - planner)
-	)
-
-    (:action move_around
-    :parameters (?robotBase ?targetObject - Object  ?robotPosition - Position)
-    :precondition
-        (and             
-            (type ?robotBase Mobile)
-            (not (detectedObject ?targetObject))
-            (forall (?container - Object)
-                (not (inContGeneric ?container ?targetObject))            
+    ; move robot base from to
+    (:action move_base
+		:parameters (?robot_group - Object ?current_position ?goal_position - Position)
+        :precondition 
+            (and   
+                (primitive)
             )
-            (locatedAt ?robotBase ?robotPosition)  
-        )    
-    :effect
-        (and            
-            (detectedObject ?targetObject)
-        )
-		:constraints (?position - controller ?Arm - hardware_group ?movearound - planner)
+        :effect
+            (and
+            ) 
+		:constraints (?position - controller ?Mobile - hardware_group ?movebase - planner)  
 	)
 
-	(:action transfer_object
-    :parameters (?robotPart ?targetObject - Object  ?robotPosition - Position)
+    ; puton object to other object
+    (:action stackup_object
+    :parameters (?robot_group ?target_object1 ?target_object2 - Object  ?current_position ?target_position - Position)
+    ; above : target_object1
+    ; below : target_object2
     :precondition
         (and            
-            (type ?robotPart Gripper) 
-            (locatedat ?robotPart ?robotPosition) 
-            (graspedBy ?robotPart ?targetObject)
+            (not (type ?target_object1 Arm))
+            (not (type ?target_object2 Arm))
+            (graspedBy ?robot_group ?target_object1)
+            (not (belowOf ?target_object2 ?target_object1))
+            (locatedat ?robot_group ?current_position) 
+            (locatedat ?target_object1 ?current_position) 
+            (locatedat ?target_object2 ?target_position) 
+			(forall (?objects - object)
+				(and
+					(not (graspedby ?objects ?target_object2))
+				)
+			)
+            (forall (?objects - object)
+				(and
+					(not (delivered ?target_object1 ?objects))
+				)
+			)    
+            (forall (?objects - object)
+				(and
+					(not (inContGeneric ?target_object1 ?objects))
+				)
+			)       
+            (not
+                (exists (?object - object)
+                    (and
+                        (delivered ?target_object2 ?object)
+                    )
+                )
+            )   
         )    
     :effect
         (and            
-            (transferred ?robotPart ?targetObject)
-            (not (graspedBy ?robotPart ?targetObject))
+            (belowOf ?target_object2 ?target_object1)
+            (not (locatedat ?robot_group ?current_position))
+            (not (locatedat ?target_object1 ?current_position))
+            (openedHand ?robot_group)
         )
-		:constraints (?position - controller ?Arm - hardware_group ?transfer - planner)
+		:constraints (?position - controller ?Arm - hardware_group ?stackupobject - planner)
+        :primitives 
+            (and 
+                (when (and (not (inWorkspace ?robot_group ?target_object2)) (largeSized ?target_object2))
+                    (and 
+                        (obj_dual_hand ?target_object2 ?current_position ?target_position - approach_base)
+                    )
+                )
+                (when (and (not (inWorkspace ?robot_group ?target_object2)) (not (largeSized ?target_object2)))
+                    (and 
+                        (?robot_group ?target_object2 ?current_position ?target_position - approach_base)
+                    )
+                )
+                (?robot_group ?target_object1 ?target_object2 ?current_position ?target_position - putup_object)
+                (?robot_group - open_hand)
+            )
 	)
+
+    (:action putup_object
+    :parameters (?robot_group ?target_object1 ?target_object2 - Object  ?current_position ?target_position - Position)
+    :precondition
+        (and      
+                (primitive)        
+        )    
+    :effect
+        (and 
+        )
+		:constraints (?position - controller ?Arm - hardware_group ?putupobject - planner)
+    )
+
+    (:action pour_object
+    :parameters (?robot_group ?target_object1 ?target_object2 - Object  ?current_position ?target_position ?container_position - Position)
+    :precondition
+        (and            
+            (type ?robot_group Arm) 
+            (locatedat ?robot_group ?current_position) 
+            (locatedat ?target_object1 ?target_position) 
+            (locatedat ?target_object2 ?container_position) 
+            (graspedBy ?robot_group ?target_object1)
+        )    
+    :effect
+        (and            
+            (inContGeneric ?target_object2 ?target_object1)
+            (not (locatedat ?robot_group ?current_position))
+            (not (locatedat ?target_object1 ?target_position))
+        )
+		:constraints (?position - controller ?Arm - hardware_group ?pourobject - planner)
+	)
+
+    (:action handover_object
+    :parameters (?robot_group ?target_object1 - Object)
+    :precondition
+        (and    
+                (primitive)                            
+        )    
+    :effect
+        (and 
+            (handedover ?robot_group ?target_object1)
+        )
+		:constraints (?position - controller ?Arm - hardware_group ?handoverobject - planner)
+    )
+
+
+    (:action transfer_object
+    :parameters (?robot_group ?target_object1 ?target_object2 - Object  ?current_position ?target_position - Position)
+    :precondition
+        (and      
+                (primitive)        
+        )    
+    :effect
+        (and 
+        )
+		:constraints (?position - controller ?Arm - hardware_group ?transferobject - planner)
+    )
+
+    (:action deliver_object
+    :parameters (?robot_group ?target_object1 ?target_object2 - Object  ?current_position ?target_position - Position)
+    :precondition
+        (and      
+            (or
+                (type ?robot_group DualArm) 
+                (type ?robot_group Arm) 
+            )
+            (graspedBy ?robot_group ?target_object1)
+            (locatedAt ?target_object2 ?target_position)
+        )    
+    :effect
+        (and 
+            (delivered ?target_object1 ?target_object2)
+            (forall (?object - Object)
+                (when (belowOf ?target_object1 ?object)
+                    (and 
+                        (delivered ?object ?target_object2)
+                    )
+                )
+            )
+        )
+		:constraints (?position - controller ?Arm - hardware_group ?deliverobject - planner)
+        :primitives 
+            (and
+                (?robot_group ?target_object2 ?current_position ?target_position - approach_base)
+                (?robot_group ?target_object1 ?target_object2 ?current_position ?target_position - transfer_object)
+            )
+    )
 )

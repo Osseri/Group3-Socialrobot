@@ -1,0 +1,23 @@
+s: 0, 0, 0
+g: 0, 2, -pi
+
+
+# self.solver.set_successors("full_circle")
+elif stype == "full_circle":
+    self.set_circle_successors(diagonal_length, min_drad, np.radians(36.01))  # (mu: 4.2654, alpha: 76.806 deg)
+
+# self.solver.set_successors("sm_circle")
+elif stype == "sm_circle":
+    self.set_circle_successors(diagonal_length, min_drad, np.radians(12.01))  # (mu: 0.5648, alpha: 29.458 deg)
+
+w grasp + full
+w/o grasp + full
+w/o grasp + sm
+
+
+1차시 (w/o grasp + sm) - 실패
+2차시 (w/o grasp + sm) 그냥 아예 안풀리네..
+
+============
+1.  w/o grasp + full  x 4:56
+2. with grasp + full  o 5:13

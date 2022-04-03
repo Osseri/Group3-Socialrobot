@@ -14,170 +14,18 @@ import smach_ros
 from smach import Iterator, StateMachine, CBState
 from smach_ros import ConditionState, IntrospectionServer
 
-# class setup(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['setup_done','setup_fail'])
-
-#     def execute(self, userdata):
-#         rospy.sleep(5.0)
-
-#         return 'setup_done'
-
-# class standby(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['comm_confirmed'])
-
-#     def execute(self, userdata):
-        
-#         rospy.sleep(5)
-#         return 'comm_confirmed'
-
-# class catch_intent(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail', 'request'])
-
-#     def execute(self, userdata):
-#         rospy.sleep(5)
-#         return 'success'
-
-# class get_states(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['done', 'fail'])
-        
-#     def execute(self, userdata):
-#         rospy.loginfo("[State Machine] Getting initial & goal states...")
-#         rospy.sleep(5)
-#         return 'done'
-
-# class plan_task(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['plan_success', 'plan_fail', 'no_solution'],  
-#                                     input_keys=['result', 'action_plan'], 
-#                                     output_keys = ['result', 'action_plan'])
-
-#     def execute(self, userdata):
-#         rospy.loginfo("[State Machine] Task planning...")
-        
-        
-#         if True:
-#             rospy.sleep(5)
-#             return 'plan_success'
-#         else:
-#             rospy.logerr("[State Machine] Task planning is failed.")
-#             return 'plan_fail'
-
-# class decode_plan(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['decode_success', 'decode_fail'],  
-#                                     input_keys=['result', 'action_plan'], 
-#                                     output_keys = ['result', 'action_sequence'])
-
-#     def execute(self, userdata):
-#         rospy.loginfo("[State Machine] Decoding compound task plan...")
-#         if True:
-#             rospy.sleep(5)
-#             return 'decode_success'
-#         else:
-#             rospy.logerr("[State Machine] Decoding plan is failed.")
-#             return 'decode_fail'
-
-# class check_action(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail'], 
-#                 input_keys=['result', 'action', 'index', 'action_sequence', 'state', 'status'],output_keys = ['result', 'action', 'requirements'])
-
-#     def execute(self, userdata):
-        
-#         if True:     
-#             rospy.sleep(5)
-#             return 'success'
-#         else:
-#             rospy.logerr("[State Machine] Checking action: is failed" )
-#             return 'fail'
-
-# class get_values(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail'], input_keys=['result', 'action', 'index', 'action_sequence', 'requirements', 'state', 'status'], output_keys = ['result', 'action', 'values'])
-
-#     def execute(self, userdata):
-#         rospy.loginfo('[State Machine] Getting action: parameter.')
-       
-#         if True:   
-#             rospy.sleep(5)
-#             return 'success'        
-#         else:
-#             rospy.logerr("[State Machine] Cannot get action: parameter.")
-#             return 'fail'
-
-# class get_motion(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail'], input_keys=['result', 'action', 'index', 'action_sequence', 'values', 'state', 'status'], output_keys = ['result', 'action', 'motion'])
-
-#     def execute(self, userdata):  
-#         rospy.loginfo("[State Machine] Getting action: motion.")       
-        
-        
-#         if True:     
-#             rospy.sleep(5)
-#             return 'success'
-        
-#         else:
-#             rospy.logerr("[State Machine] Getting action: motion is failed." )  
-#             return 'fail'
-
-# class execute_action(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail'],  input_keys=['result', 'action', 'index', 'action_sequence', 'motion', 'state', 'status'], output_keys = ['result', 'action'])
-
-#     def execute(self, userdata):
-#         # Execute each action 
-#         rospy.loginfo("[StateMachine] Waiting until the action is finished.")
-        
-#         if True:
-#             rospy.loginfo("[StateMachine] The action is finished.")
-#             rospy.sleep(5)
-#             return 'success'
-#         else:
-#             rospy.logerr("[State Machine] Waiting until the action: is failed." )  
-#             return 'fail'
-
-# class check_precondition(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail', 'update'],  input_keys=['result', 'action', 'index', 'action_sequence', 'motion', 'preconditions', 'state', 'status'], output_keys = ['result', 'action'])
-
-#     def execute(self, userdata):
-#         rospy.loginfo("[State Machine] Checking  action: precondition." )  
-#         rospy.sleep(5)
-#         return 'success'
-
-# class check_effect(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail', 'update'],  input_keys=['result', 'action', 'index', 'action_sequence', 'motion', 'effects', 'state', 'status'], output_keys = ['result', 'action'])
-
-#     def execute(self, userdata):
-#         rospy.loginfo("[State Machine] The  action:  effect." ) 
-#         rospy.sleep(5)
-#         return 'success'
-
-# class update_states(smach.State):
-#     def __init__(self):
-#         smach.State.__init__(self, outcomes=['success', 'fail'],  input_keys=['result', 'action', 'index', 'action_sequence', 'motion', 'effects', 'state', 'status'], output_keys = ['result', 'action'])
-
-#     def execute(self, userdata):
-#         rospy.loginfo("[State Machine] Updating  action: predicates.") 
-#         rospy.sleep(5)
-#         return 'success'
-
 class SocialrobotSM():
     def __init__(self):
         rospy.init_node("socialrobot_machine_state")
-        rospy.loginfo('[SocialrobotSystem] Service Started!')        
+        rospy.loginfo('[SocialrobotSystem] State machine is started!')        
 
         #main container
         self.sm = smach.StateMachine(outcomes=['succeeded', 'preempted', 'aborted'])
         self.sm.userdata.result = ""
         self.sm.userdata.action_plan = []
-        self.sm.userdata.action_sequence = []
+        #self.sm.userdata.action_sequence = []
+        self.sm.userdata.com_act_seq = None
+        self.sm.userdata.prim_act_seq = None
         self.sm.userdata.action = ""
         self.sm.userdata.requirements = []
         self.sm.userdata.preconditions = []
@@ -217,90 +65,156 @@ class SocialrobotSM():
                         goal = SystemGoal(command="GetState")),
                     {'succeeded':'TASK_PLAN', 'preempted':'TASK_FAIL',  'aborted':'TASK_FAIL'})
             #Task planning
+            def task_cb(userdata, status, result):
+                self.sm.userdata.com_act_seq = result
             smach.StateMachine.add('TASK_PLAN',
                     smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="TaskPlan")),
-                    {'succeeded':'DECODE_PLAN', 'preempted':'TASK_FAIL',  'aborted':'TASK_FAIL'})
-            #Action decoding
-            smach.StateMachine.add('DECODE_PLAN',
+                        goal = SystemGoal(command="TaskPlan"), result_cb=task_cb),
+                    {'succeeded':'GET_CONSTRAINTS', 'preempted':'TASK_FAIL',  'aborted':'TASK_FAIL'})
+            #Get social constraints
+            smach.StateMachine.add('GET_CONSTRAINTS',
                     smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="DecodePlan"), result_key='action_sequence'),
-                    {'succeeded':'TASK_IT', 'preempted':'TASK_FAIL',  'aborted':'TASK_FAIL'})            
-            
-            #
+                        goal = SystemGoal(command="GetConst")),
+                    {'succeeded':'COM_IT', 'preempted':'TASK_FAIL',  'aborted':'TASK_FAIL'})
+
             smach.StateMachine.add('TASK_SUCCESS',
                     smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="TaskSuccess"), result_key='action_sequence'),
+                        goal = SystemGoal(command="TaskSuccess")),
                     {'succeeded':'STANDBY', 'preempted':'STANDBY',  'aborted':'ACTIVE_PERCEPTION'})
             #
             smach.StateMachine.add('TASK_FAIL',
                     smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="TaskFail"), result_key='action_sequence'),
+                        goal = SystemGoal(command="TaskFail")),
                     {'succeeded':'STANDBY', 'preempted':'STANDBY',  'aborted':'STANDBY'})
             #
             smach.StateMachine.add('TASK_RETRY',
                     smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="TaskRetry"), result_key='action_sequence'),
+                        goal = SystemGoal(command="TaskRetry")),
                     {'succeeded':'ACTIVE_PERCEPTION', 'preempted':'STANDBY',  'aborted':'STANDBY'})
 
-            #action iteration container
-            task_it = Iterator(outcomes = ['TASK_SUCCESS', 'TASK_FAIL', 'TASK_RETRY'],
-                                input_keys = ['result', 'action_sequence', 'action'],
-                                it = lambda: range(0, len(self.sm.userdata.action_sequence.action_sequence)),
-                                output_keys = ['result', 'action_sequence', 'action'],
-                                it_label = 'index',
-                                exhausted_outcome = 'TASK_SUCCESS')
-                                
-            with task_it:
-                action_sm = StateMachine(
-                    outcomes = ['TASK_SUCCESS', 'TASK_FAIL','TASK_CONTINUE', 'TASK_RETRY'], input_keys = ['result', 'action_sequence', 'index', 'action'], output_keys = ['result', 'action_sequence', 'action'])
+            # #DEBUG function
+            # @smach.cb_interface(input_keys=['prim_act_seq'],
+            #                     output_keys=['prim_act_seq'], 
+            #                     outcomes=['succeeded'])
+            # def even_cb(ud):
+            #     print('com_act_seq')
+            #     print(self.sm.userdata.com_act_seq)
+            #     return 'succeeded'
+            # StateMachine.add('TEST', CBState(even_cb), 
+            #                 {'succeeded':'COM_IT'})
 
-                with action_sm:
-                    #Initialize
-                    smach.StateMachine.add('CHECK_ACTION',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="CheckAction")),
-                    {'succeeded':'GET_VALUES', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})
-                    #
-                    smach.StateMachine.add('GET_VALUES',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="GetValues")),
-                    {'succeeded':'CHECK_PRECONDITION', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})
-                    #
-                    smach.StateMachine.add('CHECK_PRECONDITION',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="CheckPrecond")),
-                    {'succeeded':'GET_MOTION', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})
-                    #
-                    smach.StateMachine.add('GET_MOTION',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="GetMotion")),
-                    {'succeeded':'EXECUTE_ACTION', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})
-                    #
-                    smach.StateMachine.add('EXECUTE_ACTION',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="ExecuteAction")),
-                    {'succeeded':'CHECK_EFFECT', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})
-                    #
-                    smach.StateMachine.add('CHECK_EFFECT',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="CheckEffect")),
-                    {'succeeded':'UPDATE_STATES', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})
-                    #
+            ############## compound action iteration container ################
+            compound_action_it = Iterator(
+                outcomes = ['COM_ITER_SUCCESS', 'COM_ITER_FAIL', 'COM_ITER_RETRY'],
+                it = lambda: range(0, len(self.sm.userdata.com_act_seq.action_sequence)),
+                it_label = 'com_index',
+                input_keys = ['com_act_seq', 'prim_act_seq'],
+                output_keys = ['com_act_seq', 'prim_act_seq'],
+                exhausted_outcome = 'COM_ITER_SUCCESS')
+
+            with compound_action_it:
+                com_action_sm = StateMachine(
+                    outcomes = ['COM_ITER_SUCCESS', 'COM_ITER_FAIL','COM_ITER_CONTINUE', 'COM_ITER_RETRY'], input_keys = ['com_index', 'com_act_seq', 'prim_act_seq'], 
+                    output_keys = ['com_act_seq', 'prim_act_seq'])
+                
+                with com_action_sm:
+                    # Action decoding
+                    def decode_cb(userdata, status, result):
+                        self.sm.userdata.prim_act_seq = result
+
+                    smach.StateMachine.add('DECODE_PLAN',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                        goal = SystemGoal(command="DecodePlan"), 
+                                        input_keys = ['com_act_seq', 'prim_act_seq'],
+                                        output_keys = ['com_act_seq', 'prim_act_seq'],
+                                        result_cb=decode_cb),
+                                        {'succeeded':'PRIM_IT', 'preempted':'COM_ITER_RETRY',  'aborted':'COM_ITER_RETRY'})
+
+                    # Update compound action state
                     smach.StateMachine.add('UPDATE_STATES',
-                    smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
-                        goal = SystemGoal(command="UpdateStates")),
-                    {'succeeded':'TASK_CONTINUE', 'preempted':'TASK_RETRY',  'aborted':'TASK_RETRY'})              
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                        goal = SystemGoal(command="UpdateStates"),                  
+                                        input_keys = ['com_act_seq', 'prim_act_seq'],
+                                        output_keys = ['com_act_seq', 'prim_act_seq']),
+                                        {'succeeded':'COM_ITER_CONTINUE', 'preempted':'COM_ITER_RETRY',  'aborted':'COM_ITER_RETRY'})  
 
-                #close action_sm
-                Iterator.set_contained_state('ACTION_STATE', 
-                                            action_sm, 
-                                            loop_outcomes=['TASK_CONTINUE'])
+                    ################### primitive action iteration container ##################
+                    primitive_action_it = Iterator(
+                        outcomes = ['PRIM_ITER_SUCCESS', 'PRIM_ITER_FAIL', 'PRIM_ITER_RETRY'],
+                        it = lambda: range(0, len(self.sm.userdata.prim_act_seq.action_sequence)),
+                        it_label = 'prim_index',
+                        input_keys = ['com_act_seq', 'prim_act_seq'],
+                        output_keys = ['com_act_seq', 'prim_act_seq'],
+                        exhausted_outcome = 'PRIM_ITER_SUCCESS')
+
+                    with primitive_action_it:
+                        action_sm = StateMachine(
+                            outcomes = ['PRIM_ITER_SUCCESS', 'PRIM_ITER_FAIL','PRIM_ITER_CONTINUE', 'PRIM_ITER_RETRY'], 
+                            input_keys = ['com_act_seq', 'prim_act_seq'], 
+                            output_keys = ['com_act_seq', 'prim_act_seq'])
+
+                        with action_sm:
+                    
+                            #Check action condition
+                            smach.StateMachine.add('CHECK_ACTION',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="CheckAction")),
+                            {'succeeded':'GET_SYMBOLIC_VALUES', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #Assign symbolic values
+                            smach.StateMachine.add('GET_SYMBOLIC_VALUES',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="GetSymbolicValues")),
+                            {'succeeded':'GET_METRIC_VALUES', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #Assign metric values
+                            smach.StateMachine.add('GET_METRIC_VALUES',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="GetMetricValues")),
+                            {'succeeded':'UPDATE_VALUES', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #Update constraint values
+                            smach.StateMachine.add('UPDATE_VALUES',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="UpdateValues")),
+                            {'succeeded':'CHECK_PRECONDITION', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #
+                            smach.StateMachine.add('CHECK_PRECONDITION',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="CheckPrecond")),
+                            {'succeeded':'GET_MOTION', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #
+                            smach.StateMachine.add('GET_MOTION',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="GetMotion")),
+                            {'succeeded':'EXECUTE_ACTION', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #
+                            smach.StateMachine.add('EXECUTE_ACTION',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="ExecuteAction")),
+                            {'succeeded':'CHECK_EFFECT', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})
+                            #
+                            smach.StateMachine.add('CHECK_EFFECT',
+                            smach_ros.SimpleActionState('/socialrobot/system', SystemAction,
+                                goal = SystemGoal(command="CheckEffect")),
+                            {'succeeded':'PRIM_ITER_CONTINUE', 'preempted':'PRIM_ITER_RETRY',  'aborted':'PRIM_ITER_RETRY'})            
+
+                        #close action_sm
+                        Iterator.set_contained_state('PRIMITIVE_ACTION_STATE', 
+                                                    action_sm, 
+                                                    loop_outcomes=['PRIM_ITER_CONTINUE'])
+
+                    StateMachine.add('PRIM_IT', primitive_action_it,
+                        {'PRIM_ITER_SUCCESS':'UPDATE_STATES',
+                        'PRIM_ITER_FAIL':'COM_ITER_FAIL', 
+                        'PRIM_ITER_RETRY':'COM_ITER_RETRY'})
+
+
+                Iterator.set_contained_state('COMPOUND_ACTION_STATE', 
+                                            com_action_sm, 
+                                            loop_outcomes=['COM_ITER_CONTINUE'])
             #close the task_it
-            StateMachine.add('TASK_IT',task_it,
-                        {'TASK_SUCCESS':'TASK_SUCCESS',
-                        'TASK_FAIL':'TASK_FAIL', 
-                        'TASK_RETRY':'TASK_RETRY'})
+            StateMachine.add('COM_IT', compound_action_it,
+                        {'COM_ITER_SUCCESS':'TASK_SUCCESS',
+                        'COM_ITER_FAIL':'TASK_FAIL', 
+                        'COM_ITER_RETRY':'TASK_RETRY'})        
 
         sis = smach_ros.IntrospectionServer('smach_server', self.sm, '/SM_ROOT')
         sis.start()

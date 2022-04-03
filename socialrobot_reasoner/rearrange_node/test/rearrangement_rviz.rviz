@@ -8,7 +8,7 @@ Panels:
         - /Status1
         - /Request1/Status1
         - /Response1
-      Splitter Ratio: 0.37022900581359863
+      Splitter Ratio: 0.35305342078208923
     Tree Height: 637
   - Class: rviz/Selection
     Name: Selection
@@ -59,12 +59,12 @@ Visualization Manager:
       Marker Topic: /rearrangement_marker/request_view
       Name: Request
       Namespaces:
-        my_namespace: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /rearrangement_marker/response_view
+      Marker Topic: /rearrange_node/markers
       Name: Response
       Namespaces:
         my_namespace: true
@@ -74,7 +74,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: map
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -98,25 +98,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.092956781387329
+      Distance: 1.719788670539856
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.8452786207199097
-        Y: 0.07777491956949234
-        Z: 1.221413016319275
+        X: 0.7438768744468689
+        Y: 0.15973713994026184
+        Z: 1.201924443244934
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6653991341590881
+      Pitch: 0.8453990817070007
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.253591537475586
+      Yaw: 1.06040620803833
     Saved: ~
 Window Geometry:
   Displays:

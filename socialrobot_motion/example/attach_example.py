@@ -57,20 +57,25 @@ if __name__ == '__main__':
     # box_pose.pose.position.y = 0.6
     # scene.add_box(box_name, box_pose, size=(0.1, 0.1, 0.4))
     
-    # robot = moveit_commander.RobotCommander()
-    # leftarm_group = moveit_commander.MoveGroupCommander('left_arm')
-    # rightarm_group = moveit_commander.MoveGroupCommander('right_arm')
-    # lefteef_link = leftarm_group.get_end_effector_link()
-    # righteef_link = rightarm_group.get_end_effector_link()
+    robot = moveit_commander.RobotCommander()
+    leftarm_group = moveit_commander.MoveGroupCommander('left_arm')
+    rightarm_group = moveit_commander.MoveGroupCommander('right_arm')
+    lefteef_link = leftarm_group.get_end_effector_link()
+    righteef_link = rightarm_group.get_end_effector_link()
 
     # #rospy.loginfo(wait_for_state_update(box_name, scene, box_is_known=True))
 
-    # grasping_group = 'left_eef'
-    # touch_links = robot.get_link_names(group=grasping_group)
-    # touch_links.append(righteef_link)    
+    print('------lefteef_link-------')
+    print(lefteef_link)
+    print('------righteef_link-------')
+    print(righteef_link)
 
-    # scene.attach_box(righteef_link, 'box3', touch_links=touch_links)
-    # #scene.remove_attached_object(lefteef_link, 'obj_red_gotica')    
+    grasping_group = 'left_eef'
+    touch_links = robot.get_link_names(group=grasping_group)
+    touch_links.append(righteef_link)    
+    object_name = 'obj_juice'
+    scene.attach_box(righteef_link, object_name, touch_links=touch_links)
+    #scene.remove_attached_object(righteef_link, object_name)    
     
     print('------objects-------')
     print (scene.get_known_object_names())
@@ -80,14 +85,14 @@ if __name__ == '__main__':
     scene_objects = scene.get_objects()
     print(attached_objects)
 
-    for obj in scene_objects.keys():
-        print(scene_objects[obj].id)
-        print(scene_objects[obj].primitives[0].dimensions)
-        print(scene_objects[obj].primitive_poses[0].position)
-        print(scene_objects[obj].primitive_poses[0].orientation)
+    # for obj in scene_objects.keys():
+    #     print(scene_objects[obj].id)
+    #     print(scene_objects[obj].primitives[0].dimensions)
+    #     print(scene_objects[obj].primitive_poses[0].position)
+    #     print(scene_objects[obj].primitive_poses[0].orientation)
 
-    for obj in attached_objects.keys():
-        print(attached_objects[obj].object.id)
-        print(attached_objects[obj].object.primitives[0].dimensions)
-        print(attached_objects[obj].object.primitive_poses[0].position)
-        print(attached_objects[obj].object.primitive_poses[0].orientation)
+    # for obj in attached_objects.keys():
+    #     print(attached_objects[obj].object.id)
+    #     print(attached_objects[obj].object.primitives[0].dimensions)
+    #     print(attached_objects[obj].object.primitive_poses[0].position)
+    #     print(attached_objects[obj].object.primitive_poses[0].orientation)

@@ -38,9 +38,9 @@ class ArmMotionClient:
     def plan(self):
 
         rospy.loginfo("wait for single arm motion planner.")
-        rospy.wait_for_service("/motion_plan/single_arm")
+        rospy.wait_for_service("/motion_plan/move_arm")
         rospy.loginfo("single arm motion planner server is connected.")
-        plan_srv = rospy.ServiceProxy("/motion_plan/single_arm", MotionPlan)
+        plan_srv = rospy.ServiceProxy("/motion_plan/move_arm", MotionPlan)
 
         #
         req = MotionPlanRequest()

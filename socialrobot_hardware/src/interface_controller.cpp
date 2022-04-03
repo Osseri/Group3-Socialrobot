@@ -163,13 +163,6 @@ GripperController::GripperController(std::string name_, ros::NodeHandle &nh):
   as_.registerPreemptCallback(boost::bind(&GripperController::gPreemptCB, this));
   joint_command_pub=nh_.advertise<sensor_msgs::JointState>("/vrep_interface/set_joint",100);
 
-  joint_command_msg.name.resize(2);
-  joint_command_msg.position.resize(2);
-
-  joint_command_msg.header.frame_id="panda_link0";
-  joint_command_msg.name[0]="panda_finger_joint1";
-  joint_command_msg.name[1]="panda_finger_joint2";
-
   as_.start();
 }
 
@@ -179,9 +172,20 @@ void GripperController::gGoalCB(){
 
   goal_start_time = ros::Time::now();
 
-  joint_command_msg.header.stamp=goal_start_time;
-  joint_command_msg.position[0] = goal_->command.position;
-  joint_command_msg.position[1] = goal_->command.position;
+  traj_time = goal_->trajectory.points.back().time_from_start;
+  as_joint_size = goal_->trajectory.points[0].positions.size();
+
+
+  joint_command_msg.header.stamp = goal_start_time;
+
+  joint_command_msg.name.resize(as_joint_size);
+  joint_command_msg.position.resize(as_joint_size);
+
+  for(int i=0;i<as_joint_size;i++){
+    joint_command_msg.name[i] = goal_->trajectory.joint_names[i];
+    joint_command_msg.position[i] = goal_->trajectory.points.back().positions[i];
+  }
+
   joint_command_pub.publish(joint_command_msg);
 
 }

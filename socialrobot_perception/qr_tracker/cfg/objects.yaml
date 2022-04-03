@@ -14,12 +14,27 @@ objects:
           x: 0.073
           y: 0.073
           z: 0.23
+      affordance:
+         - name: open
+           translation:
+               x: 0.0
+               y: 0.0
+               z: 1.1200e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 3.0000e-02
+               y: 3.0000e-02
+               z: 2.0000e-02
     - name: obj_pringles_onion
       id: 1
       translation:
           x: 0.0
           y: 0.0
-          z: -0.1085
+          z: -0.105
       rotation:
           x: 0.0
           y: 0.0
@@ -28,7 +43,7 @@ objects:
       size:
           x: 0.07
           y: 0.07
-          z: 0.217
+          z: 0.21
     - name: obj_milk_200ml
       id: 2
       translation:
@@ -42,14 +57,14 @@ objects:
           w: 1.0
       size:
           x: 0.056
-          y: 0.100
+          y: 0.120
           z: 0.062
     - name: obj_cantata
       id: 3
       translation:
           x: 0.0
           y: 0.0
-          z: -0.068
+          z: -0.065
       rotation:
           x: 0.0
           y: 0.0
@@ -58,13 +73,13 @@ objects:
       size:
           x: 0.065
           y: 0.065
-          z: 0.136
+          z: 0.135
     - name: obj_toilet_paper
       id: 4
       translation:
           x: 0.0
           y: 0.0
-          z: -0.05
+          z: -0.045
       rotation:
           x: 0.0
           y: 0.0
@@ -73,7 +88,7 @@ objects:
       size:
           x: 0.08
           y: 0.08
-          z: 0.1
+          z: 0.095
     - name: obj_banana_milk
       id: 5
       translation:
@@ -86,8 +101,8 @@ objects:
           z: 0.0
           w: 1.0
       size:
-          x: 0.065
-          y: 0.065
+          x: 0.06
+          y: 0.06
           z: 0.1
     - name: obj_tape
       id: 6
@@ -169,7 +184,7 @@ objects:
       translation:
           x: 0.0
           y: 0.0
-          z: -0.105
+          z: -0.103
       rotation:
           x: 0.0
           y: 0.0
@@ -178,7 +193,7 @@ objects:
       size:
           x: 0.055
           y: 0.055
-          z: 0.21
+          z: 0.205
     - name: obj_vitamin
       id: 12
       translation:
@@ -228,7 +243,7 @@ objects:
       id: 15
       translation:
           x: 0.0
-          y: 0.0
+          y: -0.003
           z: -0.06
       rotation:
           x: 0.0
@@ -304,16 +319,16 @@ objects:
       translation:
           x: 0.0
           y: 0.0
-          z: -0.0725
+          z: -0.07
       rotation:
           x: 0.0
           y: 0.0
           z: 0.0
           w: 1.0
       size:
-          x: 0.07
-          y: 0.07
-          z: 0.145
+          x: 0.065
+          y: 0.065
+          z: 0.14
     - name: obj_bath_sponge
       id: 21
       translation:
@@ -326,8 +341,8 @@ objects:
           z: 0.0
           w: 1.0
       size:
-          x: 0.07
-          y: 0.07
+          x: 0.09
+          y: 0.09
           z: 0.09
     - name: obj_spray
       id: 22
@@ -344,12 +359,12 @@ objects:
           x: 0.065
           y: 0.065
           z: 0.23
-    - name: obj_mug
+    - name: obj_cookie_stick
       id: 23
       translation:
           x: 0.0
-          y: 0.005
-          z: -0.045
+          y: 0.0
+          z: -0.06
       rotation:
           x: 0.0
           y: 0.0
@@ -357,14 +372,14 @@ objects:
           w: 1.0
       size:
           x: 0.07
-          y: 0.09
-          z: 0.09
+          y: 0.07
+          z: 0.122
     - name: obj_dispenser
       id: 24
       translation:
           x: 0.0
           y: 0.0
-          z: -0.087
+          z: -0.085
       rotation:
           x: 0.0
           y: 0.0
@@ -373,50 +388,539 @@ objects:
       size:
           x: 0.065
           y: 0.065
-          z: 0.174
-
-    - name: obj_fridge_handle
-      id: 32
+          z: 0.17
+    - name: obj_mug
+      id: 25
       translation:
-          x: -0.055
-          y: -0.16
-          z: 0.04
+          x: 0.0
+          y: 0.0
+          z: -0.0475
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.707
+          w: 0.707
+      size:
+          x: 0.06
+          y: 0.06
+          z: 0.095
+      grasp_point:
+          - translation:
+                x: 0.0
+                y: -0.01
+                z: 0.0
+            rotation:
+                x: 0.0
+                y: 0.0
+                z: 0.707
+                w: 0.707
+      affordance:
+         - name: open
+           translation:
+               x: 0.0
+               y: 0.0
+               z: +3.9000e-02
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 6.0000e-02
+               y: 6.0000e-02
+               z: 1.0000e-02
+         - name: handle
+           translation:
+               x: 0.0
+               y: 0.04
+               z: 0.0
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.707
+               w: 0.707
+           size:
+               x: 0.02
+               y: 0.02
+               z: 0.045
+           grasp_point:
+                - translation:
+                    x: 0.025
+                    y: 0.0
+                    z: 0.0
+                  rotation:
+                    x: 0.0
+                    y: 0.0
+                    z: 1.0
+                    w: 0.0
+    - name: obj_chocopick
+      id: 26
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.06
       rotation:
           x: 0.0
           y: 0.0
           z: 0.0
           w: 1.0
       size:
-          x: 0.025
-          y: 0.15
-          z: 0.04
-    - name: obj_fridge_body
+          x: 0.065
+          y: 0.065
+          z: 0.12
+    - name: obj_oreo_mini
+      id: 27
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.055
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.08
+          y: 0.08
+          z: 0.115
+    - name: obj_thinthin
+      id: 28
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.08
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.11
+          y: 0.05
+          z: 0.16
+    - name: obj_toothpaste_box
+      id: 29
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.095
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.05
+          y: 0.05
+          z: 0.19
+    - name: obj_sodium_bicarbonate
+      id: 30
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.08
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.05
+          y: 0.10
+          z: 0.16
+    - name: obj_sesame_oil
       id: 31
       translation:
-          x: 0.205
-          y: -0.31
-          z: -0.28
+          x: 0.0
+          y: 0.0195
+          z: -0.065
       rotation:
           x: 0.0
           y: 0.0
           z: 0.0
           w: 1.0
       size:
-          x: 0.49
-          y: 1.36
-          z: 0.56
-    # - name: obj_table
-    #   id: 99
+          x: 0.04
+          y: 0.095
+          z: 0.175
+    - name: obj_1L_milk
+      id: 32
+      translation:
+          x: -0.035
+          y: -0.02
+          z: -0.09
+      rotation:
+          x: -0.10911671
+          y: 0.0
+          z: 0.0
+          w: 0.99402895
+      size:
+          x: 0.07
+          y: 0.07
+          z: 0.236
+    - name: obj_dental
+      id: 33
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.12
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.05
+          y: 0.10
+          z: 0.24
+    - name: obj_spray_plaster
+      id: 34
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.085
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.055
+          y: 0.055
+          z: 0.17
+    - name: obj_tray
+      id: 35
+      translation:
+          x: 0.0
+          y: 0.0960
+          z: -0.00573
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.7071
+          w: 0.7071
+      size:
+          x: 0.235
+          y: 0.31
+          z: 0.02
+    - name: obj_table
+      id: 47
+      translation:
+          x: -0.566
+          y: 0.316
+          z: -0.365
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 1.2
+          y: 0.7
+          z: 0.73
+    - name: obj_glass
+      id: 
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.0444
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.063487
+          y: 0.063487
+          z: 0.0888
+      affordance:
+         - name: open
+           translation:
+               x: 0.0
+               y: 0.0
+               z: 3.9000e-02
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 6.0000e-02
+               y: 6.0000e-02
+               z: 1.0000e-02
+    - name: obj_coffee
+      id: 
+      translation:
+          x: 0.0
+          y: 0.0
+          z: -0.04
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.06
+          y: 0.06
+          z: 0.083926
+      affordance:
+         - name: open
+           translation:
+               x: 0.02
+               y: 0.0
+               z: 0.038779
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.01
+               y: 0.01
+               z: 0.01
+    - name: obj_left_hand
+      id: 43
+      translation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+          w: 1.0
+      size:
+          x: 0.01
+          y: 0.01
+          z: 0.01
+    # - name: obj_dyn_table_tl
+    #   id: 44
     #   translation:
-    #       x: 0.53
+    #       x: 0.0
     #       y: 0.0
-    #       z: 0.385
+    #       z: 0.0
     #   rotation:
-    #       x: 0
-    #       y: 0
-    #       z: 0
-    #       w: 1
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #       w: 1.0
     #   size:
-    #       x: 0.50
-    #       y: 0.80
-    #       z: 0.79
+    #       x: 0.05
+    #       y: 0.05
+    #       z: 0.02
+    # - name: obj_dyn_table_tr
+    #   id: 45
+    #   translation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #   rotation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #       w: 1.0
+    #   size:
+    #       x: 0.05
+    #       y: 0.05
+    #       z: 0.02
+    # - name: obj_dyn_table_cl
+    #   id: 46
+    #   translation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #   rotation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #       w: 1.0
+    #   size:
+    #       x: 0.05
+    #       y: 0.05
+    #       z: 0.02
+    # - name: obj_dyn_table_cr
+    #   id: 47
+    #   translation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #   rotation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #       w: 1.0
+    #   size:
+    #       x: 0.05
+    #       y: 0.05
+    #       z: 0.02
+    # - name: obj_dyn_table_bl
+    #   id: 48
+    #   translation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #   rotation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #       w: 1.0
+    #   size:
+    #       x: 0.05
+    #       y: 0.05
+    #       z: 0.02
+    # - name: obj_dyn_table_br
+    #   id: 49
+    #   translation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #   rotation:
+    #       x: 0.0
+    #       y: 0.0
+    #       z: 0.0
+    #       w: 1.0
+    #   size:
+    #       x: 0.05
+    #       y: 0.05
+    #       z: 0.02
+    - name: obj_table
+      id: 50
+      translation:
+          x: 0.3
+          y: 0.24
+          z: -0.37
+      rotation:
+          x: 0.0
+          y: 0.0
+          z: 1.0
+          w: 0.0
+      size:
+          x: 1.2
+          y: 0.7
+          z: 0.74
+    - name: obj_fridge
+      id: 51
+      translation:
+          x: 0.0
+          y: -5.1100e-01
+          z: -2.4800e-01
+      rotation:
+          x: -0.707
+          y: 0.0
+          z: 0.0
+          w: 0.707
+      size:
+          x: 4.9000e-01
+          y: 4.9500e-01
+          z: 1.3600e+00
+      mesh: obj_fridge
+      affordance:
+         - name: obj_fridge_bottom_door
+           translation:
+               x: +2.7498e-01
+               y: +2.1085e-05
+               z: -2.1505e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 5.0000e-02
+               y: 4.9500e-01
+               z: 9.2000e-01
+         - name: obj_fridge_top_door
+           translation:
+               x: +2.7494e-01
+               y: +6.8992e-06
+               z: +4.6496e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 5.0000e-02
+               y: 4.9500e-01
+               z: 4.2999e-01
+         - name: workspace
+           translation:
+               x: +1.2963e-01
+               y: -1.1921e-06
+               z: -6.0000e-02
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 1.0000e-01
+               y: 4.0000e-01
+               z: 8.0000e-03
+         - name: obj_fridge_handle
+           translation:
+               x: +3.3550e-01
+               y: -1.9999e-01
+               z: -5.6043e-02
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 7.5002e-02
+               y: 3.0004e-02
+               z: 1.5000e-01
+           mesh: obj_fridge_handle
+           grasp_point:
+                - translation:
+                    x: 0.0
+                    y: 0.0
+                    z: 0.0
+                  rotation:
+                    x: 0.0
+                    y: 0.0
+                    z: 1.0
+                    w: 0.0
+         - name: center
+           translation:
+               x: +3.0084e-01
+               y: 0.0
+               z: +1.8495e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.001
+               y: 0.001
+               z: 0.001
+         - name: frame_p1
+           translation:
+               x: +2.4500e-01
+               y: +2.4750e-01
+               z: -6.4005e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.001
+               y: 0.001
+               z: 0.001
+         - name: frame_p2
+           translation:
+               x: +2.4500e-01
+               y: -2.4750e-01
+               z: -6.4005e-01
+           rotation:
+               x: 0.0
+               y: 0.0
+               z: 0.0
+               w: 1.0
+           size:
+               x: 0.001
+               y: 0.001
+               z: 0.001

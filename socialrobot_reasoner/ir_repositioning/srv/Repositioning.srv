@@ -1,0 +1,104 @@
+# ================================================
+#
+#                                  ^ y
+#     |> robot,    |--  tool center tip   ->x
+#
+#
+#
+# [ INPUT ]
+# Pt: Position of the target object
+#     - relative to: global coordinates
+#     - format: (x, y)
+# Obs: Area list of ground obstacles
+#     - relative to: global coordinates
+#     - format: [CollisionModel, ...]
+# Cr: Constraints on the approach angle
+#     - relative to: the robot heading
+#     - format: (min, max)
+#     - range: -90 ~ 90 in RADIAN
+# Ct: Constraints on the approach angle
+#     - relative to: global coordinates
+#       (Assumtion) The initial T_heading is the same as initial R_heading.
+#     - format: (min, max)
+#     - range: -180 ~ 180 in RADIAN
+# section_def: The definition of ROI (Region of interest)
+#     - relative to: the center of the target
+#     - format: (min_radius, max_radius, interval)
+#
+# [ OUTPUT ]
+# num_candidates
+# candidates: new x, y, heading of the robot
+#     - relative to: global coordinates
+# approach_angles
+#     - relative to: global coordinates
+# manipulabilities
+#
+# ________________________
+# * Distance unit: meters
+# * Angle unit: radians
+# ================================================
+
+# hand
+uint8 hand_type
+uint8 RIGHT_HAND = 0
+uint8 LEFT_HAND  = 1
+uint8 DUAL_HAND  = 2
+# The dual hand version has a different process.
+
+# x, y (ignore theta) <- Tool tip center
+# If dual_hand, Pt is target_center.
+geometry_msgs/Pose2D Pt
+
+# This option works the same as the previous [base_radius] option.
+float32 collision_offset
+
+# Maximum distance constraint to target (unit: meter)
+# Only make sence to dual_hand
+float32 max_dist
+
+# These will be collision models.
+vision_msgs/BoundingBox2D[] Obs
+
+# x is min, y is max (ignore z)
+# If dual_hand, Cr = +(right)/-(left) 90deg. (fixed)
+#               Ct = (use when not strict) / (use only x when strict)
+geometry_msgs/Vector3 Cr
+geometry_msgs/Vector3 Ct
+
+# x is min_radius, y is max_radius, z is interval
+geometry_msgs/Vector3 section_definition
+
+# For the cost function in the get_candidates()
+# float32 preferred_heading
+
+################ ONLY FOR DUAL HAND ################
+# Available only when dual_hand
+# unit: meter
+float32 dual_hand_width
+
+# This [strict_dual=True] option forces the target
+# to always be in front of the robot-center.
+bool strict_dual
+
+
+---
+
+# The number of candidates
+uint8 num_candidates
+
+# x, y, heading of the robot
+geometry_msgs/Pose2D[] candidates
+
+#       [top view]
+#     45     0    -45
+#       .    ^    .
+#         .  |  .
+#  90 <------|------> -90
+#     approach angle [radian]
+float64[] approach_angles
+float64[] manipulabilities
+
+# eef
+# geometry_msgs/Pose[]
+# radian
+sensor_msgs/JointState[] joint_angles

@@ -2,7 +2,7 @@
 import geometry_msgs
 import rospy
 import sys
-from socialrobot_perception_msgs.srv import *
+from socialrobot_msgs.srv import *
 
 class GetObjectsTest:
 

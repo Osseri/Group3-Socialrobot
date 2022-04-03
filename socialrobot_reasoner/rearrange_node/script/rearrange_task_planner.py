@@ -27,6 +27,22 @@ from VFHplus_change_radius import influence
 from envClass import EnvInfo as EI
 from envClass import CanInfo as CI
 
+def quaternion_to_euler(x, y, z, w):
+    import math
+    t0 = +2.0 * (w * x + y * z)
+    t1 = +1.0 - 2.0 * (x * x + y * y)
+    X = math.degrees(math.atan2(t0, t1))
+
+    t2 = +2.0 * (w * y - z * x)
+    t2 = +1.0 if t2 > +1.0 else t2
+    t2 = -1.0 if t2 < -1.0 else t2
+    Y = math.degrees(math.asin(t2))
+
+    t3 = +2.0 * (w * z + x * y)
+    t4 = +1.0 - 2.0 * (y * y + z * z)
+    Z = math.degrees(math.atan2(t3, t4))
+
+    return X, Y, Z
 
 def rearrange_task_planner(data):
     print "node 1"
@@ -46,8 +62,18 @@ def rearrange_task_planner(data):
         tmp_info = tmp_position, tmp_orientation, tmp_scale
         env_info.append(tmp_info)
 
+        ## adding in 21.07.28
+        table_position = [data.workspace.object_position.x, data.workspace.object_position.y, data.workspace.object_position.z]
+        table_orientation_euler = quaternion_to_euler(data.workspace.object_orientation.x, data.workspace.object_orientation.y, data.workspace.object_orientation.z, data.workspace.object_orientation.w)
+        z_rad = np.deg2rad(table_orientation_euler[2])
+        rotation_matrix = np.array([[np.cos(-z_rad), -np.sin(-z_rad)], [np.sin(-z_rad), np.cos(-z_rad)]])
+        rotation_matrix_minus = np.array([[np.cos(z_rad), -np.sin(z_rad)], [np.sin(z_rad), np.cos(z_rad)]])
+        table_edge_left_bottom = [(table_position[0] - tmp_scale[0]/2), (table_position[1] - tmp_scale[1]/2)]
+        table_edge_right_up = [(table_position[0] + tmp_scale[0] / 2), (table_position[1] + tmp_scale[1] / 2)]
+
     target_name = data.target.object_name
     target_info = []
+    # target_position_rotation = []
     for i in range(len(target_name)):
         tmp_position = [data.target.object_position.x, data.target.object_position.y, data.target.object_position.z]
         tmp_orientation = [data.target.object_orientation.x, data.target.object_orientation.y, data.target.object_orientation.z, data.target.object_orientation.w]
@@ -55,9 +81,16 @@ def rearrange_task_planner(data):
 
         tmp_info = tmp_position, tmp_orientation, tmp_scale
         target_info.append(tmp_info)
+        ## adding in 21.07.28
+        # obj_r_tm = np.dot(rotation_matrix, np.array([[tmp_position[0] - table_position[0]], [tmp_position[1] - table_position[1]]]))
+        # target_position_rotation = [obj_r_tm[0] + table_position[0], obj_r_tm[1] + table_position[1], data.target.object_position.z]
+
+        # tmp_info = target_position_rotation, tmp_orientation, tmp_scale
+        # target_info.append(tmp_info)
 
     obstacle_name = []
     obstacle_info = []
+    # obstacle_position_rotation = []
     for i in range(len(data.objects)):
         tmp_position = [data.objects[i].object_position.x, data.objects[i].object_position.y, data.objects[i].object_position.z]
         tmp_orientation = [data.objects[i].object_orientation.x, data.objects[i].object_orientation.y, data.objects[i].object_orientation.z, data.objects[i].object_orientation.w]
@@ -66,10 +99,16 @@ def rearrange_task_planner(data):
         tmp_info = tmp_position, tmp_orientation, tmp_scale
         obstacle_name.append(data.objects[i].object_name)
         obstacle_info.append(tmp_info)
+        ## adding in 21.07.28
+        # obj_r_tm = np.dot(rotation_matrix, np.array([[tmp_position[0] - table_position[0]], [tmp_position[1] - table_position[1]]]))
+        # obstacle_position_rotation = [obj_r_tm[0] + table_position[0], obj_r_tm[1] + table_position[1], data.objects[i].object_position.z]
+
+        # tmp_info = obstacle_position_rotation, tmp_orientation, tmp_scale
+        # obstacle_info.append(tmp_info)
 
     ws = env_info[0]
     # print"ws info", env_info[0]
-    ws_d, ws_w = int(ws[2][1] * 100), int(ws[2][0] * 100)
+    ws_d, ws_w = int(ws[2][1] * 100 + 50), int(ws[2][0] * 100 + 50)
     # print"work space width, depth", ws_w, ws_d
     # GRID_SIZE = 0.01
     ws_zero_pos = [round(ws[0][2] - ws[2][0] * 0.5, 2), round(-ws[0][1] - ws[2][1] * 0.5, 2)]
@@ -500,19 +539,50 @@ def rearrange_task_planner(data):
 
         # for the rearrange-node
         print "\tA : candidaate position:"
-        return_can_pos = []
+        # return_can_pos = []
+        # for i in range(len(t_sel_can_index)):
+        #     print "\t\tcan:", s_v_index[0][t_sel_can_index[i]], "pos:", round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[0], 2), round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[1], 2)
+        #     tmp_pos = geometry_msgs.msg.Point()
+        #     tmp_pos.x = round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[0], 2)
+        #     tmp_pos.y = round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[1], 2)
+        #     tmp_pos.z = round(obstacle_info[env.ore_order[0]][0][2], 2)
+
+        #     return_can_pos.append([rearrange_positions_r_x, rearrange_positions_r_y, tmp_pos.z])
+
+        ### add in 21.08.17
+        return_can_pos_tm = []
         for i in range(len(t_sel_can_index)):
             print "\t\tcan:", s_v_index[0][t_sel_can_index[i]], "pos:", round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[0], 2), round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[1], 2)
+            tmp_pos_x = round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[0], 2)
+            tmp_pos_y = round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[1], 2)
+            tmp_pos_z = round(obstacle_info[env.ore_order[0]][0][2], 2)
+
+            return_can_pos_tm.append([tmp_pos_x, tmp_pos_y, tmp_pos_z])
+
+        return_can_pos_temp = []
+        for i in range(len(return_can_pos_tm)):
+            rearrange_positions_tm = np.dot(rotation_matrix, np.array([[return_can_pos_tm[i][0] - table_position[0]], [return_can_pos_tm[i][1] - table_position[1]]]))
+            rearrange_positions_r_x = rearrange_positions_tm[0] + table_position[0]
+            rearrange_positions_r_y = rearrange_positions_tm[1] + table_position[1]
+
+            if rearrange_positions_r_x > table_edge_left_bottom[0] and rearrange_positions_r_x < table_edge_right_up[0] and rearrange_positions_r_y > table_edge_left_bottom[1] and rearrange_positions_r_y < table_edge_right_up[1]:
+                return_can_pos_temp.append([rearrange_positions_r_x, rearrange_positions_r_y, return_can_pos_tm[i][2]])
+
+        return_can_pos = []
+        for i in range(len(return_can_pos_temp)):
+            rearrange_positions_tm = np.dot(rotation_matrix_minus, np.array([return_can_pos_temp[i][0] - table_position[0], return_can_pos_temp[i][1] - table_position[1]]))
             tmp_pos = geometry_msgs.msg.Point()
-            tmp_pos.x = round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[0], 2)
-            tmp_pos.y = round(can_info[s_v_index[0][t_sel_can_index[i]]].pos[1], 2)
-            tmp_pos.z = round(obstacle_info[env.ore_order[0]][0][2], 2)
+            tmp_pos.x = rearrange_positions_tm[0] + table_position[0]
+            tmp_pos.y = rearrange_positions_tm[1] + table_position[1]
+            tmp_pos.z = return_can_pos_temp[i][2]
+
             return_can_pos.append(tmp_pos)
 
         return rearrange_env_srvResponse(
             object_name = obstacle_name[env.ore_order[0]],
             rearrange_positions = return_can_pos
         )
+    return rearrange_env_srvResponse()
 
 
 def listener():
@@ -527,4 +597,5 @@ if __name__ == "__main__":
     rospy.init_node('rearrange_node', anonymous=True)
 
     listener()
+
 

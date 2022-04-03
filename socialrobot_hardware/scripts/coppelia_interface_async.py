@@ -12,7 +12,7 @@ import rosparam
 import math
 
 try:
-    import sim
+    import legacy_api.sim as sim
 except:
     print ('--------------------------------------------------------------')
     print ('"sim.py" could not be imported. This means very probably that')
@@ -53,8 +53,6 @@ class VrepInterface():
         self.obstacle_boundingboxes = {} 
 
         print('Connected to V-REP')
-        rospy.set_param('robot_hw', 'vrep')
-
 
     def __del__(self):
         if self.client_id != -1:
@@ -77,7 +75,7 @@ class VrepInterface():
             sim.simxGetPingTime(self.client_id)
 
         else:
-            print('[VREP] Connection Error!')
+            rospy.logerr('[VREP] Connection Error!')
             return -1
         
         return 0
@@ -207,7 +205,7 @@ class VrepInterface():
         # start simulation
         res = sim.simxStartSimulation(self.client_id, sim.simx_opmode_oneshot)
         if res > 2:
-            print('VREP:Cannot start a simulation[error: {}]'.format(res))
+            rospy.logerr('VREP:Cannot start a simulation[error: {}]'.format(res))
             return -1
 
         # # set sync mode(joint_state)
@@ -266,15 +264,15 @@ class VrepInterface():
 
         # check scene and model files
         if not os.path.exists(model_path):
-            print('Invaild path!:' + model_path)
+            rospy.logerr('Invaild path!: ' + model_path)
             return -1
 
         # close and load the scene
         if sim.simxGetConnectionId(self.client_id) != -1:
             sim.simxCloseScene(self.client_id, sim.simx_opmode_blocking)
-
-            if sim.simxLoadScene(self.client_id, str(model_path), 1, sim.simx_opmode_blocking):
-                print('VREP: scene load error')
+            res = sim.simxLoadScene(self.client_id, str(model_path), 1, sim.simx_opmode_blocking)
+            if res:
+                rospy.logerr('VREP: scene load error')
                 return -1
 
             # load model -> modified because of some problems
@@ -285,7 +283,7 @@ class VrepInterface():
             #if res:
             #    raise EnvironmentError()
         else:
-            print('VREP: connection error')
+            rospy.logerr('VREP: connection error')
             return -1
 
 
@@ -352,6 +350,8 @@ class VrepInterface():
         for i,n in enumerate(sdata):
             if n.split('_')[0] == 'obj':
                 obstacles[n] = handles[i]
+            # elif n.split('_')[0] == 'aff':
+            #     obstacles[n] = handles[i]
             elif n == 'base_footprint':
                 self.robot_handle = handles[i]
 
@@ -393,6 +393,9 @@ class VrepInterface():
             print('error in set_traj')
 
     def get_state(self):
+        '''
+        duplicated in CoppeliaSim 4.2.0 <=
+        '''
         inputInts = [0]
         inputFloats = [.0]
         inputStrings = ['']
@@ -451,7 +454,6 @@ class RosInterface:
             self.joint_ratio = {}
         if not self.joint_offset:
             self.joint_offset = {}
-
         
     def callback_get_obstacle(self, req):
         '''
@@ -624,11 +626,11 @@ class RosInterface:
         pass
 
     def update(self):
-        res, state = self.vrep_if.get_state()
+        # res, state = self.vrep_if.get_state()
 
-        if res == 0:
-            self.action_state = state[0]
-
+        # if res == 0:
+        #     self.action_state = state[0]
+        pass
 
 
 ##############################
@@ -638,6 +640,10 @@ if __name__ == '__main__':
     # loop freqency
     loop_freq = 20
 
+    # Initialize ROS node
+    rospy.init_node('vrep_interface')
+    rospack = rospkg.RosPack()
+    
     # Check joint remap configuration
     joint_remap = None
     try:
@@ -651,13 +657,11 @@ if __name__ == '__main__':
     vrep_if = VrepInterface()
     ros_if = RosInterface(vrep_if, joint_remap=joint_remap)
 
-    # Initialize ROS node
-    rospy.init_node('vrep_interface')
-
-    # To get a robot description
-    robot_name = rospy.get_param('/robot_name')
+    # Setup robot parameters
+    robot_name = rospy.get_param('/robot_name', default="social_robot")
     sim_env = rospy.get_param(rospy.get_name() + '/vrep_environment')
-    sim_model_path = rospy.get_param('/robot_description_path') + '/vrep_model/' + robot_name + '_' + sim_env + '.ttt'
+    robot_description_path = rospy.get_param('/robot_description_path', default=rospack.get_path(robot_name+"_description"))
+    sim_model_path = robot_description_path + '/vrep_model/4.1/' + robot_name + '_' + sim_env + '.ttt'
 
     # load sim model
     if vrep_if.load_sim_model(sim_model_path):

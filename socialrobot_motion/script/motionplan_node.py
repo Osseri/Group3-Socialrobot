@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-import socialrobot_perception_msgs
 import arm_planner
 import grasp_planner
 #import single_arm_planner
 from socialrobot_behavior.srv import *
 from socialrobot_hardware.srv import *
 from socialrobot_motion.srv import *
-from socialrobot_perception_msgs.srv import *
+from socialrobot_msgs.srv import *
 from std_msgs.msg import *
 import std_srvs.srv as std_srv
 from geometry_msgs.msg import *
@@ -51,7 +50,8 @@ if __name__ == '__main__':
     scene = moveit_commander.PlanningSceneInterface()
 
     # Arm Planner
-    ap = arm_planner.ArmPlanner(robot=robot,
+    ap = arm_planner.ArmPlanner(commander=moveit_commander,
+                                robot=robot,
                                 scene=scene)
     rospy.Service('/motion_plan/move_arm',
                   MotionPlan,
@@ -60,8 +60,14 @@ if __name__ == '__main__':
                   std_srv.Empty,
                   ap.callback_reset)    
     rospy.Service('/motion_plan/get_scene_objects',
-                  socialrobot_perception_msgs.srv.GetObjects,
+                  socialrobot_msgs.srv.GetObjects,
                   ap.callback_get_scene_objects)  
+    rospy.Service('/motion_plan/update_scene_objects',
+                  socialrobot_msgs.srv.UpdateObjects,
+                  ap.callback_update_scene_objects)  
+    rospy.Service('/motion_plan/get_group_info',
+                  socialrobot_msgs.srv.GetGroups,
+                  ap.callback_get_group_info)  
                   
     # Grasp Planner
     gp = grasp_planner.GraspPlanner(robot_name=robot_name,
