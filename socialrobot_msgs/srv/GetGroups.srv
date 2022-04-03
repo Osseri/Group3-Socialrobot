@@ -1,0 +1,6 @@
+string[] group_name
+--- 
+int32 result
+int32 SUCCESS = 1
+int32 FAIL = 0
+Group[] groups

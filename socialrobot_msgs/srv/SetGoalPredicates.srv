@@ -1,0 +1,7 @@
+socialrobot_actionlib/Predicate[] goal_predicates    
+socialrobot_actionlib/Predicate[] social_constraints        
+int32 actionID                    
+--- 
+int32 result
+int32 SUCCESS = 1
+int32 FAIL = 0

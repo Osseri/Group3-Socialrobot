@@ -1,0 +1,10 @@
+int32 command
+int32 ADD = 0
+int32 REMOVE = 1
+
+string[] object_ids   
+Object[] objects              
+--- 
+int32 result
+int32 SUCCESS = 1
+int32 FAIL = 0
