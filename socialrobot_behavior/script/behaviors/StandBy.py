@@ -75,7 +75,7 @@ class StandByBehavior(BehaviorBase):
                     'RShoulder_Pitch', 'RShoulder_Roll', 'RElbow_Pitch', 'RElbow_Yaw', 'RWrist_Pitch', 'RWrist_Roll',
                     ]
                 joint_state.position = [0, 0.48, #0, -0.3,
-                                        0, 1.39626, 0, 0, 0, 0,
+                                        0.5, 1.5, 0, 0, -1.5224, 0,
                                         ]
             elif robot_group == MotionPlanRequest.LEFT_ARM or robot_group == MotionPlanRequest.LEFT_GRIPPER:
                 robot_group = MotionPlanRequest.LEFT_ARM
@@ -84,7 +84,7 @@ class StandByBehavior(BehaviorBase):
                     'LShoulder_Pitch', 'LShoulder_Roll', 'LElbow_Pitch', 'LElbow_Yaw', 'LWrist_Pitch', 'LWrist_Roll',
                     ]
                 joint_state.position = [0, 0.48, #0, -0.3,
-                                        0, -1.39626, 0, 0, 0, 0,
+                                        0.5, -1.5, 0, 0, -1.5224, 0,
                                         ]
             elif robot_group == MotionPlanRequest.BOTH_ARM:
                 robot_group = MotionPlanRequest.BOTH_ARM
@@ -94,8 +94,8 @@ class StandByBehavior(BehaviorBase):
                     'RShoulder_Pitch', 'RShoulder_Roll', 'RElbow_Pitch', 'RElbow_Yaw', 'RWrist_Pitch', 'RWrist_Roll',
                     ]
                 joint_state.position = [0, 0.48, #0, -0.3,
-                                        0, -1.39626, 0, 0, 0, 0,
-                                        0, 1.39626, 0, 0, 0, 0,
+                                        0.5, -1.5, 0, 0, -1.5224, 0,
+                                        0.5, 1.5, 0, 0, -1.5224, 0,
                                         ]
 
             plan_req.targetBody = robot_group

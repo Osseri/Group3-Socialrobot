@@ -89,7 +89,7 @@ class RelocateTest():
         # # if self.detected_objects == None:
         # #     self.add_objects()
 
-        request.requirements.target_object = [None, None, None]
+        request.requirements.target_object = [social_robot_msg.Object()]*3
         for obj in self.detected_objects:
             request.requirements.dynamic_object.append(obj)
             if obj.id == target_objects[0]:

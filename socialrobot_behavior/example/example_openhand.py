@@ -29,7 +29,7 @@ if __name__ == '__main__':
     plan_req = GetMotionRequest()
     
     # fill behavior requirements
-    plan_req.requirements.name = "closehand" # closehand, openhand
+    plan_req.requirements.name = "openhand" # closehand, openhand
     plan_req.requirements.robot_group = [plan_req.inputs.BOTH_GRIPPER] # RIGHT_GRIPPER, LEFT_GRIPPER, BOTH_GRIPPER
 
     # OPTIONAL: if you want to set gripper joints manually

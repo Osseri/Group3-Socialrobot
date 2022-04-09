@@ -18,30 +18,36 @@ def requestTaskClient():
 		srv = rospy.ServiceProxy("/socialrobot/set_goal_predicates", social_srv.SetGoalPredicates)
 		req	= social_srv.SetGoalPredicatesRequest()
 
-		# add predicates
+		# # add predicates
 		# predicate = actionlib_msg.Predicate()
 		# predicate.name = 'inContGeneric'
-		# predicate.args = ['obj_mug','obj_coffee']
+		# predicate.args = ['obj_white_gotica','obj_fridge']
 		# predicate.is_negative = False
 		# req.goal_predicates.append(predicate)	
 
 		predicate = actionlib_msg.Predicate()
-		predicate.name = 'belowOf'
-		predicate.args = ['obj_tray', 'obj_white_gotica']
+		predicate.name = 'openedContainer'
+		predicate.args = ['obj_fridge']
 		predicate.is_negative = False
 		req.goal_predicates.append(predicate)	
 
-		predicate = actionlib_msg.Predicate()
-		predicate.name = 'graspedBy'
-		predicate.args = ['obj_dual_hand', 'obj_tray']
-		predicate.is_negative = False
-		req.goal_predicates.append(predicate)	
+		# predicate = actionlib_msg.Predicate()
+		# predicate.name = 'belowOf'
+		# predicate.args = ['obj_tray', 'obj_white_gotica']
+		# predicate.is_negative = False
+		# req.goal_predicates.append(predicate)	
 
-		predicate = actionlib_msg.Predicate()
-		predicate.name = 'delivered'
-		predicate.args = ['obj_tray', 'obj_human']
-		predicate.is_negative = False
-		req.goal_predicates.append(predicate)	
+		# predicate = actionlib_msg.Predicate()
+		# predicate.name = 'graspedBy'
+		# predicate.args = ['obj_dual_hand', 'obj_tray']
+		# predicate.is_negative = False
+		# req.goal_predicates.append(predicate)	
+
+		# predicate = actionlib_msg.Predicate()
+		# predicate.name = 'delivered'
+		# predicate.args = ['obj_tray', 'obj_human']
+		# predicate.is_negative = False
+		# req.goal_predicates.append(predicate)	
 
 		# predicate = actionlib_msg.Predicate()
 		# predicate.name = 'delivered'
@@ -51,7 +57,7 @@ def requestTaskClient():
 
 		# predicate = actionlib_msg.Predicate()
 		# predicate.name = 'graspedBy'
-		# predicate.args = ['obj_right_hand', 'obj_milk']
+		# predicate.args = ['obj_right_hand', 'obj_white_gotica']
 		# predicate.is_negative = False
 		# req.goal_predicates.append(predicate)	
 

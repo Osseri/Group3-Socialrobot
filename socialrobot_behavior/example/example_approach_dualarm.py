@@ -44,13 +44,15 @@ class AppraochArmTest():
         if data.detected_objects != []:
             self.objects_from_camera = data.detected_objects
         return
+
     def get_motion(self, target_object, request):
         # 
         self.detected_objects = []
-        if self.objects_from_robot != None:
-            self.detected_objects += self.objects_from_camera
-        if self.objects_from_robot != None:
-            self.detected_objects += self.objects_from_robot
+        # if self.objects_from_robot != None:
+        #     self.detected_objects += self.objects_from_camera
+        # if self.objects_from_robot != None:
+        #     self.detected_objects += self.objects_from_robot
+        self.add_objects()
         
         for obj in self.detected_objects:
             request.requirements.dynamic_object.append(obj)
@@ -76,7 +78,7 @@ class AppraochArmTest():
         
         # get motion
         motion_srv = rospy.ServiceProxy('/behavior/get_motion', GetMotion)
-        #print(request)
+        print(request)
         res = motion_srv(request)
         return res
 
@@ -96,17 +98,17 @@ class AppraochArmTest():
         object1.id = "obj_courier_box"
         obs1 = BoundingBox3D()
         c1 = Pose()
-        c1.position.x = 0.29177
-        c1.position.y = 0.0
-        c1.position.z = 0.841748
+        c1.position.x = 0.328999876976
+        c1.position.y = -2.47246316576e-06
+        c1.position.z = 0.840275347233
         c1.orientation.x = 0.0
         c1.orientation.y = 0.0
-        c1.orientation.z = 0.0
-        c1.orientation.w = 1.0
+        c1.orientation.z = 0.707
+        c1.orientation.w = 0.707
         obs1.center = c1
         v1 = Vector3()
-        v1.x = 0.05  
-        v1.y = 0.125
+        v1.x = 0.125 
+        v1.y = 0.05
         v1.z = 0.265
         obs1.size = v1
         object1.bb3d = obs1
@@ -116,9 +118,9 @@ class AppraochArmTest():
         object4.id = "obj_table"
         obs4 = BoundingBox3D()
         c4 = Pose()
-        c4.position.x = 0.550006
-        c4.position.y = 0.0
-        c4.position.z = 0.36
+        c4.position.x = +5.5001e-01
+        c4.position.y = +8.8066e-06
+        c4.position.z = +3.6501e-01
         c4.orientation.x = 0
         c4.orientation.y = 0
         c4.orientation.z = 0.707
@@ -126,14 +128,13 @@ class AppraochArmTest():
         obs4.center = c4
         v4 = Vector3()
         v4.x = 1.1342161893844604
-        v4.y = 0.7088739275932312
-        v4.z = 0.72
+        v4.y = 7.0887e-01
+        v4.z = 6.9000e-01
         obs4.size = v4
         object4.bb3d = obs4
 
-
         self.detected_objects = [object1, object4]
-
+        
 ##############################
 # Main function
 ##############################
@@ -145,7 +146,7 @@ if __name__ == '__main__':
 
     plan_req = GetMotionRequest()
     plan_req.requirements.name = "approachdualarm"
-    target_object = 'obj_tray'
+    target_object = 'obj_courier_box'
 
     # arm type
     plan_req.requirements.robot_group = [plan_req.requirements.BOTH_ARM]

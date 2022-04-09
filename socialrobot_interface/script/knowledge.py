@@ -423,6 +423,9 @@ class KnowledgeInterface(InterfaceBase):
             #         self.add_predicate(problem, 'onPhysical', [obj.id, 'obj_table'])
 
             has_workspace = False
+            detected_objects = []
+            for obj in self.detected_objects:
+                detected_objects.append(obj.id)
             for obj in self.detected_objects:
                 # create dynamic group
                 if obj.id in static_group:
@@ -438,18 +441,19 @@ class KnowledgeInterface(InterfaceBase):
                 if obj.id == 'obj_fridge':
                     self.add_predicate(problem, 'openedhand', ['obj_dual_hand'])
                     self.add_predicate(problem, 'largeSized', ['obj_fridge'])
-                    self.add_predicate(problem, 'largeSized', ['obj_tray'])   
                     self.add_predicate(problem, 'emptyhand', ['obj_right_hand'])
                     self.add_predicate(problem, 'emptyhand', ['obj_left_hand'])
-                    self.add_predicate(problem, 'inContGeneric', ['obj_red_gotica','obj_fridge'])
-                    self.add_predicate(problem, 'inContGeneric', ['obj_white_gotica','obj_fridge'])
-                    self.add_predicate(problem, 'obstruct', ['obj_right_hand','obj_white_gotica','obj_red_gotica'])
-                    self.add_predicate(problem, 'locatedAt', ['obj_fridge','pos_fridge'])
-                    self.add_predicate(problem, 'locatedAt', ['obj_red_gotica','pos_red_gotica'])
-                    self.add_predicate(problem, 'locatedAt', ['obj_white_gotica','pos_white_gotica'])
-                    self.add_predicate(problem, 'detectedobject', ['obj_red_gotica'])
                     self.add_predicate(problem, 'detectedobject', ['obj_white_gotica'])
-                    self.add_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_white_gotica'])
+                    self.add_predicate(problem, 'locatedAt', ['obj_white_gotica','pos_white_gotica'])
+                    if 'obj_red_gotica' in detected_objects:
+                        self.add_predicate(problem, 'largeSized', ['obj_tray'])   
+                        self.add_predicate(problem, 'inContGeneric', ['obj_red_gotica','obj_fridge'])
+                        self.add_predicate(problem, 'inContGeneric', ['obj_white_gotica','obj_fridge'])
+                        self.add_predicate(problem, 'obstruct', ['obj_right_hand','obj_white_gotica','obj_red_gotica'])
+                        self.add_predicate(problem, 'locatedAt', ['obj_fridge','pos_fridge'])
+                        self.add_predicate(problem, 'locatedAt', ['obj_red_gotica','pos_red_gotica'])
+                        self.add_predicate(problem, 'detectedobject', ['obj_red_gotica'])
+                        self.add_predicate(problem, 'inWorkspace', ['obj_right_hand', 'obj_white_gotica'])
                     self.remove_predicate(problem, 'locatedAt', ['obj_left_hand', 'pos_left_hand'])
                     if rospy.has_param('fridge_isopen'):
                         if rospy.get_param('fridge_isopen') == True:

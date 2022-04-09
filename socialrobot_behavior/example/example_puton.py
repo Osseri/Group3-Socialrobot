@@ -45,14 +45,18 @@ class PutOnTest():
         # 
         if self.objects_from_robot != None:
             self.detected_objects = self.objects_from_camera + self.objects_from_robot
-        if self.detected_objects == None:
-            self.add_objects()
         
+        # obstacles
         for obj in self.detected_objects:
             request.requirements.dynamic_object.append(obj)
-            if obj.id in target_objects:
+        # target
+        for obj in self.detected_objects:
+            if obj.id == target_objects[0]:
                 request.requirements.target_object.append(obj)
-        
+        for obj in self.detected_objects:
+            if obj.id == target_objects[1]:
+                request.requirements.target_object.append(obj)
+                
         # get motion
         motion_srv = rospy.ServiceProxy('/behavior/get_motion', GetMotion)
         res = motion_srv(request)
@@ -68,89 +72,6 @@ class PutOnTest():
             behavior_res = behavior_srv(behavior_req)
             return behavior_res
     
-    def add_objects(self):        
-        # red_gotica
-        object1 = social_robot_msg.Object()
-        object1.id = "obj_red_gotica"
-        obs1 = BoundingBox3D()
-        c1 = Pose()
-        c1.position.x = +3.0000e-01
-        c1.position.y = +0.15
-        c1.position.z = +8.2750e-01
-        c1.orientation.x = 0
-        c1.orientation.y = 0
-        c1.orientation.z = 0
-        c1.orientation.w = 1
-        obs1.center = c1
-        v1 = Vector3()
-        v1.x = 0.0618015
-        v1.y = 0.059508
-        v1.z = 0.23814
-        obs1.size = v1
-        object1.bb3d = obs1
-
-        # gotica
-        object2 = social_robot_msg.Object()
-        object2.id = "obj_gotica"
-        obs2 = BoundingBox3D()
-        c2 = Pose()
-        c2.position.x = +4.0000e-01
-        c2.position.y = -1.5003e-02
-        c2.position.z = +8.2886e-01
-        c2.orientation.x = 1.31627e-05
-        c2.orientation.y = 2.26816e-10
-        c2.orientation.z = -1.15535e-18
-        c2.orientation.w = 1.0
-        obs2.center = c2
-        v2 = Vector3()
-        v2.x = 0.065
-        v2.y = 0.065
-        v2.z = 0.23544
-        obs2.size = v2
-        object2.bb3d = obs2
-
-        # obj_bakey
-        object3 = social_robot_msg.Object()
-        object3.id = "obj_bakey"
-        obs3 = BoundingBox3D()
-        c3 = Pose()
-        c3.position.x = +3.0000e-01
-        c3.position.y = -0.15
-        c3.position.z = +8.2886e-01
-        c3.orientation.x = 1.31936e-05
-        c3.orientation.y = 2.20794e-10
-        c3.orientation.z = 6.07222e-07
-        c3.orientation.w = 1
-        obs3.center = c3
-        v3 = Vector3()
-        v3.x = 0.0618015
-        v3.y = 0.059508
-        v3.z = 0.23814
-        obs3.size = v3
-        object3.bb3d = obs3
-
-        # table
-        object4 = social_robot_msg.Object()
-        object4.id = "obj_table"
-        obs4 = BoundingBox3D()
-        c4 = Pose()
-        c4.position.x = 0.550006
-        c4.position.y = 0.0
-        c4.position.z = 0.36
-        c4.orientation.x = 0
-        c4.orientation.y = 0
-        c4.orientation.z = 0.707
-        c4.orientation.w = 0.707
-        obs4.center = c4
-        v4 = Vector3()
-        v4.x = 1.1342161893844604
-        v4.y = 0.7088739275932312
-        v4.z = 0.72
-        obs4.size = v4
-        object4.bb3d = obs4
-
-
-        self.detected_objects = [object1, object2, object3, object4]
 
 ##############################
 # Main function
@@ -163,7 +84,7 @@ if __name__ == '__main__':
 
     plan_req = GetMotionRequest()
     plan_req.requirements.name = "putupobject"
-    target_objects = ['obj_white_gotia', 'obj_tray']
+    target_objects = ['obj_white_gotica', 'obj_fridge']    # grasped, below
 
     # arm type
     plan_req.requirements.robot_group = [plan_req.requirements.RIGHT_ARM]
@@ -174,8 +95,10 @@ if __name__ == '__main__':
 
     # add obstacles from topic
     motion_plan = example.get_motion(target_objects, plan_req)
-    #example.set_motion(motion_plan)
-
-    print(motion_plan.motion.jointTrajectory.joint_names)
-    for pos in motion_plan.motion.jointTrajectory.points:
-        print(pos.positions)
+    
+    if motion_plan.result:
+        input = raw_input("Execute=y Pass=n : ")
+        if input == 'y':
+            example.set_motion(motion_plan)
+        else:
+            pass

@@ -1,4 +1,0 @@
-int32 type
-string waypoint
-sensor_msgs/JointState joint_state
-geometry_msgs/Pose pose

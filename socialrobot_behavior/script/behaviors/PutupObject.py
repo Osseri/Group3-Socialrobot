@@ -15,6 +15,7 @@ from socialrobot_hardware.srv import *
 from trajectory_msgs.msg import *
 from sensor_msgs.msg import *
 from std_msgs.msg import *
+from socialrobot_msgs.msg import Object
 from geometry_msgs.msg import Pose, Point, Quaternion
 
 import tf
@@ -22,7 +23,6 @@ import tf.transformations as tfm
 from tf.transformations import quaternion_from_euler, quaternion_matrix, euler_from_quaternion
 import numpy as np
 import random
-import utils
 from behavior import BehaviorBase
 
 class PutupObjectBehavior(BehaviorBase):
@@ -30,14 +30,9 @@ class PutupObjectBehavior(BehaviorBase):
     def __init__(self, name, **params):
         super(PutupObjectBehavior, self).__init__(name, **params)
         self.listener = tf.TransformListener()
-        if self._hardware_if == 'vrep':
-            self.service_name = '/sim_interface/set_motion'
-            self.service_type = VrepSetJointTrajectory
-        elif self._hardware_if == 'hw':
-            self.service_name = '/hw_interface/set_motion'
-            self.service_type = SetJointTrajectory
-        armplan_srv = '/motion_plan/move_arm'
 
+
+        armplan_srv = '/motion_plan/move_arm'
         self.talker = tf.TransformBroadcaster(queue_size=10)
         self.srv_plan = rospy.ServiceProxy(armplan_srv, MotionPlan)
 
@@ -107,6 +102,7 @@ class PutupObjectBehavior(BehaviorBase):
         requirements.target_object[1] : below object        
         '''
         try:
+            print(requirements)
             plan_req = MotionPlanRequest()
             plan_res = MotionPlanResponse(planResult=MotionPlanResponse.ERROR_FAIL)
 
@@ -138,33 +134,55 @@ class PutupObjectBehavior(BehaviorBase):
 
             # get bounding box of target object
             if len(requirements.target_object) == 0:
-                rospy.logerr("Approaching target is not decided.")
+                rospy.logerr("Puton targets are not decided.")
                 return plan_res
-            else:
-                grasped_object = requirements.target_object[0]
-                base_object = requirements.target_object[1]
+            elif len(requirements.target_object) == 1:
+                rospy.logwarn("A target is not decided.")
+                # HARD-CODE for demo
+                grasped_object = Object()
+                grasped_object.id = 'obj_white_gotica'
+                grasped_object.bb3d.size.x = 0.065
+                grasped_object.bb3d.size.y = 0.065
+                grasped_object.bb3d.size.z = 0.16
+                base_object = requirements.target_object[0]  # above object
+                self._utils.update_object_info(grasped_object)
+                self._utils.update_object_info(base_object)                
                 plan_req.targetObject = [grasped_object.id]            
-
+            else:            
+                grasped_object = requirements.target_object[0]  # above object
+                base_object = requirements.target_object[1]     # below object ex) tray, table...
+                self._utils.update_object_info(grasped_object)
+                self._utils.update_object_info(base_object)                
+                plan_req.targetObject = [grasped_object.id]            
+            
             # set obstacles from perception
             obstacles = requirements.static_object + requirements.dynamic_object
             for obs in obstacles:
                 plan_req.obstacle_ids.append(obs.id)
                 plan_req.obstacles.append(obs.bb3d)
 
-            # if object has affordances and grasp direction, transpose them based on robot frame            
-            base_object = utils.transform_object(base_object)
-            
+            # transpose object pose based on robot frame            
+            base_object = self._utils.transform_object(base_object)
+            # if object has workspace affordance replace base object
+            rospy.logwarn("[PutOn Behavior] Checking base object affordance.")
             for aff in base_object.affordance:
-                if self.check_affordance(aff, exception_constraints=aff_except):
-                    # add affordance as obstacle
-                    plan_req.obstacle_ids.append(aff.id)
-                    plan_req.obstacles.append(aff.bb3d)
+                print(aff.id)
+                if 'workspace' in aff.id:
+                    base_object = aff
+            print(base_object)
+            
+            # for aff in base_object.affordance:
+            #     if self.check_affordance(aff, exception_constraints=aff_except):
+            #         # add affordance as obstacle
+            #         plan_req.obstacle_ids.append(aff.id)
+            #         plan_req.obstacles.append(aff.bb3d)
 
             # brute-force search approching pose
             pre_eef = []
             way_eef = []
             goal_eef = []
-
+            print('=====grasped===')
+            print(grasped_object)
             sample_poses = self.create_sample_poses(robot_group, base_object)
             self.get_eef_poses(robot_group, sample_poses, grasped_object, pre_eef, way_eef, goal_eef)
             pre_wrist, way_wrist, goal_wrist = self.eef_to_wrist(pre_eef, way_eef, goal_eef, robot_group)
@@ -183,7 +201,7 @@ class PutupObjectBehavior(BehaviorBase):
                 plan_req.orientation_constraint.position.x = 3.14 #ignore this axis
                 plan_req.orientation_constraint.position.y = 0.4 #30degree
                 plan_req.orientation_constraint.position.z = 0.4
-                
+
                 grasp_plan = self.srv_plan(plan_req)
                 if grasp_plan.planResult == MotionPlanResponse.SUCCESS:    
                     rospy.loginfo('final approach pose to target is found!')
@@ -220,40 +238,40 @@ class PutupObjectBehavior(BehaviorBase):
 
         # get 4 approaching pose
         # y
-        trans = utils.create_pose([0, target_size.y/2.0, 0],
+        trans = self._utils.create_pose([0, target_size.y/2.0, 0],
                                         self.rot_z(-90))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         # -y
-        trans = utils.create_pose([0, -target_size.y/2.0, 0],
+        trans = self._utils.create_pose([0, -target_size.y/2.0, 0],
                                         self.rot_z(90))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         # x
-        trans = utils.create_pose([target_size.x/2.0, 0, 0],
+        trans = self._utils.create_pose([target_size.x/2.0, 0, 0],
                                         self.rot_z(180))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         # -x
-        trans = utils.create_pose([-target_size.x/2.0, 0, 0],
+        trans = self._utils.create_pose([-target_size.x/2.0, 0, 0],
                                         self.rot_z(0))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         
 
         # create eef poses
         for desired_pose in candidate_poses:
 
             # pre-grasp
-            trans_pose = utils.create_pose([-(offset[1]), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[1]), 0, 0],
                                             [0, 0, 0, 1])                                            
-            pre_grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            pre_grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # waypoint
-            trans_pose = utils.create_pose([-((offset[0]+offset[1])/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-((offset[0]+offset[1])/2.0), 0, 0],
                                             [0, 0, 0, 1])   
-            waypoint_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            waypoint_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # grasp
-            trans_pose = utils.create_pose([-(offset[0]), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[0]), 0, 0],
                                             [0, 0, 0, 1])   
-            grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
 
             pre_eef.append(pre_grasp_pose)
             way_eef.append(waypoint_pose)
@@ -282,19 +300,19 @@ class PutupObjectBehavior(BehaviorBase):
         for desired_pose in candidate_poses:
 
             # pre
-            trans_pose = utils.create_pose([0, 0, target_size.z/2.0 + 0.05],
+            trans_pose = self._utils.create_pose([0, 0, target_size.z/2.0 + 0.05],
                                             [0, 0, 0, 1])                                            
-            pre_grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            pre_grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # waypoint
-            trans_pose = utils.create_pose([0, 0, target_size.z/2.0 + 0.02],
+            trans_pose = self._utils.create_pose([0, 0, target_size.z/2.0 + 0.02],
                                             [0, 0, 0, 1])   
-            waypoint_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            waypoint_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # goal
-            trans_pose = utils.create_pose([0, 0, target_size.z/2.0],
+            trans_pose = self._utils.create_pose([0, 0, target_size.z/2.0],
                                             [0, 0, 0, 1])   
-            grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
 
             pre_eef_poses.append(pre_grasp_pose)
             waypoint_eef_poses.append(waypoint_pose)
@@ -322,16 +340,16 @@ class PutupObjectBehavior(BehaviorBase):
                 pass
             
         # vector to pose
-        eef_to_wrist_pose = utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
+        eef_to_wrist_pose = self._utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
 
         # transpose
         pre_wrist_poses = []
         waypoint_wrist_poses = []
         goal_wrist_poses = []
         for i in range(len(pre_eef_poses)):
-            pre_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
-            waypoint_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
-            goal_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
+            pre_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
+            waypoint_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
+            goal_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
 
         return pre_wrist_poses, waypoint_wrist_poses, goal_wrist_poses
 
@@ -343,17 +361,18 @@ class PutupObjectBehavior(BehaviorBase):
         target_pose = Pose()
         target_pose.orientation = Quaternion(x=0.0,y=0.0,z=0.0,w=1.0)
         target_pose.position = base_object.bb3d.center.position
+        target_pose.position.x -= 0.02
         target_pose.position.z += base_object.bb3d.size.z/2.0 + 0.01
 
         if robot_group is PlannerInputs.LEFT_ARM or robot_group is PlannerInputs.LEFT_ARM_WITHOUT_WAIST:
-            rot_deg = [0, -15, -30, -45, -60, -75, -90]
+            rot_deg = [30, 20, 10, 0, -10, -20, -30]
         elif robot_group is PlannerInputs.RIGHT_ARM or robot_group is PlannerInputs.RIGHT_ARM_WITHOUT_WAIST:
-            rot_deg = [0, 15, 30, 45, 60, 75, 90]
+            rot_deg = [-30, -20, -10, 0, 10, 20, 30]
         rot_deg.reverse()
         for deg in rot_deg:
-            rot_pose = utils.create_pose([0, 0, 0],
+            rot_pose = self._utils.create_pose([0, 0, 0],
                                          self.rot_z(deg))
-            candidate_poses.append(utils.transform_pose(rot_pose, target_pose))
+            candidate_poses.append(self._utils.transform_pose(rot_pose, target_pose))
 
         return candidate_poses
 

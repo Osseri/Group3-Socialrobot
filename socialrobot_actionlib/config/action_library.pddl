@@ -431,7 +431,7 @@
             (not (locatedAt ?robot_group2 ?arm_position)) 
             (locatedAt ?robot_group2 ?target_position)   
         )
-		:constraints (?position - controller ?Mobile - hardware_group ?opencontainer - planner)
+		:constraints (?position - controller ?Mobile - hardware_group ?takeoutobject - planner)
         :primitives 
             (and
                 ; (when (not (openedContainer ?target_object2))
@@ -444,6 +444,44 @@
                 (?robot_group2 ?target_object1 - standby_with_object)
             )
 	)
+
+    ; put object into container
+    (:action putin_object
+    :parameters (?robot_group1 ?robot_group2 ?target_object1 ?target_object2 - Object ?mobile_position ?arm_position ?container_position ?target_position - Position)
+    ; robot_group1 = mobile
+    ; robot_group2 = single arm
+    ; target_object1 = target object
+    ; target_object2 = container
+    :precondition
+        (and           
+            (type ?robot_group1 Mobile)
+            (type ?robot_group2 Arm)
+            (not (type ?target_object1 Arm))
+            (not (type ?target_object2 Arm))
+            (not (= ?robot_group1 ?robot_group2))
+            (graspedBy ?robot_group2 ?target_object1)
+            (not (inContGeneric ?target_object1 ?target_object2))
+            (openedContainer ?target_object2)    
+            (locatedAt ?robot_group1 ?mobile_position)
+            (locatedAt ?robot_group2 ?arm_position)  
+            (locatedAt ?target_object2 ?container_position)   
+            (locatedAt ?target_object1 ?target_position)     
+        )    
+    :effect
+        (and            
+            (inContGeneric ?target_object1 ?target_object2)
+        )
+		:constraints (?position - controller ?Mobile - hardware_group ?putinobject - planner)
+        :primitives 
+            (and              
+                (?robot_group2 ?target_object1 - standby_with_object)
+                (?robot_group1 ?target_object2 ?mobile_position ?container_position - approach_base)
+                (?robot_group2 ?target_object1 ?target_object2 ?container_position ?target_position - putup_object)
+                (?robot_group2 - open_hand)
+                (?robot_group1 ?initPos [-0.3,0.0,0.0] - move_base)
+                (obj_dual_hand - standby)
+            )
+	) 
 
     ;open fridge container 
     (:action open_container
@@ -463,7 +501,6 @@
             (locatedAt ?robot_group1 ?initPos)
             (locatedAt ?robot_group2 ?armPos)  
             (locatedAt ?target_object ?goal_position)    
-            (openedHand ?robot_group2)        
         )    
     :effect
         (and           
@@ -480,13 +517,55 @@
 		:constraints (?position - controller ?Mobile - hardware_group ?opencontainer - planner)
         :primitives 
             (and                
-                (?robot_group1 ?target_object ?initPos ?goal_position - approach_base)
+                (?robot_group1 obj_fridge_bottom_door ?initPos ?goal_position - approach_base)
                 (?robot_group2 ?target_object ?armPos ?goal_position - approach_arm)
                 (?robot_group2 ?target_object ?armPos ?goal_position - grasp_object)
                 (?robot_group2 ?target_object ?initPos ?goal_position - open_door)
                 (?robot_group2 - open_hand)
-                (?robot_group2 - standby)
-                (?robot_group1 ?target_object ?initPos ?goal_position - approach_base)
+                (obj_dual_hand - standby)
+                ;(?robot_group1 ?target_object ?initPos ?goal_position - approach_base)
+            )
+	)
+
+    ;close fridge container 
+    (:action close_container
+    :parameters (?robot_group1 ?robot_group2 ?target_object - Object ?initPos ?armPos ?goal_position - Position)
+    ; robot_group1 = mobile
+    ; robot_group2 = single arm
+    ; target_object = container
+    :precondition
+        (and
+            (type ?robot_group1 Mobile)
+            (type ?robot_group2 Arm)
+            (not (= ?robot_group1 ?robot_group2))
+            (openedContainer ?target_object)
+            (emptyHand ?robot_group2)
+            (openedHand ?robot_group2)
+            (locatedAt ?robot_group1 ?initPos)
+            (locatedAt ?robot_group2 ?armPos)  
+            (locatedAt ?target_object ?goal_position)    
+        )    
+    :effect
+        (and           
+		    (not (openedContainer ?target_object))
+            ; (forall (?object - Object)
+            ;     (when (inContGeneric ?target_object ?object)
+            ;         (and 
+            ;             (not (detectedObject ?object))
+            ;             (not (inWorkspace ?robot_group2 ?object))
+            ;         )
+            ;     )
+            ; )
+        )
+		:constraints (?position - controller ?Mobile - hardware_group ?closecontainer - planner)
+        :primitives 
+            (and                
+                (?robot_group1 obj_fridge_bottom_door ?initPos ?goal_position - approach_base)
+                (?robot_group2 ?target_object ?armPos ?goal_position - approach_arm)
+                (?robot_group2 ?target_object ?armPos ?goal_position - grasp_object)
+                (?robot_group2 ?target_object ?initPos ?goal_position - close_door)
+                (?robot_group2 - open_hand)
+                (obj_dual_hand - standby)
             )
 	)
 
@@ -495,12 +574,25 @@
     :parameters (?robot_group ?target_object - Object ?current_position ?goal_position - Position)
     :precondition
         (and      
-                (primitive)        
+            (primitive)        
         )    
     :effect
         (and 
         )
 		:constraints (?position - controller ?Mobile - hardware_group ?opendoor - planner)
+    )
+
+    ; close fridge door
+    (:action close_door
+    :parameters (?robot_group ?target_object - Object ?current_position ?goal_position - Position)
+    :precondition
+        (and      
+            (primitive)        
+        )    
+    :effect
+        (and 
+        )
+		:constraints (?position - controller ?Mobile - hardware_group ?closedoor - planner)
     )
 
     ; move robot base from to
@@ -664,4 +756,25 @@
                 (?robot_group ?target_object1 ?target_object2 ?current_position ?target_position - transfer_object)
             )
     )
+
+    ; pushing object with dual arm
+    ; (:action pushing_object_dualarm
+    ; :parameters (?robot_group ?target_object1 ?target_object2 - Object  ?current_position ?target_position - Position)
+    ; :precondition
+    ;     (and      
+    ;         (or
+    ;             (type ?robot_group DualArm) 
+    ;         )
+    ;     )    
+    ; :effect
+    ;     (and 
+    ;     )
+	; 	:constraints (?position - controller ?Arm - hardware_group ?deliverobject - planner)
+    ;     :primitives 
+    ;         (and
+    ;             (?robot_group ?target_object2 ?current_position ?target_position - hold_object_dualarm)
+    ;             ( - pushing)
+    ;             ( - move_base)
+    ;         )
+    ; )
 )

@@ -28,6 +28,7 @@ class BehaviorBase(with_metaclass(ABCMeta)):
         self._target_gripper = params.get('target_gripper', 0)
         self._target_base = params.get('target_base', 0)
         self._hardware_if = params.get('hardware_interface', 'vrep')
+        self._utils = params.get('utils', None)
         self.behavior_data = {}
         self.motion_trajectory = {}
         self.input_args = []

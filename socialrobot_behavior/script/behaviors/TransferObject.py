@@ -13,6 +13,7 @@ from sensor_msgs.msg import *
 from std_msgs.msg import *
 from geometry_msgs.msg import Pose, Point, Quaternion
 from visualization_msgs.msg import Marker, MarkerArray
+from socialrobot_msgs import msg as social_msg
 
 import tf
 import tf.transformations as tfm
@@ -21,7 +22,6 @@ import numpy as np
 import copy
 from scipy.spatial import KDTree
 from behavior import BehaviorBase
-import utils
 
 
 def degToRad(deg):
@@ -154,11 +154,23 @@ class TransferObjectBehavior(BehaviorBase):
             if len(requirements.target_object) == 0:
                 rospy.logerr("Transfer target is not decided.")
                 return plan_res
-            else:
+
+            elif len(requirements.target_object) == 2:
                 # transform based on footprint
-                grasp_object = utils.transform_object(requirements.target_object[0])
+                grasp_object = self._utils.transform_object(requirements.target_object[0])
                 goal_object = requirements.target_object[1]
                 plan_req.targetObject = [grasp_object.id]
+
+            elif len(requirements.target_object) == 1:
+                # transform based on footprint
+                grasp_object = self._utils.transform_object(requirements.target_object[0])
+                plan_req.targetObject = [grasp_object.id]
+
+                # there is no goal, set static goal pose
+                goal_object = social_msg.Object()
+                goal_object.bb3d.center.position.x = 0.8
+                goal_object.bb3d.center.position.y = 0.0
+                goal_object.bb3d.center.position.z = 1.0
            
             # create workspace surface points
             points = self._create_workspace_surface_points(500, self.robot_config['arm_length'], arm_origin)
@@ -234,9 +246,9 @@ class TransferObjectBehavior(BehaviorBase):
         # gripper end-effector position from target object
         for desired_pose in candidate_poses:
 
-            trans_pose = utils.create_pose([0, 0, 0],
+            trans_pose = self._utils.create_pose([0, 0, 0],
                                             [0, 0, 0, 1])   
-            eef_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            eef_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             goal_eef_poses.append(eef_pose)
 
     def eef_to_wrist(self, goal_eef_poses, robot_group):
@@ -259,12 +271,12 @@ class TransferObjectBehavior(BehaviorBase):
                 pass
             
         # vector to pose
-        eef_to_wrist_pose = utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
+        eef_to_wrist_pose = self._utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
 
         # transpose
         goal_wrist_poses = []
         for i in range(len(goal_eef_poses)):
-            goal_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
+            goal_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
 
         return goal_wrist_poses
 
@@ -288,9 +300,9 @@ class TransferObjectBehavior(BehaviorBase):
             rot_deg = [0, 15, 30, 45, 60, 75, 90]
         rot_deg.reverse()
         for deg in rot_deg:
-            rot_pose = utils.create_pose([0, 0, 0],
+            rot_pose = self._utils.create_pose([0, 0, 0],
                                          self.rot_z(deg))
-            candidate_poses.append(utils.transform_pose(rot_pose, target_pose))
+            candidate_poses.append(self._utils.transform_pose(rot_pose, target_pose))
 
         return candidate_poses
 

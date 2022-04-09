@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
     if motion_plan.result:
         input = raw_input("Execute=y Pass=n : ")
-        if input == 'y':
+        if input == 'y' or 'e':
             example.set_motion(motion_plan)
         else:
             pass

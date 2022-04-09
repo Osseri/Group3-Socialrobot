@@ -198,7 +198,7 @@ if __name__ == '__main__':
 
     plan_req = GetMotionRequest()
     plan_req.requirements.name = "approachbase"
-    target_object = 'obj_tray'
+    target_object = 'obj_fridge_bottom_door'
     #plan_req.requirements.constraints = ['init']
 
     # arm type
@@ -206,7 +206,7 @@ if __name__ == '__main__':
 
     # add obstacles from topic
     motion_plan = example.get_motion(target_object, plan_req)    
-    #print(motion_plan)
+    print(motion_plan)
     
     # publish results
     iter=0

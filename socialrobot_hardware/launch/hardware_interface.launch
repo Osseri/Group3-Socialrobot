@@ -4,7 +4,7 @@
   <arg name="sim_env" default="default"/>
   <arg name="sim" default="true"/>
   <arg name="sync_mode" default="false"/>
-  <arg name="max_lin_vel" default="0.05"/>
+  <arg name="max_lin_vel" default="0.08"/>
   <arg name="max_ang_vel" default="0.08"/>
 	
   <!-- VREP interface -->

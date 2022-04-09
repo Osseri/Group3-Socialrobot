@@ -21,7 +21,6 @@ import tf
 import tf.transformations as tfm
 import numpy as np
 import random
-import utils
 from behavior import BehaviorBase
 
 class PourObjectBehavior(BehaviorBase):
@@ -132,8 +131,8 @@ class PourObjectBehavior(BehaviorBase):
                 plan_req.targetObject = [grasped_object.id]
 
             # if object has affordances and grasp direction, trasnpose them based on robot frame            
-            grasped_object = utils.transform_object(grasped_object)         
-            container_object = utils.transform_object(container_object)
+            grasped_object = self._utils.transform_object(grasped_object)         
+            container_object = self._utils.transform_object(container_object)
 
             # grasped object and container have OPEN affordance
             #TODO
@@ -207,10 +206,15 @@ class PourObjectBehavior(BehaviorBase):
 
                         if third_plan.planResult == MotionPlanResponse.SUCCESS:
                             rospy.loginfo('final pouring pose to target is found!')
-                            merged_plan = utils.connect_motion_plan(approach_plan, second_plan, rospy.Duration(0.0))   
-                            merged_plan = utils.connect_motion_plan(merged_plan, third_plan, rospy.Duration(0.0))                        
-                            merged_plan.planResult = MotionPlanResponse.SUCCESS
-                            return merged_plan
+                            merged_plan = self._utils.connect_motion_plan(approach_plan, second_plan, rospy.Duration(0.0))   
+                            merged_plan = self._utils.connect_motion_plan(merged_plan, third_plan, rospy.Duration(0.0))
+                            
+                            # reverse pouring motion for put the object onto the table
+                            reversed_plan = self._utils.reverse_motion_plan(merged_plan)
+                            final_plan = self._utils.connect_motion_plan(merged_plan, reversed_plan, rospy.Duration(2.0))
+         
+                            final_plan.planResult = MotionPlanResponse.SUCCESS
+                            return final_plan
 
             return MotionPlanResponse(planResult=MotionPlanResponse.ERROR_NO_SOLUTION)
 
@@ -239,21 +243,21 @@ class PourObjectBehavior(BehaviorBase):
         for desired_pose in candidate_poses:
 
             # approach
-            trans_pose = utils.create_pose([-min(gr_size.x, gr_size.y)/2.0, i*(gr_size.x + con_size.x/2.0), gr_size.z],
+            trans_pose = self._utils.create_pose([-min(gr_size.x, gr_size.y)/2.0, i*(gr_size.x + con_size.x/2.0), gr_size.z],
                                             [0, 0, 0, 1])                                            
-            pre_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            pre_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # waypoint
             quat = self.rot_x(45*i)
-            trans_pose = utils.create_pose([-min(gr_size.x, gr_size.y)/2.0, i*(gr_size.x + con_size.x/2.0), gr_size.z],
+            trans_pose = self._utils.create_pose([-min(gr_size.x, gr_size.y)/2.0, i*(gr_size.x + con_size.x/2.0), gr_size.z],
                                             quat)   
-            waypoint_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            waypoint_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # pouring
             quat = self.rot_x(90*i)
-            trans_pose = utils.create_pose([-min(gr_size.x, gr_size.y)/2.0, i*(gr_size.x + con_size.x/2.0), gr_size.z],
+            trans_pose = self._utils.create_pose([-min(gr_size.x, gr_size.y)/2.0, i*(gr_size.x + con_size.x/2.0), gr_size.z],
                                             quat)   
-            grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
 
             pre_eef_poses.append(pre_pose)
             waypoint_eef_poses.append(waypoint_pose)
@@ -279,16 +283,16 @@ class PourObjectBehavior(BehaviorBase):
                 pass
             
         # vector to pose
-        eef_to_wrist_pose = utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
+        eef_to_wrist_pose = self._utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
 
         # transpose
         pre_wrist_poses = []
         waypoint_wrist_poses = []
         goal_wrist_poses = []
         for i in range(len(pre_eef_poses)):
-            pre_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
-            waypoint_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
-            goal_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
+            pre_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
+            waypoint_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
+            goal_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
 
         return pre_wrist_poses, waypoint_wrist_poses, goal_wrist_poses
 
@@ -307,9 +311,9 @@ class PourObjectBehavior(BehaviorBase):
             rot_deg = [0, 15, 30, 45, 60, 75, 90]
         rot_deg.reverse()
         for deg in rot_deg:
-            rot_pose = utils.create_pose([0, 0, 0],
+            rot_pose = self._utils.create_pose([0, 0, 0],
                                          self.rot_z(deg))
-            candidate_poses.append(utils.transform_pose(rot_pose, target_pose))
+            candidate_poses.append(self._utils.transform_pose(rot_pose, target_pose))
 
         return candidate_poses
 

@@ -5,6 +5,7 @@
     <arg name="use_rviz" default="true"/>
     <arg name="use_knowledge" default="true"/>
     <arg name="use_reasoner" default="true"/>
+    <arg name="use_behavior" default="true"/>
     <arg name="sim" default="true"/>
     <arg name="sim_env" default="default"/>
     <arg name="sync_mode" default="false"/>
@@ -37,7 +38,7 @@
     </include>
 
     <!-- socialrobot_behavior -->
-    <include file="$(find socialrobot_behavior)/launch/behavior.launch"/>
+    <include if="$(arg use_behavior)" file="$(find socialrobot_behavior)/launch/behavior.launch"/>
 
     <!-- socialrobot_motion -->
     <include file="$(find socialrobot_motion)/launch/motion_plan.launch"/>

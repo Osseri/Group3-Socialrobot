@@ -23,8 +23,8 @@ class TransferObjectTest():
 
     def __init__(self):
         self.detected_objects = []
-        self.objects_from_robot = None
-        self.objects_from_camera = None
+        self.objects_from_robot = []
+        self.objects_from_camera = []
 
         # 
         rospy.Subscriber("/socialrobot/perception/objects", social_robot_msg.Objects, self._callback_objects)
@@ -42,12 +42,11 @@ class TransferObjectTest():
         return
 
     def get_motion(self, target_object, goal_position, request):
-        # wait all perception data is subscribed        
-        while(self.objects_from_robot != None and self.objects_from_camera != None):
-            rospy.logwarn("waiting perception data...")
-            rospy.sleep(1.0)
-        
-        self.detected_objects = self.objects_from_camera + self.objects_from_robot
+        self.detected_objects = []
+        if self.objects_from_robot != None:
+            self.detected_objects += self.objects_from_camera
+        if self.objects_from_robot != None:
+            self.detected_objects += self.objects_from_robot
 
         # if self.detected_objects == None:
         #     self.add_objects()
@@ -150,7 +149,7 @@ if __name__ == '__main__':
 
     plan_req = GetMotionRequest()
     plan_req.requirements.name = "transferobject"
-    target_object = 'obj_milk'
+    target_object = 'obj_gotica'
     goal_position = 'obj_human'
 
     # arm type

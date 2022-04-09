@@ -83,7 +83,7 @@ if __name__ == '__main__':
     plan_req = GetMotionRequest()
     plan_req.requirements.name = "pourobject"
     grasped_object = 'obj_coffee'
-    container_object = 'obj_glass'
+    container_object = 'obj_mug'
 
     # arm type
     plan_req.requirements.robot_group = [plan_req.requirements.RIGHT_ARM]

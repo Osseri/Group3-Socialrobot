@@ -45,8 +45,8 @@ class MobileController():
         self.max_lin_vel = rospy.get_param("~max_lin_vel", default="0.05")
         self.max_ang_vel = rospy.get_param("~max_ang_vel", default="0.08")
 
-        self.dist_thre = 0.01   # meter
-        self.ori_thre = np.deg2rad(2.0)   # rad
+        self.dist_thre = 0.02   # meter
+        self.ori_thre = np.deg2rad(3.0)   # rad
         self.joint_states = []
         rospy.spin()
 

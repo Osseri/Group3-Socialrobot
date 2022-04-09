@@ -25,17 +25,10 @@ import random
 import utils
 from behavior import BehaviorBase
 
-class OpenDoorBehavior(BehaviorBase):
+class CloseDoorBehavior(BehaviorBase):
     def __init__(self, name, **params):
         # TODO: this behavior is based on SNU's sbpl_planner with robocare robot only
-        super(OpenDoorBehavior, self).__init__(name, **params)        
-
-        if self._hardware_if == 'vrep':
-            self.service_name = '/sim_interface/set_motion'
-            self.service_type = VrepSetJointTrajectory
-        elif self._hardware_if == 'hw':
-            self.service_name = '/hw_interface/set_motion'
-            self.service_type = SetJointTrajectory
+        super(CloseDoorBehavior, self).__init__(name, **params)        
 
         # service
         self.planner_service = "/plan_door_open_motion"
@@ -65,7 +58,7 @@ class OpenDoorBehavior(BehaviorBase):
         '''
         return the trajectory 
         '''
-        rospy.loginfo("Calculating door openning motion..")
+        rospy.loginfo("Calculating door closing motion..")
         res = self._call_ros_service(inputs)
         return res
 
@@ -98,8 +91,8 @@ class OpenDoorBehavior(BehaviorBase):
         door_center = None
 
         # transform doorinfo based on robot base
-        door_info = self._utils.transform_object(door_info)    
-
+        door_info = self._utils.transform_object(door_info)  
+        
         for aff in door_info.affordance:
             if aff.id == 'center':
                 door_center = aff
@@ -133,7 +126,7 @@ class OpenDoorBehavior(BehaviorBase):
             arm_states.name = joints[2:]
             arm_states.velocity = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             arm_states.effort = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            rospy.logwarn("[OpenDoor Behavior] cannot get current robocare robot joint states.")
+            rospy.logwarn("[CloseDoor Behavior] cannot get current robocare robot joint states.")
 
         # frame_id = base_footprint
         mobile_pose.x = 0.0
@@ -151,31 +144,7 @@ class OpenDoorBehavior(BehaviorBase):
 
         door.handle.x = door_handle.bb3d.center.position.x
         door.handle.y = door_handle.bb3d.center.position.y
-        # try:        
-        #     door.center.x = door_center.bb3d.center.position.x
-        #     door.center.y = door_center.bb3d.center.position.y
-
-        #     door.frame_p1.x = door_frame[0].bb3d.center.position.x
-        #     door.frame_p1.y = door_frame[0].bb3d.center.position.y
-        #     door.frame_p2.x = door_frame[1].bb3d.center.position.x
-        #     door.frame_p2.y = door_frame[1].bb3d.center.position.y
-
-        #     door.handle.x = door_handle.bb3d.center.position.x
-        #     door.handle.y = door_handle.bb3d.center.position.y
-            
-        # except:      
-        #     rospy.logwarn("[OpenDoor Behavior] cannot get door information.") 
-        #     # use temp values  
-        #     door.frame_p1.x = +6.1700e-01
-        #     door.frame_p1.y = -5.3600e-01
-        #     door.frame_p2.x = +6.1700e-01
-        #     door.frame_p2.y = -3.6002e-02
-
-        #     door.handle.x = +4.9700e-01
-        #     door.handle.y = -8.6002e-02
-
-        #     door.center.x = +5.1699e-01
-        #     door.center.y = -2.8601e-01  
+    
 
         door.door_p1.x = door.frame_p1.x
         door.door_p1.y = door.frame_p1.y
@@ -205,28 +174,30 @@ class OpenDoorBehavior(BehaviorBase):
         pt_num = len(door_plan.mobile_pose_trajectory[0].points)   
 
         if pt_num>0:
-            res.planResult = MotionPlanResponse.SUCCESS
             path = Path()
             path.header.stamp = rospy.Time().now()
             path.header.frame_id = 'base_footprint'
             
+            # create close trajectory
+            last_pose = self._utils.pose2d_2_pose(door_plan.mobile_pose_trajectory[0].points[-1])
             for i in range(pt_num):
-                mobile_pose = door_plan.mobile_pose_trajectory[0].points[i]
+                mobile_pose_2d = door_plan.mobile_pose_trajectory[0].points[i]
+                mobile_pose = self._utils.pose2d_2_pose(mobile_pose_2d)
+
+                # reverse open pose
+                reversed_pose = self._utils.multiply_pose(self._utils.inverse_pose(last_pose), mobile_pose)
+
+                #
                 pose = PoseStamped()
-                pose.pose.position.x = mobile_pose.x
-                pose.pose.position.y = mobile_pose.y
-                pose.pose.position.z = 0.0
-                quaternion = tf.transformations.quaternion_from_euler(0, 0, mobile_pose.theta)
-                pose.pose.orientation.x = quaternion[0]
-                pose.pose.orientation.y = quaternion[1]
-                pose.pose.orientation.z = quaternion[2]
-                pose.pose.orientation.w = quaternion[3]
+                pose.pose = reversed_pose
                 path.poses.append(pose)
+            path.poses.reverse()
+
             res.planResult = MotionPlanResponse.SUCCESS
             res.pathTrajectory = path
 
             # set door status opened
-            rospy.set_param("fridge_isopen", True)
+            rospy.set_param("fridge_isopen", False)
         else:
             res.planResult = MotionPlanResponse.ERROR_NO_SOLUTION   
         return res
@@ -239,7 +210,18 @@ class OpenDoorBehavior(BehaviorBase):
 
 if __name__ == "__main__":
     rospy.init_node("sbpl_test")
-    planner = OpenDoorBehavior('opendoor')
+    planner = CloseDoorBehavior('closedoor')
     req = Behavior()
-    planner.get_motion(req)
-    
+
+    # get object info
+    import utils
+    planner._utils = utils
+    targer_object = planner._utils.get_object_info('obj_fridge')
+    req.target_object.append(targer_object)
+    res = planner.get_motion(req)
+
+    # publish results
+    iter=0
+    while(not rospy.is_shutdown() and iter<100):
+        planner.path_pub.publish(res.pathTrajectory)
+        iter+=1

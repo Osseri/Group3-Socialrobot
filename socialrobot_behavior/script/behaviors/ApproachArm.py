@@ -12,6 +12,7 @@ from socialrobot_motion.srv import *
 from socialrobot_behavior.msg import *
 from socialrobot_behavior.srv import *
 from socialrobot_hardware.srv import *
+from socialrobot_msgs.msg import *
 from trajectory_msgs.msg import *
 from sensor_msgs.msg import *
 from std_msgs.msg import *
@@ -22,7 +23,6 @@ import tf.transformations as tfm
 from tf.transformations import quaternion_from_euler, quaternion_matrix, euler_from_quaternion
 import numpy as np
 import random
-import utils
 from behavior import BehaviorBase
 
 class ApproachArmBehavior(BehaviorBase):
@@ -30,14 +30,8 @@ class ApproachArmBehavior(BehaviorBase):
     def __init__(self, name, **params):
         super(ApproachArmBehavior, self).__init__(name, **params)
         self.listener = tf.TransformListener()
-        if self._hardware_if == 'vrep':
-            self.service_name = '/sim_interface/set_motion'
-            self.service_type = VrepSetJointTrajectory
-        elif self._hardware_if == 'hw':
-            self.service_name = '/hw_interface/set_motion'
-            self.service_type = SetJointTrajectory
+            
         armplan_srv = '/motion_plan/move_arm'
-
         self.talker = tf.TransformBroadcaster(queue_size=10)
         self.srv_plan = rospy.ServiceProxy(armplan_srv, MotionPlan)
 
@@ -47,6 +41,9 @@ class ApproachArmBehavior(BehaviorBase):
         self.rot_x = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (1, 0, 0))
         self.rot_y = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (0, 1, 0))
         self.rot_z = lambda x: tfm.quaternion_about_axis(x / 180. * math.pi, (0, 0, 1))
+
+        # grasp offset
+        self.z_offset = 0.01
 
         # get hardware
         robot_name = rosparam.get_param("/robot_name")
@@ -62,8 +59,8 @@ class ApproachArmBehavior(BehaviorBase):
             self.gripper_pose = {
                 'left': 'LHand_base',
                 'right': 'RHand_base',
-                'left_offset': [-0.005, 0.05],
-                'right_offset': [-0.005, 0.05]  # grasp, pre-grasp offset
+                'left_offset': [-0.015, 0.06],
+                'right_offset': [-0.015, 0.06]  # grasp, pre-grasp offset
             }
 
         self.input_args = ['robot_group',
@@ -134,7 +131,10 @@ class ApproachArmBehavior(BehaviorBase):
 
             # set obstacles
             obstacles = requirements.static_object + requirements.dynamic_object
+            has_workspace = False
             for obs in obstacles:
+                if obs.id in ['obj_table','obj_fridge']:
+                    has_workspace = True
                 plan_req.obstacle_ids.append(obs.id)
                 plan_req.obstacles.append(obs.bb3d)
 
@@ -144,34 +144,62 @@ class ApproachArmBehavior(BehaviorBase):
                 return plan_res
             else:
                 target_object = requirements.target_object[0]
+                target_object.bb3d.center.position.z += self.z_offset
+                # if target in known object, get data from database
+                self._utils.update_object_info(target_object)
+                # # TODO: hard-coding for demo
+                # if target_object.id == 'obj_fridge':
+                #     for i,aff in enumerate(target_object.affordance):
+                #         if aff.id == 'obj_fridge_bottom_door':
+                #             if rospy.has_param('fridge_isopen'):
+                #                 if rospy.get_param('fridge_isopen'):
+                #                     target_object.affordance[i].bb3d.center.position.x = +4.5400e-01
+                #                     target_object.affordance[i].bb3d.center.position.y = +3.9664e-01
+                #                     target_object.affordance[i].bb3d.center.position.z = -2.1505e-01
+                #                     target_object.affordance[i].bb3d.center.orientation.x = 0.0
+                #                     target_object.affordance[i].bb3d.center.orientation.y = 0.0
+                #                     target_object.affordance[i].bb3d.center.orientation.z = 0.866
+                #                     target_object.affordance[i].bb3d.center.orientation.w = 0.5
 
             # if object has affordances and grasp direction, transpose them based on robot frame            
-            target_object = utils.transform_object(target_object)
+            target_object = self._utils.transform_object(target_object)
 
-            # 1.get grasp approaching pose from known object database
+            # if no workspace in obstacles, create virtual workspace
+            if not has_workspace:
+                table = self._utils.create_workspace(target_object.bb3d)
+                plan_req.obstacle_ids.append(table.id)
+                plan_req.obstacles.append(table.bb3d)
+
+            ## 1.get grasp point from known object database
             pre_eef = []
             way_eef = []
             goal_eef = []
             desired_eef_poses = []
             has_grasp_point = False
 
+            # object grasp point
             for gr_pt in target_object.grasp_point:
                 desired_eef_poses.append(gr_pt)
                 has_grasp_point = True
             self.get_eef_poses(robot_group, desired_eef_poses, target_object, pre_eef, way_eef, goal_eef)
 
+            # affordance grasp point
             for aff in target_object.affordance:
-                if self.check_affordance(aff, exception_constraints=aff_except):
-                    # if len(aff.grasp_point)>0:
-                    #     # add affordance as obstacle
-                    #     plan_req.obstacle_ids.append(aff.id)
-                    #     plan_req.obstacles.append(aff.bb3d)
-                    
+                if self.check_affordance(aff, exception_constraints=aff_except):                    
                     desired_eef_poses = []
                     for gr_pt in aff.grasp_point:
                         desired_eef_poses.append(gr_pt)
                         has_grasp_point = True
                     self.get_eef_poses(robot_group, desired_eef_poses, aff, pre_eef, way_eef, goal_eef)
+
+                # sub-affordance grasp point
+                for sub_aff in aff.affordance:
+                    if self.check_affordance(aff, exception_constraints=aff_except): 
+                        desired_eef_poses = []
+                        for gr_pt in sub_aff.grasp_point:
+                            desired_eef_poses.append(gr_pt)
+                            has_grasp_point = True
+                        self.get_eef_poses(robot_group, desired_eef_poses, sub_aff, pre_eef, way_eef, goal_eef)
 
             if not has_grasp_point:
                 # 2. get grasp approaching pose from object shape         
@@ -212,26 +240,13 @@ class ApproachArmBehavior(BehaviorBase):
                     second_req.obstacles = plan_req.obstacles
                     second_req.currentJointState = joint_state
                     second_req.targetPose = [way_wrist[idx], goal_wrist[idx]]
-                    #second_req.goalType = MotionPlanRequest.CARTESIAN_WITH_ORIENTATION_CONSTRAINTS
+                    second_req.goalType = MotionPlanRequest.CARTESIAN_SPACE_GOAL_WITH_IGNORE_OBSTACLES
                     grasp_plan = self.srv_plan(second_req)
 
                     if grasp_plan.planResult == MotionPlanResponse.SUCCESS and len(grasp_plan.jointTrajectory.points)>1:
-                        if len(grasp_plan.jointTrajectory.points[0].velocities)>0:
-                            rospy.loginfo('final approach pose to target is found!')
-                            final_plan = MotionPlanResponse()
-                            final_plan.jointTrajectory.joint_names = grasp_plan.jointTrajectory.joint_names
-                            final_plan.jointTrajectory.header = grasp_plan.jointTrajectory.header
-
-                            for pt in pre_grasp_plan.jointTrajectory.points:
-                                final_plan.jointTrajectory.points.append(pt)
-
-                            for pt in grasp_plan.jointTrajectory.points:
-                                pt.time_from_start += (time_from_start + rospy.Time(0.2))
-                                final_plan.jointTrajectory.points.append(pt)
-                            final_plan.planResult = MotionPlanResponse.SUCCESS
-                            return final_plan
-                        else:
-                            rospy.logerr('empty velocity error')
+                        final_plan = self._utils.connect_motion_plan(pre_grasp_plan, grasp_plan)
+                        final_plan.planResult = MotionPlanResponse.SUCCESS
+                        return final_plan
                         
             rospy.loginfo('no solution of final approach pose to target')
             return MotionPlanResponse(planResult=MotionPlanResponse.ERROR_NO_SOLUTION)
@@ -264,40 +279,40 @@ class ApproachArmBehavior(BehaviorBase):
 
         # get 4 approaching pose
         # y
-        trans = utils.create_pose([0, target_size.y/2.0, 0],
+        trans = self._utils.create_pose([0, target_size.y/2.0, 0],
                                         self.rot_z(-90))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         # -y
-        trans = utils.create_pose([0, -target_size.y/2.0, 0],
+        trans = self._utils.create_pose([0, -target_size.y/2.0, 0],
                                         self.rot_z(90))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         # x
-        trans = utils.create_pose([target_size.x/2.0, 0, 0],
+        trans = self._utils.create_pose([target_size.x/2.0, 0, 0],
                                         self.rot_z(180))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         # -x
-        trans = utils.create_pose([-target_size.x/2.0, 0, 0],
+        trans = self._utils.create_pose([-target_size.x/2.0, 0, 0],
                                         self.rot_z(0))
-        candidate_poses.append(utils.transform_pose(trans, sample_pose))
+        candidate_poses.append(self._utils.transform_pose(trans, sample_pose))
         
 
         # create eef poses
         for desired_pose in candidate_poses:
 
             # pre-grasp
-            trans_pose = utils.create_pose([-(offset[1]), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[1]), 0, 0],
                                             [0, 0, 0, 1])                                            
-            pre_grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            pre_grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # waypoint
-            trans_pose = utils.create_pose([-((offset[0]+offset[1])/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-((offset[0]+offset[1])/2.0), 0, 0],
                                             [0, 0, 0, 1])   
-            waypoint_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            waypoint_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # grasp
-            trans_pose = utils.create_pose([-(offset[0]), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[0]), 0, 0],
                                             [0, 0, 0, 1])   
-            grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
 
             pre_eef.append(pre_grasp_pose)
             way_eef.append(waypoint_pose)
@@ -330,19 +345,23 @@ class ApproachArmBehavior(BehaviorBase):
         for desired_pose in candidate_poses:
 
             # pre-grasp
-            trans_pose = utils.create_pose([-(offset[1] + target_size.x/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[1] + target_size.x/2.0), 0, 0],
                                             [0, 0, 0, 1])                                            
-            pre_grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            pre_grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # waypoint
-            trans_pose = utils.create_pose([-((offset[0]+offset[1])/2.0 + target_size.x/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-((offset[0]+offset[1])/2.0 + target_size.x/2.0), 0, 0],
                                             [0, 0, 0, 1])   
-            waypoint_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            waypoint_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # grasp
-            trans_pose = utils.create_pose([-(offset[0] + target_size.x/2.0), 0, 0],
-                                            [0, 0, 0, 1])   
-            grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            if self._hardware_if == 'vrep':
+                trans_pose = self._utils.create_pose([-(offset[0] + target_size.x/2.0), 0, 0],
+                                                 [0, 0, 0, 1])   
+            elif self._hardware_if == 'hw':
+                trans_pose = self._utils.create_pose([0, 0, 0],
+                                                 [0, 0, 0, 1])   
+            grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
 
             pre_eef_poses.append(pre_grasp_pose)
             waypoint_eef_poses.append(waypoint_pose)
@@ -370,16 +389,16 @@ class ApproachArmBehavior(BehaviorBase):
                 pass
             
         # vector to pose
-        eef_to_wrist_pose = utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
+        eef_to_wrist_pose = self._utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
 
         # transpose
         pre_wrist_poses = []
         waypoint_wrist_poses = []
         goal_wrist_poses = []
         for i in range(len(pre_eef_poses)):
-            pre_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
-            waypoint_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
-            goal_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
+            pre_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
+            waypoint_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
+            goal_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
 
         return pre_wrist_poses, waypoint_wrist_poses, goal_wrist_poses
 
@@ -398,9 +417,9 @@ class ApproachArmBehavior(BehaviorBase):
             rot_deg = [0, 15, 30, 45, 60, 75, 90]
         rot_deg.reverse()
         for deg in rot_deg:
-            rot_pose = utils.create_pose([0, 0, 0],
+            rot_pose = self._utils.create_pose([0, 0, 0],
                                          self.rot_z(deg))
-            candidate_poses.append(utils.transform_pose(rot_pose, target_pose))
+            candidate_poses.append(self._utils.transform_pose(rot_pose, target_pose))
 
         return candidate_poses
 

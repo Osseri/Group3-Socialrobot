@@ -21,7 +21,6 @@ from tf.transformations import quaternion_from_euler, quaternion_matrix
 import numpy as np
 import math
 from behavior import BehaviorBase
-import utils
 
 def degToRad(deg):
     rad = deg / 180.0 * math.pi
@@ -49,17 +48,11 @@ class ApproachDualArmBehavior(BehaviorBase):
     def __init__(self, name, **params):
         super(ApproachDualArmBehavior, self).__init__(name, **params)
         self.listener = tf.TransformListener()
-        if self._hardware_if == 'vrep':
-            self.service_name = '/sim_interface/set_motion'
-            self.service_type = VrepSetJointTrajectory
-        elif self._hardware_if == 'hw':
-            self.service_name = '/hw_interface/set_motion'
-            self.service_type = SetJointTrajectory
 
         self.talker = tf.TransformBroadcaster(queue_size=10)
         self.grasp_srv = None
-        self.box_srv = rospy.ServiceProxy("/dual_arm_planning/grasp", DualArmGrasp)   # box method
-        self.tray_srv = rospy.ServiceProxy("/dual_arm_planning/grasp_seperated_targets", DualArmGraspSeperatedTargets)   # tray method
+        #self.grasp_srv = rospy.ServiceProxy("/dual_arm_planning/grasp", DualArmGrasp)   # box method
+        self.grasp_srv = rospy.ServiceProxy("/dual_arm_planning/grasp_seperated_targets", DualArmGraspSeperatedTargets)   # tray method
         self.srv_plan = rospy.ServiceProxy("/motion_plan/move_arm", MotionPlan)     # SKKU method
 
         robot_name = 'social_robot'
@@ -104,14 +97,15 @@ class ApproachDualArmBehavior(BehaviorBase):
         return the trajectory 
         '''
         rospy.loginfo("Calculating approaching motion..")
-        res = self._call_ros_service2(inputs)
+        res = self._call_ros_service_simultaneous(inputs)
         return res
 
     def finish_behavior(self):
         rospy.loginfo('finishing...%s' % self._name)
         return True
 
-    def _call_ros_service2(self, requirements):
+    # calculate dual arm motion simultaneously
+    def _call_ros_service_simultaneous(self, requirements):
         try:
             plan_res = MotionPlanResponse(planResult=MotionPlanResponse.ERROR_FAIL)
 
@@ -129,116 +123,111 @@ class ApproachDualArmBehavior(BehaviorBase):
                 return MotionPlanResponse(planResult=MotionPlanResponse.ERROR_INPUT)
             else:
                 target_object = requirements.target_object[0]
+                target_data = self._utils.get_object_info(target_object.id)
+                if target_data != None:
+                    target_object.grasp_point = target_data.grasp_point
+                    # transpose them based on robot frame          
+                    target_object = self._utils.transform_object(target_object)
                 print('grasping target:')
                 print(target_object)
 
-            # TODO: approaching direction from dataset
-            plan_req = None
-            direction_pose = [Pose(), Pose()]   #left right
-            if target_object.id == 'obj_courier_box':
-                # direction_pose[0].position.x = 0.0
-                # direction_pose[0].position.y = 7.0610e-02
-                # direction_pose[0].position.z = +3.2740e-02
-                # direction_pose[0].orientation.x = 0.0
-                # direction_pose[0].orientation.y = 0.0
-                # direction_pose[0].orientation.z = -0.707
-                # direction_pose[0].orientation.w = 0.707
-
-                # direction_pose[1].position.x = 0.0
-                # direction_pose[1].position.y = -7.0610e-02
-                # direction_pose[1].position.z = +3.2740e-02
-                # direction_pose[1].orientation.x = 0.0
-                # direction_pose[1].orientation.y = 0.0
-                # direction_pose[1].orientation.z = 0.707
-                # direction_pose[1].orientation.w = 0.707
-
-                plan_req = DualArmGraspRequest()
-                plan_req.obj_width = 0.325
-                plan_req.obj_pose = target_object.bb3d.center
-                self.grasp_srv = self.box_srv
-
-            elif target_object.id == 'obj_tray':
-                direction_pose[0].position.x = -1.0712e-02
-                direction_pose[0].position.y = +1.7000e-01
-                direction_pose[0].position.z = +1.0648e-01
-                direction_pose[0].orientation.x = 0.0
-                direction_pose[0].orientation.y = 0.0
-                direction_pose[0].orientation.z = -0.259
-                direction_pose[0].orientation.w = 0.966
-
-                direction_pose[1].position.x = -8.8818e-03
-                direction_pose[1].position.y = -1.7000e-01
-                direction_pose[1].position.z = +9.8930e-02
-                direction_pose[1].orientation.x = 0.0
-                direction_pose[1].orientation.y = 0.0
-                direction_pose[1].orientation.z = 0.259
-                direction_pose[1].orientation.w = 0.966
-
-                # if object has affordances and grasp direction, transpose them based on robot frame 
-                target_object.grasp_point = direction_pose           
-                target_object = utils.transform_object(target_object)
-
-                trans_pose = utils.create_pose([0, 0, 0],
+            trans_pose = self._utils.create_pose([0, 0, 0],
                                                 [0, 0, 0, 1]) 
-                left_eef_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, target_object.grasp_point[0]), PlannerInputs.LEFT_ARM)
-                right_eef_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, target_object.grasp_point[1]), PlannerInputs.RIGHT_ARM)
+            left_eef_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, target_object.grasp_point[0]), PlannerInputs.LEFT_ARM)
+            right_eef_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, target_object.grasp_point[1]), PlannerInputs.RIGHT_ARM)
 
-                left_wrist_pose = self.eef_to_wrist(left_eef_pose, PlannerInputs.LEFT_ARM)
-                right_wrist_pose = self.eef_to_wrist(right_eef_pose, PlannerInputs.RIGHT_ARM)
+            # transform based on wrist coordinate from eef
+            left_wrist_pose = self.eef_to_wrist(left_eef_pose, PlannerInputs.LEFT_ARM)
+            right_wrist_pose = self.eef_to_wrist(right_eef_pose, PlannerInputs.RIGHT_ARM)
 
-                plan_req = DualArmGraspSeperatedTargetsRequest()
-                plan_req.left_target = left_wrist_pose
-                plan_req.right_target = right_wrist_pose
-                self.grasp_srv = self.tray_srv
-                plan = DualArmGraspResponse()
+            plan_req = DualArmGraspSeperatedTargetsRequest()
+            plan_req.left_target = left_wrist_pose
+            plan_req.right_target = right_wrist_pose
 
             # add obstacles
             rospy.loginfo("adding obstacles into scene...")
             obs_req = MotionPlanRequest()
             obstacles = requirements.static_object + requirements.dynamic_object
+            has_workspace = False
             for obs in obstacles:
+                if obs.id in ['obj_table','obj_fridge']:
+                    has_workspace = True
                 obs_req.obstacle_ids.append(obs.id)
                 obs_req.obstacles.append(obs.bb3d)
+
+            # if no workspace in obstacles, create virtual workspace
+            if not has_workspace:
+                table = self._utils.create_workspace(target_object.bb3d)
+                obs_req.obstacle_ids.append(table.id)
+                obs_req.obstacles.append(table.bb3d)
+
+            # add obstacles first
             obs_req.targetBody = MotionPlanRequest.BOTH_ARM
             obs_req.goalType = -1
             self.srv_plan(obs_req)
-            plan = DualArmGraspSeperatedTargetsResponse()
-
-            # calculate trajectory
-            print('-----------request--------------')
-            print(plan_req)
 
             # calculate pre-grasp motion
+            plan = DualArmGraspSeperatedTargetsResponse()
             iter = 0
-            while(iter < 20):
-                rospy.logwarn("[ApproachDualArm Behavior] attempting to grasp motion....")
+            while(iter < 5):
+                rospy.logwarn("[ApproachDualArm Behavior] attempting to grasp motion....%d/%d" %(iter+1,5))
                 plan = self.grasp_srv(plan_req)    
                 if plan.pre_grasp_trajetory.points and plan.grasp_trajetory.points:
                     break
                 iter+=1       
-            rospy.loginfo("[ApproachDualArm Behavior] planning is done.")
-
-            print('----------pre---------')
-            print(plan.pre_grasp_trajetory)
-            print('----------grasp---------')
-            print(plan.grasp_trajetory)
 
             if plan.pre_grasp_trajetory.points and plan.grasp_trajetory.points:
+                rospy.loginfo("[ApproachDualArm Behavior] planning is done.")
                 # fix zero velocities
                 for i, pt in enumerate(plan.grasp_trajetory.points):
                     vel_list = []
                     for vel in pt.velocities:
                         if vel==0.0:
-                            fixed_vel = 0.05
+                            fixed_vel = 0.2
                             vel_list.append(fixed_vel)
                         else:
                             vel_list.append(vel)
                     plan.grasp_trajetory.points[i].velocities = vel_list
 
-                #merge pre-grasp and grasp trajectory
-                merged_traj = self.addPlan(plan.pre_grasp_trajetory, plan.grasp_trajetory)
+                #### Robocare hardware ERROR?? ###
+                # merge pre-grasp and grasp trajectory
+                merged_traj = self._utils.connect_trajectories(plan.pre_grasp_trajetory, plan.grasp_trajetory, rospy.Duration(0.0), only_last=True)
+
+                # #### calculate again for final grasp
+                # # get start joint
+                # waypoint_pos = copy.copy(plan.pre_grasp_trajetory.points[-1].positions)
+                # time_from_start = copy.copy(plan.pre_grasp_trajetory.points[-1].time_from_start)
+                # start_state = sensor_msgs.msg.JointState()
+                # start_state.header = plan.pre_grasp_trajetory.header
+                # start_state.name = plan.pre_grasp_trajetory.joint_names
+                # start_state.position = plan.pre_grasp_trajetory.points[-1].positions
+
+                # goal_state = sensor_msgs.msg.JointState()
+                # goal_state.header = plan.grasp_trajetory.header
+                # goal_state.name = plan.grasp_trajetory.joint_names
+                # goal_state.position = plan.grasp_trajetory.points[-1].positions
+
+                # # get goal joint
+                # second_req = MotionPlanRequest()
+                # second_req.targetBody = robot_group
+                # # second_req.obstacle_ids = obs_req.obstacle_ids
+                # # second_req.obstacles = obs_req.obstacles
+                # second_req.currentJointState = start_state
+                # second_req.targetJointState = [goal_state]
+                # second_req.goalType = MotionPlanRequest.JOINT_SPACE_GOAL
+                # grasp_plan = self.srv_plan(second_req)
+
+                # print('========================pre===========================', len(plan.pre_grasp_trajetory.points))
+                # print(plan.pre_grasp_trajetory)
+                # print('========================grasp===========================', len(plan.grasp_trajetory.points))
+                # print(plan.grasp_trajetory)
+                # print('========================merge===========================')
+                # print(merged_traj)
+                # print('========================second===========================')
+                # print(grasp_plan)
+
                 plan_res.planResult = MotionPlanResponse.SUCCESS
-                plan_res.jointTrajectory = plan.pre_grasp_trajetory
+                plan_res.jointTrajectory = merged_traj
                 return plan_res
             else:
                 rospy.logerr('[ApproachDualArm Behavior] no solution.')
@@ -258,21 +247,9 @@ class ApproachDualArmBehavior(BehaviorBase):
             sample_list.append(-i)
 
         return sample_list
-        
-    def addPlan(self, first_traj, second_traj):
-        '''
-        trajectory_msgs/JointTrajectory
-        '''
-        merged_plan = copy.copy(first_traj)
-        last_time = first_traj.points[-1].time_from_start + rospy.Time(0.2)
-        # merge next trajectory
-        for pt in second_traj.points:
-            pt.time_from_start = rospy.Time().from_sec(pt.time_from_start.to_sec() + last_time.to_sec())
-            merged_plan.points.append(pt)
 
-        return merged_plan
-
-    def _call_ros_service(self, requirements):
+    # calculate dual arm motion indivisually
+    def _call_ros_service_indivisual(self, requirements):
         try:
             plan_req = MotionPlanRequest()
             plan_res = MotionPlanResponse(planResult=MotionPlanResponse.ERROR_FAIL)
@@ -308,7 +285,7 @@ class ApproachDualArmBehavior(BehaviorBase):
             if len(waist_pitch_angles)>0:
                 waist_req = copy.copy(plan_req)
                 for waist_deg in waist_pitch_angles:
-                    print("[ApproachDualArm] Waist deg = %d", waist_deg)
+                    print("[ApproachDualArm] Waist deg = %d"  %waist_deg)
                     waist_rad = degToRad(waist_deg)
 
                     # set waist angle
@@ -448,7 +425,7 @@ class ApproachDualArmBehavior(BehaviorBase):
 
     def getApproachMotion(self, robot_group, request, sample_angle, target_object):
         for idx, i in enumerate(sample_angle):
-            print("[ApproachDualArm] %s approach deg = %d", robot_group, idx)
+            print("[ApproachDualArm] %s approach deg = %d" %(robot_group, idx))
             # first motion
             first_wrist_pose, waypoints, eef_pose = self.getApproachPose(robot_group, i, target_object)
 
@@ -682,7 +659,7 @@ class ApproachDualArmBehavior(BehaviorBase):
                 pass
             
         # vector to pose
-        eef_to_wrist_pose = utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
+        eef_to_wrist_pose = self._utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
 
         # transpose
-        return utils.transform_pose(eef_to_wrist_pose, eef_pose)
+        return self._utils.transform_pose(eef_to_wrist_pose, eef_pose)

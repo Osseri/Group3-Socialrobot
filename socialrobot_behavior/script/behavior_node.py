@@ -11,6 +11,7 @@ import rosparam
 import rospkg
 import actionlib
 
+from behaviors import utils
 from math import pi
 
 from move_base_msgs.msg import *
@@ -35,7 +36,7 @@ from behaviors.behavior import BehaviorBase
 def load_behavior(module_name, behavior, interface):
     behavior_module = importlib.import_module(module_name)
     behavior_class = getattr(behavior_module, behavior + 'Behavior')
-    behavior_instance = behavior_class(behavior.lower(), hardware_interface=interface)
+    behavior_instance = behavior_class(behavior.lower(), hardware_interface=interface, utils=utils)
     return behavior_instance
 
 

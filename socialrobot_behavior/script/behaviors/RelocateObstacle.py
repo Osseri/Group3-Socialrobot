@@ -20,7 +20,6 @@ from rearrange_node import msg as rearr_msg
 from rearrange_node import srv as rearr_srv
 
 from behavior import BehaviorBase
-import utils
 
 RED = ColorRGBA(1.0, 0.0, 0.0, 1.0)
 GREEN = ColorRGBA(0.0, 1.0, 0.0, 1.0)
@@ -152,20 +151,22 @@ class RelocateObstacleBehavior(BehaviorBase):
         # create request message of rearrange_node
         req = self.create_rearrange_request(requirements)
         self.srv_visualize(request=req, lifetime=0)
+
+        # skip for fridge demo
+        if requirements.target_object[2].id=='obj_fridge':
+            #temp_pos = geometry_msgs.msg.Point(x=0.55,y=-0.22,z=0.885)
+            temp_pos = geometry_msgs.msg.Point(x=0.55,
+                                                y=-0.22,
+                                                z=requirements.target_object[1].bb3d.center.position.z+0.01)
+            temp_list = [temp_pos]
+            return True, temp_list
+
         print('rearrange requests:', req)
         resp = f_check_srv(req) 
         print('rearrange responses:', resp)
 
         if len(resp.rearrange_positions)>0:
-            self.srv_visualize(request=req, response=resp, lifetime=0)
-            
-        if len(resp.rearrange_positions)<1 or requirements.target_object[2].id=='obj_fridge':
-            self.srv_visualize(request=req, lifetime=1)
-            rospy.logerr("[RelocteBehavior] No solution to relocate obstacle.")
-            #HARD-CODING : If no solution
-            temp_pos = geometry_msgs.msg.Point(x=0.55,y=-0.22,z=0.895)
-            temp_list = [temp_pos]
-            return True, temp_list
+            self.srv_visualize(request=req, response=resp, lifetime=0)            
             
         return True, resp.rearrange_positions
 
@@ -182,7 +183,21 @@ class RelocateObstacleBehavior(BehaviorBase):
         
         # set relocate target
         obstacles = requirements.static_object + requirements.dynamic_object
-        
+        has_workspace = False
+        target_object = None
+        for obs in obstacles:
+            if obs.id in ['obj_table','obj_fridge']:
+                has_workspace = True
+            if obs.id == requirements.target_object[0].id:
+                target_object = obs
+
+         # if no workspace in obstacles, create virtual workspace
+        if requirements.target_object[2].id == None or requirements.target_object[2].id == '':
+            requirements.target_object[2].id = 'obj_table'
+        if not has_workspace:
+            table = self._utils.create_workspace(target_object.bb3d)
+            obstacles.append(table)
+
         for i,obj in enumerate(obstacles):
             if obj.id == requirements.target_object[0].id:
                 self.objects['target'] = obj
@@ -192,9 +207,10 @@ class RelocateObstacleBehavior(BehaviorBase):
                 self.objects['workspace'] = obj
             else:
                 #TODO:distinguish static and dynamic objects
-                if obj.id in ['obj_diget', 'obj_gotica', 'obj_red_gotica', 'obj_milk', 'obj_juice', 'obj_white_gotica']:
+                #if obj.id in ['obj_diget', 'obj_gotica', 'obj_red_gotica', 'obj_milk', 'obj_juice', 'obj_white_gotica']
+                if obj.id not in ['obj_table', 'obj_fridge']:
                     self.objects['obstacles'].append(obj)
-        
+                    
         if self.objects['rearrange_target'] == None:
             rospy.logerr("[RelocteBehavior] No rearrange target object for relocation.")
         
@@ -298,9 +314,9 @@ class RelocateObstacleBehavior(BehaviorBase):
             rot_deg = range(0,-91,-15)
         #rot_deg.reverse()
         for deg in rot_deg:
-            rot_pose = utils.create_pose([0, 0, 0],
+            rot_pose = self._utils.create_pose([0, 0, 0],
                                          self.rot_z(deg))
-            candidate_poses.append(utils.transform_pose(rot_pose, Pose(position=goal_pos,
+            candidate_poses.append(self._utils.transform_pose(rot_pose, Pose(position=goal_pos,
                                                                         orientation=Quaternion(x=0.0,y=0.0,z=0.0,w=1.0))))
 
         return candidate_poses
@@ -326,19 +342,19 @@ class RelocateObstacleBehavior(BehaviorBase):
         for desired_pose in candidate_poses:
 
             # pre-grasp
-            trans_pose = utils.create_pose([-(offset[1] + target_size.x/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[1] + target_size.x/2.0), 0, 0],
                                             [0, 0, 0, 1])                                            
-            pre_grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            pre_grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # waypoint
-            trans_pose = utils.create_pose([-((offset[0]+offset[1])/2.0 + target_size.x/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-((offset[0]+offset[1])/2.0 + target_size.x/2.0), 0, 0],
                                             [0, 0, 0, 1])   
-            waypoint_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            waypoint_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
             
             # grasp
-            trans_pose = utils.create_pose([-(offset[0] + target_size.x/2.0), 0, 0],
+            trans_pose = self._utils.create_pose([-(offset[0] + target_size.x/2.0), 0, 0],
                                             [0, 0, 0, 1])   
-            grasp_pose = utils.get_grasp_pose(utils.transform_pose(trans_pose, desired_pose), robot_group)
+            grasp_pose = self._utils.get_grasp_pose(self._utils.transform_pose(trans_pose, desired_pose), robot_group)
 
             pre_eef_poses.append(pre_grasp_pose)
             waypoint_eef_poses.append(waypoint_pose)
@@ -367,16 +383,16 @@ class RelocateObstacleBehavior(BehaviorBase):
                 pass
             
         # vector to pose
-        eef_to_wrist_pose = utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
+        eef_to_wrist_pose = self._utils.create_pose(eef_to_wrist_trans, eef_to_wrist_rot)
 
         # transpose
         pre_wrist_poses = []
         waypoint_wrist_poses = []
         goal_wrist_poses = []
         for i in range(len(pre_eef_poses)):
-            pre_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
-            waypoint_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
-            goal_wrist_poses.append(utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
+            pre_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, pre_eef_poses[i]))
+            waypoint_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, waypoint_eef_poses[i]))
+            goal_wrist_poses.append(self._utils.transform_pose(eef_to_wrist_pose, goal_eef_poses[i]))
 
         return pre_wrist_poses, waypoint_wrist_poses, goal_wrist_poses
 
@@ -388,7 +404,7 @@ class RelocateObstacleBehavior(BehaviorBase):
 
         # if object has workspace affordance, transpose them based on robot frame  
         if target_object:  
-            transformed_object = utils.transform_object(env_object)
+            transformed_object = self._utils.transform_object(env_object)
             rospy.logerr('transformed')
             #print(transformed_object)
             for aff in transformed_object.affordance:
